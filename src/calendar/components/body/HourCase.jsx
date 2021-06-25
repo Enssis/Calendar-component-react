@@ -6,14 +6,13 @@ import { SizedTableRow } from "../calendar.style"
 import moment from "moment"
 import StateContext from "../../StateContext"
 import { Element, scroller } from "react-scroll"
-import EventPopup from "./EventPopup"
 
 const HourCase = props => {
    const appState = useContext(StateContext)
    const hours = Array.from(Array(24).keys())
-   const date = props.date
+   const { date } = props
 
-   //event by hour
+   //event in each time block
    const [quarterHourEvents, setQuarterHourEvents] = useState(
       Array.from(Array(24 * 4).keys()).map(key => ({
          time: moment({ year: date.year(), month: date.month(), date: date.date(), hour: Math.floor(key / 4), minute: 15 * (key % 4) }),
@@ -21,32 +20,36 @@ const HourCase = props => {
       }))
    )
 
+   //used to show nothing if all events haven't finished to load
    const [isLoading, setIsLoading] = useState(true)
+   //nb max de columns
    const [nbCol, setNbCol] = useState(1)
+   //list of events in this day
    const [event, setEvent] = useState([])
+   //used to know if the first event has been mounted
    const [firstEventReady, setFirstEventReady] = useState(false)
 
    //set the events of the day
    useEffect(() => {
-      const date = props.date.format("YYYY MM DD")
-      const propEvent = appState.event[date]
+      const dateFormat = date.format("YYYY MM DD")
+      const propEvent = appState.event[dateFormat]
       setEvent(propEvent ? propEvent : [])
       setFirstEventReady(false)
-   }, [props.date, appState.event])
+   }, [date, appState.event])
 
-   //set the list of event of the day classed by quarter of hours
+   //set the list of event of the day by quarter of hours
    useEffect(() => {
       setQuarterHourEvents(q => {
-         const eventKeyCol = {}
-         const colEvent = Array(24 * 4).fill([])
          let nbColMax = 1
          let firstElement = true
-         const newQHE = q.map((element, key) => {
+         let changedCols = {}
+         const newQHE = q.map(element => {
+            let nonDisponibleCols = []
             let filteredEvent = {}
             //for each event add it if the quarter of hour contain it
             event.forEach(value => {
                let startDiff = 0
-               const { start, end, duration } = value.timeInfo
+               const { start, end, column } = value.timeInfo
                if ((startDiff = start.diff(element.time)) <= 0 && end.diff(element.time) > 0) {
                   let isStart = false
 
@@ -55,23 +58,24 @@ const HourCase = props => {
                      isStart = true
                   }
 
-                  let col = 0
-                  if (eventKeyCol[value.key] || eventKeyCol[value.key] === 0) {
-                     col = eventKeyCol[value.key]
-                  } else {
-                     col = colEvent[key].length
-                     eventKeyCol[value.key] = col
-                     for (let i = key; i < key + (duration - 1); i++) {
-                        colEvent[i][col] = value
-                     }
+                  //check if it take the first col available
+                  let col = column
+
+                  //if this event have it's cols already changed assign this value to col
+                  if (changedCols[event.key] !== undefined) col = changedCols[event.key]
+                  //else, if it's a start and the col before is available, it take it
+                  else if (col - 1 >= 0 && nonDisponibleCols.indexOf(col - 1) < 0 && isStart) {
+                     col--
+                     changedCols[event.key] = col
                   }
+                  //add event's col to col which are taken
+                  nonDisponibleCols = nonDisponibleCols.concat(col)
 
                   filteredEvent[col] = { value, isStart, firstElement }
                   if (firstElement) firstElement = false
                }
             })
             if (Object.keys(filteredEvent).length > nbColMax) nbColMax = Object.keys(filteredEvent).length
-
             return {
                event: filteredEvent,
                time: element.time
@@ -141,28 +145,11 @@ const HourCase = props => {
                                           if (firstElement) {
                                              if (!firstEventReady) setFirstEventReady(true)
                                              return (
-                                                <EventPopup
-                                                   key={row}
-                                                   trigger={
-                                                      <Element name="firstEvent">
-                                                         <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 40} />
-                                                      </Element>
-                                                   }
-                                                   event={value}
-                                                />
+                                                <Element name="firstEvent">
+                                                   <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 40} />
+                                                </Element>
                                              )
-                                          } else
-                                             return (
-                                                <EventPopup
-                                                   key={row}
-                                                   trigger={
-                                                      <div>
-                                                         <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 40} />
-                                                      </div>
-                                                   }
-                                                   event={value}
-                                                ></EventPopup>
-                                             )
+                                          } else return <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 40} />
                                        } else return ""
                                     }
                                     return <EventSegment key={row} event={null} moment={quarterHourEvent.time} size={40} />

@@ -17,7 +17,6 @@ const DaySegment = styled(Segment)`
    max-height: 20px;
    font-size: 10px !important;
    padding: 2px !important;
-
    &:hover {
       background-color: ${props => darkerColor(props.backcolor, 20)} !important;
    }
@@ -42,6 +41,7 @@ const SizedSegment = styled(Segment)`
    &:hover {
       background-color: ${props => darkerColor(props.backcolor, 10)} ${props => (props.nohover ? "" : "!important")};
    }
+   ${props => (props.border ? "border: 1px solid rgba(34, 36, 38, 0.15) !important;" : "")}
 `
 
 const PaddingLessGridColumn = styled(Grid.Column)`
@@ -66,13 +66,14 @@ const ColorButton = styled(Button)`
 const CustomLabel = styled(Label)`
    background-color: ${props => props.backcolor} !important;
    font-size: 10px !important;
-   padding: 3px !important;
+   padding: 4px !important;
    width: ${props => (props.width ? props.width : 100)}% !important;
    margin-left: ${props => (props.margLeft ? props.margLeft : 0)}% !important;
 `
 
 const MonthListItem = styled(List.Item)`
    padding: 0px !important;
+   height: 12px !important;
 `
 
 export { MainSegmentGroup, DaySegment, ScrollableSegment, PaddingLessGridColumn, PaddingLessTableCell, NoPaddingSegment, SizedTableRow, SizedSegment, ColorButton, CustomLabel, MonthListItem }

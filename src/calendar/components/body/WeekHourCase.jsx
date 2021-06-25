@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState, useRef } from "react"
 import { Table, Dimmer, Loader, Segment, Header, Icon } from "semantic-ui-react"
 import { ScrollableSegment, PaddingLessTableCell, SizedSegment } from "../calendar.style"
 import { SizedTableRow } from "../calendar.style"
@@ -6,10 +6,31 @@ import moment from "moment"
 import StateContext from "../../StateContext"
 import EventPopup from "./EventPopup"
 
+function createContextFromEvent(e) {
+   const left = e.clientX
+   const top = e.clientY
+   const right = left + 1
+   const bottom = top + 1
+
+   return {
+      getBoundingClientRect: () => ({
+         left,
+         top,
+         right,
+         bottom,
+
+         height: 0,
+         width: 0
+      })
+   }
+}
+
 const HourCase = props => {
    const appState = useContext(StateContext)
    const hours = Array.from(Array(24).keys())
    const date = props.date
+   const [open, setOpen] = useState(false)
+   const contextRef = useRef(null)
 
    //event by hour
    const [quarterHourEvents, setQuarterHourEvents] = useState(
@@ -32,16 +53,15 @@ const HourCase = props => {
    //set the list of event of the day classed by quarter of hours
    useEffect(() => {
       setQuarterHourEvents(q => {
-         const eventKeyCol = {}
-         const colEvent = Array(24 * 4).fill([])
          let nbColMax = 1
+         let changedCols = {}
          const newQHE = q.map((element, key) => {
             let filteredEvent = {}
+            let nonDisponibleCols = []
             //for each event add it if the quarter of hour contain it
-
             event.forEach(value => {
                let startDiff = 0
-               const { start, end, duration } = value.timeInfo
+               const { start, end, column } = value.timeInfo
                if ((startDiff = start.diff(element.time)) <= 0 && end.diff(element.time) > 0) {
                   let isStart = false
 
@@ -50,16 +70,18 @@ const HourCase = props => {
                      isStart = true
                   }
 
-                  let col = 0
-                  if (eventKeyCol[value.key] || eventKeyCol[value.key] === 0) {
-                     col = eventKeyCol[value.key]
-                  } else {
-                     col = colEvent[key].length
-                     eventKeyCol[value.key] = col
-                     for (let i = key; i < key + (duration - 1); i++) {
-                        colEvent[i][col] = value
-                     }
+                  //check if it take the first col available
+                  let col = column
+
+                  //if this event have it's cols already changed assign this value to col
+                  if (changedCols[event.key] !== undefined) col = changedCols[event.key]
+                  //else, if it's a start and the col before is available, it take it
+                  else if (col - 1 >= 0 && nonDisponibleCols.indexOf(col - 1) < 0 && isStart) {
+                     col--
+                     changedCols[event.key] = col
                   }
+                  //add event's col to col which are taken
+                  nonDisponibleCols = nonDisponibleCols.concat(col)
 
                   filteredEvent[col] = { value, isStart }
                }
@@ -100,23 +122,29 @@ const HourCase = props => {
                                        const { isStart, value } = event
                                        if (isStart)
                                           return (
-                                             <EventPopup
-                                                trigger={
-                                                   <div>
-                                                      <SizedSegment nomargin={1} nopadding={1} height={value.timeInfo.duration * 8} vertical backcolor={value.color}>
-                                                         {nbCol <= 2 ? (
-                                                            <Header as="h5" style={{ paddingTop: value.timeInfo.duration * 4 - 8 }}>
-                                                               <Icon name={value.icon} size="tiny" />
-                                                               {" " + value.title}
-                                                            </Header>
-                                                         ) : (
-                                                            ""
-                                                         )}
-                                                      </SizedSegment>
-                                                   </div>
-                                                }
-                                                event={value}
-                                             />
+                                             <SizedSegment
+                                                nomargin={1}
+                                                nopadding={1}
+                                                height={value.timeInfo.duration * 8}
+                                                vertical
+                                                backcolor={value.color}
+                                                onMouseLeave={() => setOpen(false)}
+                                                onMouseMove={e => {
+                                                   e.preventDefault()
+                                                   contextRef.current = createContextFromEvent(e)
+                                                   setOpen(true)
+                                                }}
+                                             >
+                                                <EventPopup context={contextRef} event={value} open={open} onClose={() => setOpen(false)} />
+                                                {nbCol <= 2 ? (
+                                                   <Header as="h5" style={{ paddingTop: value.timeInfo.duration * 4 - 8 }}>
+                                                      <Icon name={value.icon} size="tiny" />
+                                                      {" " + value.title}
+                                                   </Header>
+                                                ) : (
+                                                   ""
+                                                )}
+                                             </SizedSegment>
                                           )
                                        else return ""
                                     }

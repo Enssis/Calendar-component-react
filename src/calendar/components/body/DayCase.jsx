@@ -12,14 +12,14 @@ const DayCase = props => {
    const appDispatch = useContext(DispatchContext)
    const appState = useContext(StateContext)
 
-   const [events, setEvents] = useState([])
+   const [rows, setRows] = useState([])
 
    //set the events of the day
    useEffect(() => {
       const ndate = date.format("YYYY MM DD")
       const propEvent = appState.event[ndate]
 
-      setEvents(propEvent ? propEvent : [])
+      setRows(propEvent ? propEvent : [])
    }, [date, appState.event])
 
    const goToDay = date => {
@@ -34,20 +34,20 @@ const DayCase = props => {
          </DaySegment>
          <SizedSegment height="100" nopadding={1} attached="bottom" backcolor="#fff" nohover>
             <List>
-               {events.map(event => {
+               {rows.map(event => {
                   const { start, duration } = event.timeInfo
                   return (
-                     <EventPopup
-                        left
-                        trigger={
-                           <div>
-                              <MonthListItem>
+                     <MonthListItem>
+                        <EventPopup
+                           left
+                           trigger={
+                              <div>
                                  <CustomLabel margLeft={Math.ceil((Math.abs(moment({ year: start.year(), month: start.month(), date: start.date() }).diff(start) / 900000) * 100) / 96)} width={Math.floor((duration * 100) / 96)} backcolor={event.color}></CustomLabel>
-                              </MonthListItem>
-                           </div>
-                        }
-                        event={event}
-                     />
+                              </div>
+                           }
+                           event={event}
+                        />
+                     </MonthListItem>
                   )
                })}
             </List>

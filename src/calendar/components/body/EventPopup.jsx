@@ -4,7 +4,7 @@ import DispatchContext from "../../DispatchContext"
 import StateContext from "../../StateContext"
 
 const EventPopup = props => {
-   const { event, trigger, left } = props
+   const { event, trigger, left, open, context } = props
    const { start, end, title, description, place } = event
 
    const appDispatch = useContext(DispatchContext)
@@ -22,8 +22,16 @@ const EventPopup = props => {
       }
    }
 
+   const trigg = () => {
+      if (trigger) {
+         return { trigger: trigger }
+      } else {
+         return { context: context, open: open }
+      }
+   }
+
    return (
-      <Popup trigger={trigger} hoverable wide hideOnScroll position={left ? "left center" : "top center"}>
+      <Popup {...trigg()} hoverable wide position={left ? "left center" : "top center"}>
          <Popup.Header>{title}</Popup.Header>
          <Popup.Content>
             <Segment>

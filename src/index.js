@@ -26,12 +26,19 @@ function Main() {
          hasLogo: false,
          //logo path
          logoPath: "https://react.semantic-ui.com/images/wireframe/image.png"
-      }
+      },
+      //creation and modification options
+      //allow creation of event
+      allowCreation: true,
+      //allow modification of events
+      allowModification: true
    }
 
    const handleAddEvent = event => {
-      setEventList(state => state.concat(event))
-      console.log(eventList)
+      if (eventList.filter(el => el.key === event.key).length === 0) {
+         setEventList(state => state.concat(event))
+         console.log(eventList)
+      }
    }
 
    useEffect(() => {
@@ -79,11 +86,21 @@ function Main() {
             },
             {
                title: "Fourth Test Event",
-               color: "#00c21d",
+               color: "#ffd438",
                start: moment({ hour: 10, minute: 30 }),
                end: moment({ hour: 10, minute: 15 }).add(2, "h"),
                icon: "birthday cake",
                key: "64654",
+               place: "Hotel de police",
+               description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. "
+            },
+            {
+               title: "Sixth Test Event",
+               color: "#00c21d",
+               start: moment({ hour: 12, minute: 0 }),
+               end: moment({ hour: 12, minute: 15 }).add(2, "h"),
+               icon: "birthday cake",
+               key: "646863",
                place: "Hotel de police",
                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. "
             },
@@ -104,6 +121,16 @@ function Main() {
                end: moment({ hour: 18, minute: 0 }).add(4, "d").add(5, "h"),
                icon: "coffee",
                key: "45238",
+               place: "Hotel de police",
+               description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. "
+            },
+            {
+               title: "second multiple day event",
+               color: "#ffd438",
+               start: moment({ hour: 3, minute: 45 }).add(3, "d"),
+               end: moment({ hour: 5, minute: 0 }).add(5, "d").add(5, "h"),
+               icon: "coffee",
+               key: "5623663",
                place: "Hotel de police",
                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. "
             }

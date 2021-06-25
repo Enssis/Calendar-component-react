@@ -1,10 +1,11 @@
 import React, { useContext } from "react"
 import { Button, Form, Modal } from "semantic-ui-react"
-import DatePicker from "./DatePicker"
+import MomentPicker from "./MomentPicker"
 import ColorPicker from "./ColorPicker"
 import IconDropdown from "./IconDropdown"
 import { useImmer } from "use-immer"
 import DispatchContext from "../../DispatchContext"
+import moment from "moment"
 
 const CreateModal = props => {
    const appDispatch = useContext(DispatchContext)
@@ -19,8 +20,8 @@ const CreateModal = props => {
       title: "",
       titleError: false,
       titleErrorMessage: { content: "Veuillez rentrez un titre de plus de 4 charactères", pointing: "below" },
-      start: event,
-      end: event.add(15, "m")
+      start: moment(event),
+      end: moment(event).add(15, "minutes")
    })
    const handleDescriptionChange = (e, data) => {
       setState(draft => {
@@ -36,7 +37,7 @@ const CreateModal = props => {
 
    const handlePlaceChange = (e, data) => {
       setState(draft => {
-         draft.place = data
+         draft.place = data.value
       })
    }
 
@@ -84,7 +85,7 @@ const CreateModal = props => {
                />
                <Form.Group>
                   <Form.Field
-                     control={DatePicker}
+                     control={MomentPicker}
                      label={state.entireDay ? "Jour" : "Début"}
                      day={state.entireDay}
                      date={state.start}
@@ -98,7 +99,7 @@ const CreateModal = props => {
                      ""
                   ) : (
                      <Form.Field
-                        control={DatePicker}
+                        control={MomentPicker}
                         label="Fin"
                         date={state.end}
                         setSelectedDate={value =>
