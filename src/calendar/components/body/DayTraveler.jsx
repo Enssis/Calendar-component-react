@@ -1,36 +1,44 @@
-import React, { useContext, useEffect } from "react"
-import StateContext from "../../StateContext"
-import DateTraveler from "./GeneralDateTraveler"
-import { DAYS_NAME, MONTH_NAMES } from "../../Calendar"
-import { useImmer } from "use-immer"
-import moment from "moment"
+import React, { useContext, useEffect, useState } from 'react'
+import { ADD_DAYS, DAYS_NAME, MONTH_NAMES } from '../../constants'
+import moment from 'moment'
 
-const DayTraveler = props => {
-   const appState = useContext(StateContext)
+//Context
+import StateContext from '../../StateContext'
 
-   //change when displayed date change
-   const [state, setActual] = useImmer({
-      actual: "",
-      next: "",
-      last: ""
+//Components
+import DateTraveler from './GeneralDateTraveler'
+
+/*
+   Component used to adapts the Date traveler to day traveling
+*/
+const DayTraveler = () => {
+   const { displayedDate } = useContext(StateContext)
+
+   //stock the actual, next and previous day name
+   const [state, setActual] = useState({
+      actual: '',
+      next: '',
+      last: ''
    })
 
+   //set the actual, next and previous day name
+   //change when displayed date change
    useEffect(() => {
-      let dayOfTheWeek = appState.displayedDate.day()
-      const actual = DAYS_NAME[dayOfTheWeek] + " " + appState.displayedDate.date() + " " + MONTH_NAMES[appState.displayedDate.month()] + " " + appState.displayedDate.year()
+      let dayOfTheWeek = displayedDate.day()
+      const actual = DAYS_NAME[dayOfTheWeek] + ' ' + displayedDate.date() + ' ' + MONTH_NAMES[displayedDate.month()] + ' ' + displayedDate.year()
 
-      const tomorrow = moment(appState.displayedDate).add(1, "days")
+      const tomorrow = moment(displayedDate).add(1, 'days')
       dayOfTheWeek = tomorrow.day()
-      const next = DAYS_NAME[dayOfTheWeek] + " " + tomorrow.date() + " " + MONTH_NAMES[tomorrow.month()] + " " + tomorrow.year()
+      const next = DAYS_NAME[dayOfTheWeek] + ' ' + tomorrow.date() + ' ' + MONTH_NAMES[tomorrow.month()] + ' ' + tomorrow.year()
 
-      const yesterday = moment(appState.displayedDate).add(-1, "days")
+      const yesterday = moment(displayedDate).add(-1, 'days')
       dayOfTheWeek = yesterday.day()
-      const last = DAYS_NAME[dayOfTheWeek] + " " + yesterday.date() + " " + MONTH_NAMES[yesterday.month()] + " " + yesterday.year()
+      const last = DAYS_NAME[dayOfTheWeek] + ' ' + yesterday.date() + ' ' + MONTH_NAMES[yesterday.month()] + ' ' + yesterday.year()
 
       setActual({ actual, next, last })
-   }, [appState.displayedDate, setActual])
+   }, [displayedDate])
 
-   return <DateTraveler daysMove={1} actual={state.actual} next={state.next} last={state.last} addType="addDays" />
+   return <DateTraveler daysMove={1} actual={state.actual} next={state.next} last={state.last} addType={ADD_DAYS} />
 }
 
 export default DayTraveler

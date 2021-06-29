@@ -1,21 +1,17 @@
-import React from "react"
-import { Dropdown, Icon } from "semantic-ui-react"
+import React from 'react'
+import { Dropdown, Icon } from 'semantic-ui-react'
 
 const IconDropdown = props => {
-   const handleIconChange = (e, data) => {
-      props.setSelectedIcon(data.value)
-      console.log(props.selectedIcon)
-   }
-
-   return <Dropdown button className="icon" floating labeled options={iconsOption} clearable placeholder="Aucune Icone" onChange={handleIconChange} />
+   return <Dropdown button className="icon" floating labeled options={iconsOption} clearable placeholder="Aucune Icone" onChange={(_, data) => props.setSelectedIcon(data.value)} />
 }
 
 export default IconDropdown
 
+//aray of al the icons option and the way they render
 const iconsOption = [
    {
-      key: "birthday cake",
-      value: "birthday cake",
+      key: 'birthday cake',
+      value: 'birthday cake',
       text: (
          <>
             <Icon name="birthday cake" />
@@ -24,8 +20,8 @@ const iconsOption = [
       )
    },
    {
-      key: "coffee",
-      value: "coffee",
+      key: 'coffee',
+      value: 'coffee',
       text: (
          <>
             <Icon name="coffee" />
@@ -34,8 +30,8 @@ const iconsOption = [
       )
    },
    {
-      key: "phone",
-      value: "phone",
+      key: 'phone',
+      value: 'phone',
       text: (
          <>
             <Icon name="phone" />
@@ -44,8 +40,8 @@ const iconsOption = [
       )
    },
    {
-      key: "suitcase",
-      value: "suitcase",
+      key: 'suitcase',
+      value: 'suitcase',
       text: (
          <>
             <Icon name="suitcase" />
@@ -54,8 +50,8 @@ const iconsOption = [
       )
    },
    {
-      key: "hospital",
-      value: "hospital",
+      key: 'hospital',
+      value: 'hospital',
       text: (
          <>
             <Icon name="hospital" />
@@ -64,8 +60,8 @@ const iconsOption = [
       )
    },
    {
-      key: "plane",
-      value: "plane",
+      key: 'plane',
+      value: 'plane',
       text: (
          <>
             <Icon name="plane" />
@@ -74,8 +70,8 @@ const iconsOption = [
       )
    },
    {
-      key: "taxi",
-      value: "taxi",
+      key: 'taxi',
+      value: 'taxi',
       text: (
          <>
             <Icon name="taxi" />
@@ -84,8 +80,8 @@ const iconsOption = [
       )
    },
    {
-      key: "train",
-      value: "train",
+      key: 'train',
+      value: 'train',
       text: (
          <>
             <Icon name="train" />
@@ -94,8 +90,8 @@ const iconsOption = [
       )
    },
    {
-      key: "utensils",
-      value: "utensils",
+      key: 'utensils',
+      value: 'utensils',
       text: (
          <>
             <Icon name="utensils" />
@@ -104,8 +100,8 @@ const iconsOption = [
       )
    },
    {
-      key: "exclamation",
-      value: "exclamation",
+      key: 'exclamation',
+      value: 'exclamation',
       text: (
          <>
             <Icon name="exclamation" />

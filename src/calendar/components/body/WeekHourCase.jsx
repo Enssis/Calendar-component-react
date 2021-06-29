@@ -1,10 +1,13 @@
-import React, { useContext, useEffect, useState, useRef } from "react"
-import { Table, Dimmer, Loader, Segment, Header, Icon } from "semantic-ui-react"
-import { ScrollableSegment, PaddingLessTableCell, SizedSegment } from "../calendar.style"
-import { SizedTableRow } from "../calendar.style"
-import moment from "moment"
-import StateContext from "../../StateContext"
-import EventPopup from "./EventPopup"
+import React, { useContext, useEffect, useState, useRef } from 'react'
+import moment from 'moment'
+
+//components
+import { Table, Dimmer, Loader, Segment, Header, Icon } from 'semantic-ui-react'
+import { ScrollableSegment, PaddingLessTableCell, SizedSegment } from '../calendar.style'
+import { SizedTableRow } from '../calendar.style'
+import EventPopup from './EventPopup'
+//context
+import StateContext from '../../StateContext'
 
 function createContextFromEvent(e) {
    const left = e.clientX
@@ -26,10 +29,9 @@ function createContextFromEvent(e) {
 }
 
 const HourCase = props => {
-   const appState = useContext(StateContext)
+   const { event } = useContext(StateContext)
    const hours = Array.from(Array(24).keys())
-   const date = props.date
-   const [open, setOpen] = useState(false)
+   const { date } = props
    const contextRef = useRef(null)
 
    //event by hour
@@ -42,13 +44,13 @@ const HourCase = props => {
 
    const [isLoading, setIsLoading] = useState(true)
    const [nbCol, setNbCol] = useState(1)
-   const [event, setEvent] = useState([])
+   const [events, setEvent] = useState([])
 
    useEffect(() => {
-      const date = props.date.format("YYYY MM DD")
-      const propEvent = appState.event[date]
+      const date = props.date.format('YYYY MM DD')
+      const propEvent = event[date]
       setEvent(propEvent ? propEvent : [])
-   }, [props.date, appState.event])
+   }, [props.date, event])
 
    //set the list of event of the day classed by quarter of hours
    useEffect(() => {
@@ -59,7 +61,7 @@ const HourCase = props => {
             let filteredEvent = {}
             let nonDisponibleCols = []
             //for each event add it if the quarter of hour contain it
-            event.forEach(value => {
+            events.forEach(value => {
                let startDiff = 0
                const { start, end, column } = value.timeInfo
                if ((startDiff = start.diff(element.time)) <= 0 && end.diff(element.time) > 0) {
@@ -74,13 +76,18 @@ const HourCase = props => {
                   let col = column
 
                   //if this event have it's cols already changed assign this value to col
-                  if (changedCols[event.key] !== undefined) col = changedCols[event.key]
+                  if (changedCols[value.key] !== undefined) col = changedCols[value.key]
                   //else, if it's a start and the col before is available, it take it
-                  else if (col - 1 >= 0 && nonDisponibleCols.indexOf(col - 1) < 0 && isStart) {
-                     col--
-                     changedCols[event.key] = col
+                  else if (isStart) {
+                     for (let i = 0; i < column; i++) {
+                        if (nonDisponibleCols.indexOf(i) < 0) {
+                           col = i
+                           changedCols[value.key] = col
+                           break
+                        }
+                     }
                   }
-                  //add event's col to col which are taken
+                  //add event's col to taken cols
                   nonDisponibleCols = nonDisponibleCols.concat(col)
 
                   filteredEvent[col] = { value, isStart }
@@ -98,7 +105,7 @@ const HourCase = props => {
       })
 
       setIsLoading(false)
-   }, [event])
+   }, [events])
 
    return (
       <ScrollableSegment height={800} nopadding={1} basic>
@@ -117,39 +124,34 @@ const HourCase = props => {
                               <Segment.Group>
                                  {quarterHourEvents.map((quarterHourEvent, row) => {
                                     const event = quarterHourEvent.event[col]
-
                                     if (event) {
+                                       //console.log({ event, col, row })
                                        const { isStart, value } = event
-                                       if (isStart)
+                                       if (isStart) {
+                                          console.log({ value, col, row })
                                           return (
-                                             <SizedSegment
-                                                nomargin={1}
-                                                nopadding={1}
-                                                height={value.timeInfo.duration * 8}
-                                                vertical
-                                                backcolor={value.color}
-                                                onMouseLeave={() => setOpen(false)}
-                                                onMouseMove={e => {
-                                                   e.preventDefault()
-                                                   contextRef.current = createContextFromEvent(e)
-                                                   setOpen(true)
-                                                }}
-                                             >
-                                                <EventPopup context={contextRef} event={value} open={open} onClose={() => setOpen(false)} />
-                                                {nbCol <= 2 ? (
-                                                   <Header as="h5" style={{ paddingTop: value.timeInfo.duration * 4 - 8 }}>
-                                                      <Icon name={value.icon} size="tiny" />
-                                                      {" " + value.title}
-                                                   </Header>
-                                                ) : (
-                                                   ""
-                                                )}
-                                             </SizedSegment>
+                                             <EventPopup
+                                                trigger={
+                                                   <div>
+                                                      <SizedSegment nomargin={1} nopadding={1} height={value.timeInfo.duration * 8} vertical backcolor={value.color}>
+                                                         {nbCol <= 2 ? (
+                                                            <Header as="h5" style={{ paddingTop: value.timeInfo.duration * 4 - 8 }}>
+                                                               <Icon name={value.icon} size="tiny" />
+                                                               {' ' + value.title}
+                                                            </Header>
+                                                         ) : (
+                                                            ''
+                                                         )}
+                                                      </SizedSegment>
+                                                   </div>
+                                                }
+                                                event={value}
+                                             />
                                           )
-                                       else return ""
+                                       } else return ''
                                     }
 
-                                    return <SizedSegment nohover={1} basic nomargin={1} nopadding={1} height={8} vertical backcolor="#ffffff"></SizedSegment>
+                                    return <SizedSegment nohover={1} basic nomargin={1} nopadding={1} height={8} vertical backcolor="#fff"></SizedSegment>
                                  })}
                               </Segment.Group>
                            )}

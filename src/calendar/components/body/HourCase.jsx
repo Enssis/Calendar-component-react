@@ -1,14 +1,18 @@
-import React, { useContext, useEffect, useState } from "react"
-import { Divider, Table, Dimmer, Loader, Segment } from "semantic-ui-react"
-import { ScrollableSegment, PaddingLessTableCell } from "../calendar.style"
-import EventSegment from "./EventSegment"
-import { SizedTableRow } from "../calendar.style"
-import moment from "moment"
-import StateContext from "../../StateContext"
-import { Element, scroller } from "react-scroll"
+import React, { useContext, useEffect, useState } from 'react'
+import { Element, scroller } from 'react-scroll'
+import moment from 'moment'
+//context
+import StateContext from '../../StateContext'
+//components
+import { Divider, Table, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import { ScrollableSegment, PaddingLessTableCell, SizedTableRow } from '../calendar.style'
+import EventSegment from './EventSegment'
 
+/*
+   Component rendering all the events of the day by time block defined
+*/
 const HourCase = props => {
-   const appState = useContext(StateContext)
+   const { event } = useContext(StateContext)
    const hours = Array.from(Array(24).keys())
    const { date } = props
 
@@ -25,36 +29,36 @@ const HourCase = props => {
    //nb max de columns
    const [nbCol, setNbCol] = useState(1)
    //list of events in this day
-   const [event, setEvent] = useState([])
+   const [events, setEvents] = useState([])
    //used to know if the first event has been mounted
    const [firstEventReady, setFirstEventReady] = useState(false)
 
    //set the events of the day
    useEffect(() => {
-      const dateFormat = date.format("YYYY MM DD")
-      const propEvent = appState.event[dateFormat]
-      setEvent(propEvent ? propEvent : [])
+      const dateFormat = date.format('YYYY MM DD')
+      const propEvent = event[dateFormat]
+      setEvents(propEvent ? propEvent : [])
       setFirstEventReady(false)
-   }, [date, appState.event])
+   }, [date, event])
 
    //set the list of event of the day by quarter of hours
    useEffect(() => {
-      setQuarterHourEvents(q => {
+      console.log('------------------------------------------')
+      setQuarterHourEvents(quarter => {
          let nbColMax = 1
          let firstElement = true
          let changedCols = {}
-         const newQHE = q.map(element => {
+         const newQHE = quarter.map(element => {
             let nonDisponibleCols = []
             let filteredEvent = {}
             //for each event add it if the quarter of hour contain it
-            event.forEach(value => {
+            events.forEach(value => {
                let startDiff = 0
                const { start, end, column } = value.timeInfo
                if ((startDiff = start.diff(element.time)) <= 0 && end.diff(element.time) > 0) {
                   let isStart = false
-
                   //say if it is the first quarter of the event
-                  if (startDiff > -450000) {
+                  if (startDiff > -900000) {
                      isStart = true
                   }
 
@@ -62,11 +66,16 @@ const HourCase = props => {
                   let col = column
 
                   //if this event have it's cols already changed assign this value to col
-                  if (changedCols[event.key] !== undefined) col = changedCols[event.key]
+                  if (changedCols[value.key] !== undefined) col = changedCols[value.key]
                   //else, if it's a start and the col before is available, it take it
-                  else if (col - 1 >= 0 && nonDisponibleCols.indexOf(col - 1) < 0 && isStart) {
-                     col--
-                     changedCols[event.key] = col
+                  else if (isStart) {
+                     for (let i = 0; i < column; i++) {
+                        if (nonDisponibleCols.indexOf(i) < 0) {
+                           col = i
+                           changedCols[value.key] = col
+                           break
+                        }
+                     }
                   }
                   //add event's col to col which are taken
                   nonDisponibleCols = nonDisponibleCols.concat(col)
@@ -86,23 +95,23 @@ const HourCase = props => {
       })
 
       setIsLoading(false)
-   }, [event])
+   }, [events])
 
    //function to set the scroll
    const scrollToFirstElement = () => {
-      scroller.scrollTo("firstEvent", {
+      scroller.scrollTo('firstEvent', {
          duration: 400,
          delay: 0,
-         smooth: "easeInOutQuart",
-         containerId: "container"
+         smooth: 'easeInOutQuart',
+         containerId: 'container'
       })
    }
 
    useEffect(() => {
-      if (firstEventReady && event.length > 0) {
+      if (firstEventReady && events.length > 0) {
          scrollToFirstElement()
       }
-   }, [firstEventReady, event.length])
+   }, [firstEventReady, events.length])
 
    return (
       <ScrollableSegment height={800} nopadding={1} basic id="container">
@@ -150,7 +159,7 @@ const HourCase = props => {
                                                 </Element>
                                              )
                                           } else return <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 40} />
-                                       } else return ""
+                                       } else return ''
                                     }
                                     return <EventSegment key={row} event={null} moment={quarterHourEvent.time} size={40} />
                                  })}

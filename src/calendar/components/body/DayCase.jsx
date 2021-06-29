@@ -1,40 +1,65 @@
-import React, { useContext, useState, useEffect } from "react"
-import { List } from "semantic-ui-react"
-import DispatchContext from "../../DispatchContext"
-import StateContext from "../../StateContext"
-import { DaySegment, SizedSegment, CustomLabel, MonthListItem } from "../calendar.style"
-import moment from "moment"
-import EventPopup from "./EventPopup"
+import React, { useContext, useState, useEffect } from 'react'
+import { List } from 'semantic-ui-react'
+import { DaySegment, SizedSegment, CustomLabel, MonthListItem } from '../calendar.style'
+import moment from 'moment'
+import { SET_DISPLAYED_DATE, SET_MODE, DAY, OPEN_MODAL, MODIF } from '../../constants'
 
+//components
+import EventPopup from './EventPopup'
+
+//Context
+import DispatchContext from '../../DispatchContext'
+import StateContext from '../../StateContext'
+
+/*
+   Component rendering one day when on the month mode
+*/
 const DayCase = props => {
    const { date } = props
 
    const appDispatch = useContext(DispatchContext)
-   const appState = useContext(StateContext)
+   const { event } = useContext(StateContext)
 
    const [rows, setRows] = useState([])
 
    //set the events of the day
    useEffect(() => {
-      const ndate = date.format("YYYY MM DD")
-      const propEvent = appState.event[ndate]
+      const ndate = date.format('YYYY MM DD')
+      const propEvent = event[ndate]
+      if (propEvent) {
+         //sort all the events by column number
+         const events = [...propEvent].sort((el1, el2) => {
+            return el1.timeInfo.column > el2.timeInfo.column ? 1 : -1
+         })
+         const rows = []
+         //for each event while the length of row isn't is col number add a null event
+         for (const event of events) {
+            while (rows.length < event.timeInfo.column) {
+               rows.push('')
+            }
+            rows.push(event)
+         }
+         setRows(rows)
+      } else {
+         setRows([])
+      }
+   }, [date, event])
 
-      setRows(propEvent ? propEvent : [])
-   }, [date, appState.event])
-
+   //set the displayed day to be the clicked date and switch to day mode
    const goToDay = date => {
-      appDispatch({ type: "setDisplayedDate", date })
-      appDispatch({ type: "showJour" })
+      appDispatch({ type: SET_DISPLAYED_DATE, date })
+      appDispatch({ type: SET_MODE, data: DAY })
    }
 
    return (
       <>
-         <DaySegment tertiary size={"mini"} attached="top" backcolor="#fff" onClick={() => goToDay(date)}>
+         <DaySegment tertiary size={'mini'} attached="top" backcolor="#fff" onClick={() => goToDay(date)}>
             {date.date()}
          </DaySegment>
          <SizedSegment height="100" nopadding={1} attached="bottom" backcolor="#fff" nohover>
             <List>
                {rows.map(event => {
+                  if (event === '') return <div style={{ padding: 6 }}></div>
                   const { start, duration } = event.timeInfo
                   return (
                      <MonthListItem>
@@ -42,7 +67,7 @@ const DayCase = props => {
                            left
                            trigger={
                               <div>
-                                 <CustomLabel margLeft={Math.ceil((Math.abs(moment({ year: start.year(), month: start.month(), date: start.date() }).diff(start) / 900000) * 100) / 96)} width={Math.floor((duration * 100) / 96)} backcolor={event.color}></CustomLabel>
+                                 <CustomLabel onClick={() => appDispatch({ type: OPEN_MODAL, mode: MODIF, event })} margLeft={Math.floor((Math.abs(moment({ year: start.year(), month: start.month(), date: start.date() }).diff(start) / 900000) * 100) / 96)} width={Math.floor((duration * 100) / 96)} backcolor={event.color}></CustomLabel>
                               </div>
                            }
                            event={event}

@@ -1,11 +1,14 @@
-import React, { useContext } from "react"
-import { Button, Form, Modal } from "semantic-ui-react"
-import MomentPicker from "./MomentPicker"
-import ColorPicker from "./ColorPicker"
-import IconDropdown from "./IconDropdown"
-import { useImmer } from "use-immer"
-import DispatchContext from "../../DispatchContext"
-import moment from "moment"
+import React, { useContext } from 'react'
+import { useImmer } from 'use-immer'
+import moment from 'moment'
+//components
+import { Button, Form, Message, Modal } from 'semantic-ui-react'
+import MomentPicker from './MomentPicker'
+import ColorPicker from './ColorPicker'
+import IconDropdown from './IconDropdown'
+//context
+import DispatchContext from '../../DispatchContext'
+import { ADD_EVENT, CLOSE_MODAL } from '../../constants'
 
 const CreateModal = props => {
    const appDispatch = useContext(DispatchContext)
@@ -13,21 +16,27 @@ const CreateModal = props => {
 
    const [state, setState] = useImmer({
       entireDay: false,
-      selectedColor: "#0ed3ed",
-      selectedIcon: "",
-      description: "",
-      place: "",
-      title: "",
+      selectedColor: '#0ed3ed',
+      selectedIcon: '',
+      description: '',
+      place: '',
+      title: '',
       titleError: false,
-      titleErrorMessage: { content: "Veuillez rentrez un titre de plus de 4 charactères", pointing: "below" },
+      titleErrorMessage: { content: 'Veuillez rentrez un titre de plus de 4 charactères', pointing: 'below' },
       start: moment(event),
-      end: moment(event).add(15, "minutes")
+      end: moment(event).add(15, 'minutes'),
+      timeError: '',
+      timeErrorMessage: ''
    })
+
+   //for the three functions : change the value of the place when something is typed
+
    const handleDescriptionChange = (e, data) => {
       setState(draft => {
          draft.description = data.value
       })
    }
+
    const handleTitleChange = (e, data) => {
       setState(draft => {
          draft.titleError = false
@@ -41,6 +50,7 @@ const CreateModal = props => {
       })
    }
 
+   //Add the event created if there isn't any errors
    const handleValidate = () => {
       let error = false
       if (state.title.length < 1) {
@@ -49,7 +59,17 @@ const CreateModal = props => {
             draft.titleError = true
          })
          setState(draft => {
-            draft.titleErrorMessage = { content: "Veuillez rentrez un titre de plus de 4 charactères", pointing: "below" }
+            draft.titleErrorMessage = { content: 'Veuillez rentrez un titre de plus de 4 charactères', pointing: 'below' }
+         })
+      }
+
+      if (state.start.diff(state.end) > 0) {
+         error = true
+         setState(draft => {
+            draft.timeError = true
+         })
+         setState(draft => {
+            draft.timeErrorMessage = "Le début de l'évennement doit se passer avant la fin"
          })
       }
 
@@ -64,8 +84,8 @@ const CreateModal = props => {
             key: Math.floor(Math.random() * 1000000),
             description: state.description
          }
-         appDispatch({ type: "addEvent", value: event })
-         appDispatch({ type: "closeModal" })
+         appDispatch({ type: ADD_EVENT, value: event })
+         appDispatch({ type: CLOSE_MODAL })
       }
    }
 
@@ -86,17 +106,18 @@ const CreateModal = props => {
                <Form.Group>
                   <Form.Field
                      control={MomentPicker}
-                     label={state.entireDay ? "Jour" : "Début"}
+                     label={state.entireDay ? 'Jour' : 'Début'}
                      day={state.entireDay}
                      date={state.start}
                      setSelectedDate={value =>
                         setState(draft => {
                            draft.start = value
+                           draft.timeError = false
                         })
                      }
                   />
                   {state.entireDay ? (
-                     ""
+                     ''
                   ) : (
                      <Form.Field
                         control={MomentPicker}
@@ -105,11 +126,13 @@ const CreateModal = props => {
                         setSelectedDate={value =>
                            setState(draft => {
                               draft.end = value
+                              draft.timeError = false
                            })
                         }
                      />
                   )}
                </Form.Group>
+               {state.timeError ? <Message negative>{state.timeErrorMessage}</Message> : ''}
                <Form.Group>
                   <Form.Field
                      control={ColorPicker}
@@ -140,7 +163,7 @@ const CreateModal = props => {
             <Button positive onClick={handleValidate}>
                Valider
             </Button>
-            <Button negative onClick={() => appDispatch({ type: "closeModal" })}>
+            <Button negative onClick={() => appDispatch({ type: CLOSE_MODAL })}>
                Annuler
             </Button>
          </Modal.Actions>

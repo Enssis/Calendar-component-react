@@ -1,6 +1,6 @@
-import React, { useState } from "react"
-import { Button, Container, Modal, Segment } from "semantic-ui-react"
-import { BigInputMoment, DatePicker } from "rim-bdsit"
+import React, { useState } from 'react'
+import { Button, Container, Modal, Segment } from 'semantic-ui-react'
+import { BigInputMoment, DatePicker } from 'rim-bdsit'
 
 const MomentPicker = props => {
    const { date, setSelectedDate, day } = props
@@ -14,7 +14,7 @@ const MomentPicker = props => {
    }
 
    const handleMomentChange = mom => {
-      setSelectedMoment(mom)
+      setSelectedMoment(mom.second(0).millisecond(0))
    }
 
    //popup to choose the time
@@ -38,7 +38,7 @@ const MomentPicker = props => {
 
    return (
       <>
-         <Button onClick={() => setModalOpen(true)}>{date.format(props.day ? "DD/MM/YYYY" : "DD/MM/YYYY HH:mm")}</Button>
+         <Button onClick={() => setModalOpen(true)}>{date.format(props.day ? 'DD/MM/YYYY' : 'DD/MM/YYYY HH:mm')}</Button>
          <TimeModal />
       </>
    )

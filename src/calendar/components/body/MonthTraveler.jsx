@@ -1,33 +1,40 @@
-import React, { useContext, useEffect } from "react"
-import StateContext from "../../StateContext"
-import DateTraveler from "./GeneralDateTraveler"
-import { MONTH_NAMES } from "../../Calendar"
-import { useImmer } from "use-immer"
-import moment from "moment"
+import React, { useContext, useEffect } from 'react'
+import { ADD_MONTHS, MONTH_NAMES } from '../../constants'
+import { useImmer } from 'use-immer'
+import moment from 'moment'
+//context
+import StateContext from '../../StateContext'
+//components
+import DateTraveler from './GeneralDateTraveler'
 
-const DayTraveler = props => {
-   const appState = useContext(StateContext)
+/*
+   Component used to adapts the Date traveler to month traveling
+*/
+const DayTraveler = () => {
+   const { displayedDate } = useContext(StateContext)
 
    //change when displayed date change
    const [state, setActual] = useImmer({
-      actual: "",
-      next: "",
-      last: ""
+      actual: '',
+      next: '',
+      last: ''
    })
 
+   //set the actual, next and previous day name
+   //change when displayed date change
    useEffect(() => {
-      const actual = MONTH_NAMES[appState.displayedDate.month()] + " " + appState.displayedDate.year()
+      const actual = MONTH_NAMES[displayedDate.month()] + ' ' + displayedDate.year()
 
-      const tomorrow = moment(appState.displayedDate).add(1, "month")
-      const next = MONTH_NAMES[tomorrow.month()] + " " + tomorrow.year()
+      const tomorrow = moment(displayedDate).add(1, 'month')
+      const next = MONTH_NAMES[tomorrow.month()] + ' ' + tomorrow.year()
 
-      const yesterday = moment(appState.displayedDate).add(-1, "month")
-      const last = MONTH_NAMES[yesterday.month()] + " " + yesterday.year()
+      const yesterday = moment(displayedDate).add(-1, 'month')
+      const last = MONTH_NAMES[yesterday.month()] + ' ' + yesterday.year()
 
       setActual({ actual, next, last })
-   }, [appState.displayedDate, setActual])
+   }, [displayedDate])
 
-   return <DateTraveler daysMove={1} actual={state.actual} next={state.next} last={state.last} addType="addMonths" />
+   return <DateTraveler daysMove={1} actual={state.actual} next={state.next} last={state.last} addType={ADD_MONTHS} />
 }
 
 export default DayTraveler

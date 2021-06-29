@@ -1,27 +1,33 @@
-import React, { useContext } from "react"
-import StateContext from "../../StateContext"
-import DayTraveler from "./DayTraveler"
-import WeekTraveler from "./WeekTraveler"
-import MonthTraveler from "./MonthTraveler"
+import React, { useContext } from 'react'
+import { DAY, MONTH, WEEK } from '../../constants'
 
-const BodyMenu = props => {
-   const appState = useContext(StateContext)
+//Context
+import StateContext from '../../StateContext'
 
+//Components
+import DayTraveler from './DayTraveler'
+import WeekTraveler from './WeekTraveler'
+import MonthTraveler from './MonthTraveler'
+
+const BodyMenu = () => {
+   const { mode } = useContext(StateContext)
+
+   //return the right component depending on the actual mmode
    const menu = mode => {
       switch (mode) {
-         case "jour":
+         case DAY:
             return <DayTraveler />
-         case "semaine":
+         case WEEK:
             return <WeekTraveler />
-         case "mois":
+         case MONTH:
             return <MonthTraveler />
          default:
-            console.log("Error on the mode")
+            console.log('Error on the mode')
             break
       }
    }
 
-   return <>{menu(appState.mode)}</>
+   return <>{menu(mode)}</>
 }
 
 export default BodyMenu

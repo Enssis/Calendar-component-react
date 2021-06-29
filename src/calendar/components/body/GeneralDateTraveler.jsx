@@ -1,12 +1,18 @@
-import React, { useContext } from "react"
-import { Button, Icon } from "semantic-ui-react"
-import DispatchContext from "../../DispatchContext"
+import React, { useContext } from 'react'
+
+//components
+import { Button, Icon } from 'semantic-ui-react'
+
+//context
+import DispatchContext from '../../DispatchContext'
 
 const DateTraveler = props => {
+   const { addType, daysMove, last, next, actual } = props
    const appDispatch = useContext(DispatchContext)
 
+   //change the date displayed by adding the right amount of days / month
    const changeDate = nbDays => {
-      return () => appDispatch({ type: props.addType, nbDays: nbDays * props.daysMove })
+      return () => appDispatch({ type: addType, nbDays: nbDays * daysMove })
    }
 
    return (
@@ -17,9 +23,9 @@ const DateTraveler = props => {
          <Button icon onClick={changeDate(-5)}>
             <Icon name="angle left" />
          </Button>
-         <Button onClick={changeDate(-1)}>{props.last}</Button>
-         <Button>{props.actual}</Button>
-         <Button onClick={changeDate(1)}>{props.next}</Button>
+         <Button onClick={changeDate(-1)}>{last}</Button>
+         <Button>{actual}</Button>
+         <Button onClick={changeDate(1)}>{next}</Button>
          <Button icon onClick={changeDate(5)}>
             <Icon name="angle right" />
          </Button>

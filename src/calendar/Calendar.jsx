@@ -1,40 +1,32 @@
-import React, { useEffect, useState } from "react"
-import { useImmerReducer } from "use-immer"
-import { Element, scroller } from "react-scroll"
-import moment from "moment"
+import React, { useEffect, useState } from 'react'
+import { useImmerReducer } from 'use-immer'
+import { Element, scroller } from 'react-scroll'
+import moment from 'moment'
+import { Dimmer, List, Message, Loader } from 'semantic-ui-react'
+import { ADD_DAYS, SET_EVENTS, MONTH, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT } from './constants'
 
 //components
 //header
-import CalendarHeader from "./components/Header/CalendarHeader"
+import CalendarHeader from './components/Header/CalendarHeader'
 //body
-import MainBody from "./components/body/MainBody"
+import MainBody from './components/body/MainBody'
 //modal
-import MainModal from "./components/modal/MainModal"
+import MainModal from './components/modal/MainModal'
 
 //context for acces from all childrens
-import DispatchContext from "./DispatchContext"
-import StateContext from "./StateContext"
-import { Dimmer, List, Message, Loader } from "semantic-ui-react"
+import DispatchContext from './DispatchContext'
+import StateContext from './StateContext'
 
 const date = moment()
 
 const Calendar = props => {
-   const { settings, eventList, addEvent } = props
+   const { settings, eventList, setEvents } = props
 
    //used in case of options errors
    const [error, setError] = useState({ isError: false, errorMsg: [] })
 
    //used to stop any action until the options are verified
    const [isLoading, setIsLoading] = useState(true)
-
-   //function to set the scroll
-   const scrollToBody = () => {
-      scroller.scrollTo("body", {
-         duration: 500,
-         delay: 0,
-         smooth: "easeInOutQuart"
-      })
-   }
 
    //check if the options doesn't have errors
    useEffect(() => {
@@ -54,7 +46,7 @@ const Calendar = props => {
       //check if the total isn't equal to 0
       if (total === 0) {
          optionError = true
-         optionErrMess.push("Total is egal to 0")
+         optionErrMess.push('Total is egal to 0')
       }
 
       setError({
@@ -68,16 +60,17 @@ const Calendar = props => {
 
    //initials states for the reducer
    const initialState = {
-      mode: "mois",
+      mode: MONTH,
       date: date,
       displayedDate: date,
       event: {},
       modal: {
          open: false,
-         mode: "",
+         mode: '',
          event: {}
       },
-      settings: settings
+      settings: settings,
+      debug: true
    }
 
    //loop through the events to assign them to each day
@@ -104,10 +97,10 @@ const Calendar = props => {
          const { start, end } = event
 
          //check if the event is in the limits dates
-         if (end.diff(moment().add(-before, "M")) < 0 || start.diff(moment().add(after, "M")) > 0) continue
+         if (end.diff(moment().add(-before, 'M')) < 0 || start.diff(moment().add(after, 'M')) > 0) continue
 
          //column assignation
-         //assign to this event the first column or doesn't change anithing if it already has one
+         //assign to this event the first column or doesn't change anything if it already has one
          if (columnList[event.key] === undefined) {
             columnList[event.key] = 0
          }
@@ -128,17 +121,12 @@ const Calendar = props => {
                .filter(el => el !== undefined)
                .concat(columnList[event.key])
             const usableColumns = Array.from(Array(sameTimeEvents.length + 1).keys()).filter(el => colTakenList.indexOf(el) < 0)
-            console.log({ columnList })
-            console.log({ sameTimeEvents })
-            console.log(usableColumns)
-            console.log({ colTakenList })
-            console.log({ event })
+
             //assign to each event without a column number a column and remove it from the array with all usable columns numbers
             for (const sameTimeEvent of sameTimeEvents) {
-               if (!columnList[sameTimeEvent.key]) {
+               if (columnList[sameTimeEvent.key] === undefined) {
                   const col = usableColumns.shift()
                   columnList[sameTimeEvent.key] = col
-                  console.log({ col, sameTimeEvent })
                }
             }
          }
@@ -149,11 +137,11 @@ const Calendar = props => {
          //loop to add the events to each day it is in
          do {
             //wich day we are adding the event
-            day = moment(event.start).add(nbDays, "d")
+            day = moment(event.start).add(nbDays, 'd')
             nbDays++
 
             //the key corresponding to a day are on the format "YYYY MM DD", ex : "2021 06 25" for the 25 june 2021
-            const dayFormat = day.format("YYYY MM DD")
+            const dayFormat = day.format('YYYY MM DD')
             if (!events[dayFormat]) events[dayFormat] = []
 
             //copy of the event to save
@@ -163,75 +151,84 @@ const Calendar = props => {
             const timeInfo = { start, end, duration: 0, column: columnList[event.key] }
 
             //set the start to 00:00 if the real start is before the day
-            if (!start.isSame(day, "day")) {
+            if (!start.isSame(day, 'day')) {
                timeInfo.start = moment({ year: day.year(), month: day.month(), date: day.date(), hour: 0, minute: 0 })
             }
 
             //set the end to 23::59 if the real end is after the day
-            if (!end.isSame(day, "day")) {
+            if (!end.isSame(day, 'day')) {
                timeInfo.end = moment({ year: day.year(), month: day.month(), date: day.date(), hour: 23, minute: 59 })
             }
             //duration in quarters of hours
             timeInfo.duration = Math.ceil(Math.abs(timeInfo.start.diff(timeInfo.end) / 900000))
-            newEvent["timeInfo"] = timeInfo
+            newEvent['timeInfo'] = timeInfo
 
             events[dayFormat].push(newEvent)
-         } while (!end.isSame(day, "day"))
+         } while (!end.isSame(day, 'day'))
       }
 
-      dispatch({ type: "setEvents", value: events })
-      console.log(events)
+      dispatch({ type: SET_EVENTS, value: events })
    }, [eventList, isLoading, settings.table])
 
-   //reducer
+   //Reducer function used to controle all the generals states
    const reducer = (draft, action) => {
       switch (action.type) {
-         case "showMois":
-            draft.mode = "mois"
+         case SET_MODE:
+            draft.mode = action.data
             break
-         case "showSemaine":
-            draft.mode = "semaine"
-            break
-         case "showJour":
-            draft.mode = "jour"
-            break
-         case "updateDate":
+         case UPDATE_DATE:
             const date = moment()
             draft.date = date
             break
-         case "setDisplayedDate":
+         case SET_DISPLAYED_DATE:
             draft.displayedDate = action.date
             break
-         case "addDays":
-            draft.displayedDate = moment(draft.displayedDate).add(action.nbDays, "days")
+         case ADD_DAYS:
+            draft.displayedDate = moment(draft.displayedDate).add(action.nbDays, 'days')
             break
-         case "addMonths":
-            draft.displayedDate = moment(draft.displayedDate).add(action.nbDays, "month")
+         case ADD_MONTHS:
+            draft.displayedDate = moment(draft.displayedDate).add(action.nbDays, 'month')
             break
-         case "addEvent":
-            addEvent(action.value)
+         case ADD_EVENT:
+            if (eventList.filter(el => el.key === action.value.key).length === 0) {
+               setEvents(eventList.concat(action.value))
+            }
             break
-         case "openModal":
+         case MODIF_EVENT:
+            const event = action.value
+            const newEventList = [...eventList.filter(el => el.key !== event.key)]
+            setEvents(newEventList.concat(event))
+            break
+         case DELETE_EVENT:
+            setEvents([...eventList.filter(el => el.key !== action.value.key)])
+            break
+         case OPEN_MODAL:
             draft.modal = { open: true, mode: action.mode, event: action.event }
             break
-         case "closeModal":
+         case CLOSE_MODAL:
             draft.modal.open = false
             break
-         case "setEvents":
+         case SET_EVENTS:
             draft.event = action.value
             break
          default:
-            console.log("unrecognized type")
+            console.log('unrecognized type')
             break
       }
    }
 
    const [state, dispatch] = useImmerReducer(reducer, initialState)
 
+   //function to set the scroll to the body component when the mode change
    useEffect(() => {
-      scrollToBody()
+      scroller.scrollTo('body', {
+         duration: 500,
+         delay: 0,
+         smooth: 'easeInOutQuart'
+      })
    }, [state.mode])
 
+   //show a loading icon until settings are verified
    if (isLoading)
       return (
          <Dimmer active inverted>
@@ -239,6 +236,7 @@ const Calendar = props => {
          </Dimmer>
       )
 
+   //show a error message
    if (error.isError)
       return (
          <Message negative>
@@ -261,7 +259,3 @@ const Calendar = props => {
 }
 
 export default Calendar
-
-const DAYS_NAME = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
-const MONTH_NAMES = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Decembre"]
-export { DAYS_NAME, MONTH_NAMES }
