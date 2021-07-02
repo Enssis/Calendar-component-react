@@ -13,7 +13,7 @@ const MomentPicker = props => {
       setModalOpen(false)
    }
 
-   const handleMomentChange = mom => {
+   const handleDayChange = mom => {
       setSelectedMoment(mom.second(0).millisecond(0))
    }
 
@@ -22,7 +22,15 @@ const MomentPicker = props => {
       <Modal dimmer="blurring" open={modalOpen} basic onClose={() => setModalOpen(false)} size="small">
          <Modal.Content>
             <Container text>
-               <Segment>{day ? <DatePicker moment={selectedMoment} onChange={handleMomentChange} locale="fr" /> : <BigInputMoment moment={selectedMoment} onChange={handleMomentChange} locale="fr" />}</Segment>
+               <Segment>
+                  {day ? (
+                     <DatePicker moment={selectedMoment} onChange={handleDayChange} locale="fr" />
+                  ) : (
+                     <Segment>
+                        <BigInputMoment moment={selectedMoment} onChange={handleDayChange} locale="fr" />
+                     </Segment>
+                  )}
+               </Segment>
             </Container>
          </Modal.Content>
          <Modal.Actions>

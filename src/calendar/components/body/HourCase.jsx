@@ -16,7 +16,8 @@ import { useImmer } from 'use-immer'
    Component rendering all the events of the day by time block defined
 */
 const HourCase = props => {
-   const { event, nbrTimeRange, settings, activeTags } = useContext(StateContext)
+   const { event, nbrTimeRange, settings, activeTags, zoom } = useContext(StateContext)
+   console.log(zoom)
    const appDispatch = useContext(DispatchContext)
    const hours = Array.from(Array(24).keys())
    const { date, week } = props
@@ -97,7 +98,7 @@ const HourCase = props => {
    //function to set the scroll
    const scrollToFirstElement = () => {
       scroller.scrollTo('firstEvent', {
-         duration: 400,
+         duration: 0,
          delay: 0,
          smooth: 'easeInOutQuart',
          containerId: 'container'
@@ -114,11 +115,11 @@ const HourCase = props => {
       <ScrollableSegment height={week ? 900 : 800} nopadding={1} basic id="container">
          <Table definition={!week}>
             <Table.Body>
-               <SizedTableRow height={160}>
-                  {!week
+               <SizedTableRow height={160 * zoom}>
+                  {!week && zoom > 0.4
                      ? hours.map((hour, key) => {
                           return (
-                             <SizedTableRow key={key} height={180}>
+                             <SizedTableRow key={key} height={180 * zoom}>
                                 {isLoading ? (
                                    <Dimmer active inverted>
                                       <Loader />
@@ -154,7 +155,7 @@ const HourCase = props => {
                                                 <EventPopup
                                                    trigger={
                                                       <div>
-                                                         <SizedSegment nomargin={1} nopadding={1} height={value.timeInfo.duration * 3 * nbrTimeRange} vertical backcolor={value.color} onClick={() => handleModifClick(value)}>
+                                                         <SizedSegment nomargin={1} nopadding={1} height={value.timeInfo.duration * 3 * nbrTimeRange * zoom} vertical backcolor={value.color} onClick={() => handleModifClick(value)}>
                                                             {nbCol <= 2 && nbrTimeRange > 2 && value.timeInfo.duration * nbrTimeRange > 50 ? (
                                                                <Header as="h5" style={{ paddingTop: value.timeInfo.duration * 4 - 8 }}>
                                                                   <Icon name={value.icon} size="tiny" />
@@ -174,16 +175,16 @@ const HourCase = props => {
                                                 if (!firstEventReady) setFirstEventReady(true)
                                                 return (
                                                    <Element name="firstEvent">
-                                                      <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 15 * nbrTimeRange} />
+                                                      <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 15 * nbrTimeRange * zoom} />
                                                    </Element>
                                                 )
-                                             } else return <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 15 * nbrTimeRange} />
+                                             } else return <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 15 * nbrTimeRange * zoom} />
                                           }
                                        } else return ''
                                     }
 
-                                    if (week) return <SizedSegment nohover={1} basic nomargin={1} nopadding={1} height={3 * nbrTimeRange} vertical backcolor="#fff"></SizedSegment>
-                                    return <EventSegment key={row} event={null} moment={quarterHourEvent.time} size={15 * nbrTimeRange} />
+                                    if (week) return <SizedSegment nohover={1} basic nomargin={1} nopadding={1} height={3 * nbrTimeRange * zoom} vertical backcolor="#fff"></SizedSegment>
+                                    return <EventSegment key={row} event={null} moment={quarterHourEvent.time} size={15 * nbrTimeRange * zoom} />
                                  })}
                               </Segment.Group>
                            )}

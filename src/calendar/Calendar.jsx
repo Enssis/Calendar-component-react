@@ -3,7 +3,7 @@ import { useImmerReducer } from 'use-immer'
 import { Element, scroller } from 'react-scroll'
 import moment from 'moment'
 import { Dimmer, List, Message, Loader, Sidebar, Segment, Modal } from 'semantic-ui-react'
-import { ADD_DAYS, SET_EVENTS, MONTH, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG } from './constants'
+import { ADD_DAYS, SET_EVENTS, MONTH, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS } from './constants'
 
 //components
 //header
@@ -18,6 +18,7 @@ import DispatchContext from './DispatchContext'
 import StateContext from './StateContext'
 import TagsSidebar from './components/settings/TagsSidebar'
 import CreateModal from './components/settings/CreateModal'
+import { ZOOM_PLUS } from './constants'
 
 const date = moment()
 
@@ -92,12 +93,13 @@ const Calendar = props => {
          event: {}
       },
       settings: settings,
-      debug: true,
+      debug: false,
       colors: settings.eventColors ? settings.eventColors : ['#0ed3ed', '#00c21d', '#ff87c3', '#ffd438', '#ff1c14', '#ff7919', '#0055ff', '#cc00ff'],
       nbrTimeRange: settings.timeRange / 5,
       settingsOpen: false,
       tagsOpen: false,
-      activeTags: settings.tagsList
+      activeTags: settings.tagsList,
+      zoom: 1
    }
 
    //Reducer function used to controle all the generals states
@@ -182,6 +184,12 @@ const Calendar = props => {
             break
          case SET_ACTIVE_TAG:
             draft.activeTags = action.value
+            break
+         case ZOOM_MINUS:
+            if (draft.zoom > 0.4) draft.zoom -= 0.2
+            break
+         case ZOOM_PLUS:
+            if (draft.zoom < 2) draft.zoom += 0.2
             break
          default:
             console.log('unrecognized type')
