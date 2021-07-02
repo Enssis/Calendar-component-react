@@ -4,22 +4,32 @@ import moment from 'moment'
 //context
 import StateContext from '../../StateContext'
 //components
-import { Divider, Table, Dimmer, Loader, Segment } from 'semantic-ui-react'
-import { ScrollableSegment, PaddingLessTableCell, SizedTableRow } from '../calendar.style'
+import { Divider, Table, Dimmer, Loader, Segment, Icon, Header } from 'semantic-ui-react'
+import { ScrollableSegment, PaddingLessTableCell, SizedTableRow, SizedSegment } from '../calendar.style'
 import EventSegment from './EventSegment'
+import EventPopup from './EventPopup'
+import DispatchContext from '../../DispatchContext'
+import { MODIF, OPEN_MODAL } from '../../constants'
+import { useImmer } from 'use-immer'
 
 /*
    Component rendering all the events of the day by time block defined
 */
 const HourCase = props => {
-   const { event } = useContext(StateContext)
+   const { event, nbrTimeRange, settings, activeTags } = useContext(StateContext)
+   const appDispatch = useContext(DispatchContext)
    const hours = Array.from(Array(24).keys())
-   const { date } = props
+   const { date, week } = props
+
+   // open the modification modal with the current event if modification is allowed
+   const handleModifClick = ev => {
+      if (settings.allowModification) appDispatch({ type: OPEN_MODAL, mode: MODIF, event: ev })
+   }
 
    //event in each time block
-   const [quarterHourEvents, setQuarterHourEvents] = useState(
-      Array.from(Array(24 * 4).keys()).map(key => ({
-         time: moment({ year: date.year(), month: date.month(), date: date.date(), hour: Math.floor(key / 4), minute: 15 * (key % 4) }),
+   const [partHourEvents, setPartHourEvents] = useImmer(
+      Array.from(Array(288 / nbrTimeRange).keys()).map(key => ({
+         time: moment({ year: date.year(), month: date.month(), date: date.date(), hour: Math.floor((nbrTimeRange * key) / 12), minute: nbrTimeRange * 5 * (key % (12 / nbrTimeRange)) }),
          event: {}
       }))
    )
@@ -33,69 +43,56 @@ const HourCase = props => {
    //used to know if the first event has been mounted
    const [firstEventReady, setFirstEventReady] = useState(false)
 
-   //set the events of the day
+   //set the events of the day and remove these wich the tags aren't actives
    useEffect(() => {
-      const dateFormat = date.format('YYYY MM DD')
+      const dateFormat = moment(date).format('YYYY MM DD')
       const propEvent = event[dateFormat]
       setEvents(propEvent ? propEvent : [])
       setFirstEventReady(false)
-   }, [date, event])
+   }, [date, event, activeTags])
 
-   //set the list of event of the day by quarter of hours
+   //fill all part of the day with the good event
    useEffect(() => {
-      console.log('------------------------------------------')
-      setQuarterHourEvents(quarter => {
-         let nbColMax = 1
-         let firstElement = true
-         let changedCols = {}
-         const newQHE = quarter.map(element => {
-            let nonDisponibleCols = []
-            let filteredEvent = {}
-            //for each event add it if the quarter of hour contain it
-            events.forEach(value => {
-               let startDiff = 0
-               const { start, end, column } = value.timeInfo
-               if ((startDiff = start.diff(element.time)) <= 0 && end.diff(element.time) > 0) {
-                  let isStart = false
-                  //say if it is the first quarter of the event
-                  if (startDiff > -900000) {
-                     isStart = true
-                  }
+      //well sized divided day
+      let tempDivisDay = Array.from(Array(288 / nbrTimeRange).keys()).map(key => ({
+         time: moment({ year: date.year(), month: date.month(), date: date.date(), hour: Math.floor((nbrTimeRange * key) / 12), minute: nbrTimeRange * 5 * (key % (12 / nbrTimeRange)) }),
+         event: {}
+      }))
+      //keep in memory the number of col max
+      let nbColMax = 1
 
-                  //check if it take the first col available
-                  let col = column
+      //loop through the events and fill the goods time divisions
+      for (let evNbr = 0; evNbr < events.length; evNbr++) {
+         const value = events[evNbr]
+         const { start, duration, column } = value.timeInfo
 
-                  //if this event have it's cols already changed assign this value to col
-                  if (changedCols[value.key] !== undefined) col = changedCols[value.key]
-                  //else, if it's a start and the col before is available, it take it
-                  else if (isStart) {
-                     for (let i = 0; i < column; i++) {
-                        if (nonDisponibleCols.indexOf(i) < 0) {
-                           col = i
-                           changedCols[value.key] = col
-                           break
-                        }
-                     }
-                  }
-                  //add event's col to col which are taken
-                  nonDisponibleCols = nonDisponibleCols.concat(col)
-
-                  filteredEvent[col] = { value, isStart, firstElement }
-                  if (firstElement) firstElement = false
+         //find all index of time division contained in the event
+         //find the start moment depending on the nbrTimeRange
+         const divisStart = moment(start).minutes(start.minutes() - (start.minutes() % (5 * nbrTimeRange)))
+         //find the index of the start
+         const startIndex = (12 / nbrTimeRange) * divisStart.hour() + divisStart.minutes() / (5 * nbrTimeRange)
+         //set the column and check if there is a column disponible
+         let col = column
+         const divisLength = Object.entries(tempDivisDay[startIndex].event).length
+         if (divisLength < col) {
+            for (let colCheck = 0; colCheck <= divisLength; colCheck++) {
+               const filteredEntries = Object.entries(tempDivisDay[startIndex].event).filter(([key, value]) => key === colCheck)
+               if (filteredEntries.length === 0) {
+                  col = colCheck
+                  break
                }
-            })
-            if (Object.keys(filteredEvent).length > nbColMax) nbColMax = Object.keys(filteredEvent).length
-            return {
-               event: filteredEvent,
-               time: element.time
             }
-         })
-         setNbCol(nbColMax)
-         return newQHE
-      })
-
+         }
+         if (col + 1 > nbColMax) nbColMax = col + 1
+         //fill the temp divis day
+         for (let row = startIndex; row < duration + startIndex; row++) {
+            tempDivisDay[row].event[col] = { value, isStart: row === startIndex, firstElement: evNbr === 0 }
+         }
+      }
+      setNbCol(nbColMax)
+      setPartHourEvents(tempDivisDay)
       setIsLoading(false)
-   }, [events])
+   }, [events, nbrTimeRange])
 
    //function to set the scroll
    const scrollToFirstElement = () => {
@@ -114,54 +111,79 @@ const HourCase = props => {
    }, [firstEventReady, events.length])
 
    return (
-      <ScrollableSegment height={800} nopadding={1} basic id="container">
-         <Table celled definition>
+      <ScrollableSegment height={week ? 900 : 800} nopadding={1} basic id="container">
+         <Table definition={!week}>
             <Table.Body>
                <SizedTableRow height={160}>
-                  {hours.map((hour, key) => {
-                     return (
-                        <SizedTableRow key={key} height={160}>
-                           {isLoading ? (
-                              <Dimmer active inverted>
-                                 <Loader />
-                              </Dimmer>
-                           ) : (
-                              <Table.Cell textAlign="center" width={1} verticalAlign="top">
-                                 <Divider fitted />
-                                 {hour}
-                              </Table.Cell>
-                           )}
-                        </SizedTableRow>
-                     )
-                  })}
+                  {!week
+                     ? hours.map((hour, key) => {
+                          return (
+                             <SizedTableRow key={key} height={180}>
+                                {isLoading ? (
+                                   <Dimmer active inverted>
+                                      <Loader />
+                                   </Dimmer>
+                                ) : (
+                                   <Table.Cell textAlign="center" width={1} verticalAlign="top">
+                                      <Divider fitted />
+                                      {hour}
+                                   </Table.Cell>
+                                )}
+                             </SizedTableRow>
+                          )
+                       })
+                     : null}
 
                   {Array(nbCol)
                      .fill()
                      .map((_, col) => (
-                        <PaddingLessTableCell key={col} textAlign="center" width={Math.ceil(15 / nbCol)}>
+                        <PaddingLessTableCell key={col} textAlign="center" width={week ? 1 : Math.ceil(15 / nbCol)}>
                            {isLoading ? (
                               <Dimmer active inverted>
                                  <Loader />
                               </Dimmer>
                            ) : (
                               <Segment.Group>
-                                 {quarterHourEvents.map((quarterHourEvent, row) => {
+                                 {partHourEvents.map((quarterHourEvent, row) => {
                                     const event = quarterHourEvent.event[col]
-
                                     if (event) {
                                        const { isStart, value, firstElement } = event
                                        if (isStart) {
-                                          if (firstElement) {
-                                             if (!firstEventReady) setFirstEventReady(true)
+                                          if (week) {
                                              return (
-                                                <Element name="firstEvent">
-                                                   <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 40} />
-                                                </Element>
+                                                <EventPopup
+                                                   trigger={
+                                                      <div>
+                                                         <SizedSegment nomargin={1} nopadding={1} height={value.timeInfo.duration * 3 * nbrTimeRange} vertical backcolor={value.color} onClick={() => handleModifClick(value)}>
+                                                            {nbCol <= 2 && nbrTimeRange > 2 && value.timeInfo.duration * nbrTimeRange > 50 ? (
+                                                               <Header as="h5" style={{ paddingTop: value.timeInfo.duration * 4 - 8 }}>
+                                                                  <Icon name={value.icon} size="tiny" />
+                                                                  {' ' + value.title}
+                                                               </Header>
+                                                            ) : (
+                                                               ''
+                                                            )}
+                                                         </SizedSegment>
+                                                      </div>
+                                                   }
+                                                   event={value}
+                                                />
                                              )
-                                          } else return <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 40} />
+                                          } else {
+                                             if (firstElement) {
+                                                if (!firstEventReady) setFirstEventReady(true)
+                                                return (
+                                                   <Element name="firstEvent">
+                                                      <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 15 * nbrTimeRange} />
+                                                   </Element>
+                                                )
+                                             } else return <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 15 * nbrTimeRange} />
+                                          }
                                        } else return ''
                                     }
-                                    return <EventSegment key={row} event={null} moment={quarterHourEvent.time} size={40} />
+
+                                    if (week) return <SizedSegment nohover={1} basic nomargin={1} nopadding={1} height={3 * nbrTimeRange} vertical backcolor="#fff"></SizedSegment>
+                                    return <EventSegment key={row} event={null} moment={quarterHourEvent.time} size={15 * nbrTimeRange} />
                                  })}
                               </Segment.Group>
                            )}

@@ -53,7 +53,7 @@ const EventSegment = props => {
 
    //empty case
    if (event == null) {
-      return <SizedSegment nohover={!settings.allowCreation} nomargin={1} height={40} vertical onClick={handleCreateClick} backcolor="#fff"></SizedSegment>
+      return <SizedSegment nohover={!settings.allowCreation} nomargin={1} nopadding={1} height={size} vertical onClick={handleCreateClick} backcolor="#fff"></SizedSegment>
    }
 
    return (

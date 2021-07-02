@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Grid, Header } from 'semantic-ui-react'
+import { Grid, Header, Icon, Menu } from 'semantic-ui-react'
 import { PaddingLessGridColumn, SizedSegment } from '../calendar.style'
 import moment from 'moment'
-import { DAY, DAYS_NAME, MONTH, MONTH_NAMES, SET_DISPLAYED_DATE, SET_MODE, WEEK } from '../../constants'
+import { CREATE, DAY, DAYS_NAME, MONTH, MONTH_NAMES, OPEN_MODAL, SET_DISPLAYED_DATE, SET_MODE, WEEK } from '../../constants'
 
 //components
 import DayCase from './DayCase'
 import HourCase from './HourCase'
-import WeekHourCase from './WeekHourCase'
 
 //Context
 import DispatchContext from '../../DispatchContext'
@@ -115,9 +114,9 @@ const CalendarGrid = props => {
             case MONTH:
                return <DayCase date={date} />
             case DAY:
-               return <HourCase date={date} />
+               return <HourCase week={false} date={date} />
             case WEEK:
-               return <WeekHourCase date={date} />
+               return <HourCase week={true} date={date} />
             default:
                console.log('Error on the mode')
                break
@@ -149,7 +148,14 @@ const CalendarGrid = props => {
             {listDays.map((day, key) => (
                <PaddingLessGridColumn paddingright={1} key={key} textAlign={mode !== DAY ? 'center' : 'left'}>
                   <SizedSegment nohover={mode !== WEEK} backcolor="#fff" onClick={() => handleDayClick(getDate(key, displayedDate))}>
-                     <Header as="h5">{displayDate(day, key)}</Header>
+                     {mode === DAY ? (
+                        <Menu icon secondary>
+                           <Menu.Item header>{displayDate(day, key)}</Menu.Item>
+                           <Menu.Item as="a" icon="add" position="right" onClick={() => appDispatch({ type: OPEN_MODAL, mode: CREATE, event: getDate(key, displayedDate) })} />
+                        </Menu>
+                     ) : (
+                        <Header as="h5">{displayDate(day, key)}</Header>
+                     )}
                   </SizedSegment>
                </PaddingLessGridColumn>
             ))}

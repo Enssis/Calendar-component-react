@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 
 //components
-import { Icon, Label, List, Popup, Segment } from 'semantic-ui-react'
+import { Header, Icon, Label, List, Popup, Segment } from 'semantic-ui-react'
 import { DAY, SET_DISPLAYED_DATE, SET_MODE } from '../../constants'
 
 //context
@@ -13,10 +13,11 @@ import StateContext from '../../StateContext'
  */
 const EventPopup = props => {
    const { event, trigger, left, open, context } = props
-   const { start, end, title, description, place, icon } = event
+   const { start, end, title, description, place, icon, tags } = event
 
    const appDispatch = useContext(DispatchContext)
-   const { mode, displayedDate, debug } = useContext(StateContext)
+   const { mode, displayedDate, debug, settings } = useContext(StateContext)
+   const { tagsList } = settings
 
    //stock the duration of the event
    const duration = Math.ceil(Math.abs(start.diff(end) / 900000))
@@ -79,24 +80,42 @@ const EventPopup = props => {
                         <Label.Detail> {!showFullPlace && place.length > 20 ? `${place.substring(0, 20)}...` : place} </Label.Detail>
                      </Label>
                   </List.Item>
+                  {tags.length > 0 ? (
+                     <List.Item>
+                        <Header as="h5">Tags : </Header>
+                        <List horizontal>
+                           {tags.map(tagKey => {
+                              const tag = tagsList[tagKey]
+                              return (
+                                 <List.Item>
+                                    <Label tag color={tag.color}>
+                                       {tag.name}
+                                    </Label>
+                                 </List.Item>
+                              )
+                           })}
+                        </List>
+                     </List.Item>
+                  ) : null}
+
                   {
                      /*USED FOR DEBUG TO REMOVE !!!!! */
                      debug ? (
                         <>
                            <List.Item>
-                              <Label color="blue" image as="a">
+                              <Label color="blue" image>
                                  Column
                                  <Label.Detail> {event.timeInfo.column} </Label.Detail>
                               </Label>
                            </List.Item>
                            <List.Item>
-                              <Label color="blue" image as="a">
+                              <Label color="blue" image>
                                  Start
                                  <Label.Detail> {`${event.timeInfo.start.format('DD/MM/YYYY')} à ${event.timeInfo.start.format('kk:mm')}h `} </Label.Detail>
                               </Label>
                            </List.Item>
                            <List.Item>
-                              <Label color="blue" image as="a">
+                              <Label color="blue" image>
                                  End
                                  <Label.Detail> {`${event.timeInfo.end.format('DD/MM/YYYY')} à ${event.timeInfo.end.format('kk:mm')}h `} </Label.Detail>
                               </Label>

@@ -3,10 +3,37 @@ import ReactDOM from 'react-dom'
 import Calendar from './calendar/Calendar'
 import 'semantic-ui-css/semantic.min.css'
 import moment from 'moment'
+import { useImmer } from 'use-immer'
 
 function Main() {
    const [eventList, setEventList] = useState([])
-   const settings = {
+
+   const handleSetColors = colors => {
+      setSettings(draft => {
+         draft.eventColors = colors
+      })
+   }
+
+   const handleSetTimeRange = timeRange => {
+      setSettings(draft => {
+         draft.timeRange = timeRange
+      })
+   }
+
+   const handleSetEvents = events => {
+      setEventList(events)
+   }
+
+   const initialSettings = {
+      //settings window alowed options
+      settingsModif: {
+         //allow general setting modif
+         allowed: true,
+         //allow color change in settings(true by default)
+         allowColor: true,
+         //allow change of timeRange
+         allowTimeRange: true
+      },
       //settings link to the eventList
       table: {
          //number of months before given
@@ -31,13 +58,29 @@ function Main() {
       //allow creation of event
       allowCreation: true,
       //allow modification of events
-      allowModification: true
+      allowModification: true,
+      //array of default color for events(optional)
+      //eventColors: ['#000', '#f00', '#0f0', '#00f'],
+      //minimal time range (multiple of 5)
+      timeRange: 15,
+      //list of tags
+      tagsList: {
+         dq43q7d: {
+            name: 'travail',
+            color: 'red'
+         },
+         khfyYNCKSB: {
+            name: 'famille',
+            color: 'blue'
+         },
+         jnRvoumgadinn: {
+            name: 'amis',
+            color: 'yellow'
+         }
+      }
    }
 
-   const handleSetEvents = events => {
-      setEventList(events)
-      console.log(eventList)
-   }
+   const [settings, setSettings] = useImmer(initialSettings)
 
    useEffect(() => {
       setEventList(state =>
@@ -50,6 +93,7 @@ function Main() {
                icon: 'address book',
                key: '5641231',
                place: 'Hotel de police',
+               tags: [],
                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. '
             },
             {
@@ -59,6 +103,7 @@ function Main() {
                end: moment({ hour: 5, minute: 15 }).add(6, 'h'),
                icon: 'address book',
                key: '45435',
+               tags: ['dq43q7d'],
                place: 'Hotel de police',
                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. '
             },
@@ -69,6 +114,7 @@ function Main() {
                end: moment({ hour: 10, minute: 15 }).add(2, 'h'),
                icon: 'birthday cake',
                key: '45464',
+               tags: ['dq43q7d'],
                place: 'Hotel de police',
                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. '
             },
@@ -79,6 +125,7 @@ function Main() {
                end: moment({ hour: 5, minute: 15 }).add(6, 'h'),
                icon: 'address book',
                key: '4521',
+               tags: ['jnRvoumgadinn'],
                place: 'Hotel de police',
                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. '
             },
@@ -89,16 +136,18 @@ function Main() {
                end: moment({ hour: 10, minute: 15 }).add(2, 'h'),
                icon: 'birthday cake',
                key: '64654',
+               tags: ['dq43q7d', 'jnRvoumgadinn'],
                place: 'Hotel de police',
                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. '
             },
             {
                title: 'Sixth Test Event',
                color: '#00c21d',
-               start: moment({ hour: 12, minute: 0 }),
+               start: moment({ hour: 12, minute: 10 }),
                end: moment({ hour: 12, minute: 15 }).add(2, 'h'),
                icon: 'birthday cake',
                key: '646863',
+               tags: [],
                place: 'Hotel de police',
                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. '
             },
@@ -109,6 +158,7 @@ function Main() {
                end: moment({ hour: 18, minute: 0 }).add(-4, 'd').add(5, 'h'),
                icon: 'address book',
                key: '45641',
+               tags: ['jnRvoumgadinn'],
                place: 'Hotel de police',
                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. '
             },
@@ -119,6 +169,7 @@ function Main() {
                end: moment({ hour: 18, minute: 0 }).add(4, 'd').add(5, 'h'),
                icon: 'coffee',
                key: '45238',
+               tags: [],
                place: 'Hotel de police',
                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. '
             },
@@ -129,6 +180,7 @@ function Main() {
                end: moment({ hour: 5, minute: 0 }).add(5, 'd').add(5, 'h'),
                icon: 'coffee',
                key: '5623663',
+               tags: ['khfyYNCKSB'],
                place: 'Hotel de police',
                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sapien justo, mattis quis ante vel, aliquam finibus felis. Nullam mauris nunc, auctor suscipit gravida nec, bibendum sed nisi. Etiam porttitor venenatis consectetur. Ut varius ullamcorper est, et euismod dui porttitor. '
             }
@@ -136,11 +188,13 @@ function Main() {
       )
    }, [])
 
-   /* useEffect(() => {
-      console.log(eventList)
-   }, [eventList])
-*/
-   return <Calendar eventList={eventList} setEvents={handleSetEvents} settings={settings} />
+   const handlers = {
+      handleEvent: handleSetEvents,
+      handleColors: handleSetColors,
+      handleTimeRange: handleSetTimeRange
+   }
+
+   return <Calendar eventList={eventList} settings={settings} handlers={handlers} />
 }
 
 ReactDOM.render(<Main />, document.querySelector('#root'))

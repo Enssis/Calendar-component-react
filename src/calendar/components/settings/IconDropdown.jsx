@@ -2,7 +2,8 @@ import React from 'react'
 import { Dropdown, Icon } from 'semantic-ui-react'
 
 const IconDropdown = props => {
-   return <Dropdown button className="icon" floating labeled options={iconsOption} clearable placeholder="Aucune Icone" onChange={(_, data) => props.setSelectedIcon(data.value)} />
+   const { selectedIcon, setSelectedIcon } = props
+   return <Dropdown button className="icon" defaultValue={selectedIcon} floating labeled options={iconsOption} clearable placeholder="Aucune Icone" onChange={(_, data) => setSelectedIcon(data.value)} />
 }
 
 export default IconDropdown
@@ -106,6 +107,16 @@ const iconsOption = [
          <>
             <Icon name="exclamation" />
             <span>Important</span>
+         </>
+      )
+   },
+   {
+      key: 'address book',
+      value: 'address book',
+      text: (
+         <>
+            <Icon name="address book" />
+            <span>Contact</span>
          </>
       )
    }

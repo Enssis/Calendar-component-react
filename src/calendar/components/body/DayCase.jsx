@@ -18,7 +18,7 @@ const DayCase = props => {
    const { date } = props
 
    const appDispatch = useContext(DispatchContext)
-   const { event } = useContext(StateContext)
+   const { event, nbrTimeRange } = useContext(StateContext)
 
    const [rows, setRows] = useState([])
 
@@ -34,10 +34,16 @@ const DayCase = props => {
          const rows = []
          //for each event while the length of row isn't is col number add a null event
          for (const event of events) {
-            while (rows.length < event.timeInfo.column) {
+            const col = event.timeInfo.column
+            while (rows.length < col) {
                rows.push('')
             }
-            rows.push(event)
+
+            if (rows.length > col) {
+               rows[col].push(event)
+            } else {
+               rows.push([event])
+            }
          }
          setRows(rows)
       } else {
@@ -56,22 +62,34 @@ const DayCase = props => {
          <DaySegment tertiary size={'mini'} attached="top" backcolor="#fff" onClick={() => goToDay(date)}>
             {date.date()}
          </DaySegment>
-         <SizedSegment height="100" nopadding={1} attached="bottom" backcolor="#fff" nohover>
+         <SizedSegment height="100" nopadding={1} attached="bottom" backcolor="#fff" nohover={1}>
             <List>
-               {rows.map(event => {
-                  if (event === '') return <div style={{ padding: 6 }}></div>
-                  const { start, duration } = event.timeInfo
+               {rows.map((events, row) => {
+                  if (events === '') return <div key={row} style={{ padding: 9 }}></div>
                   return (
-                     <MonthListItem>
-                        <EventPopup
-                           left
-                           trigger={
-                              <div>
-                                 <CustomLabel onClick={() => appDispatch({ type: OPEN_MODAL, mode: MODIF, event })} margLeft={Math.floor((Math.abs(moment({ year: start.year(), month: start.month(), date: start.date() }).diff(start) / 900000) * 100) / 96)} width={Math.floor((duration * 100) / 96)} backcolor={event.color}></CustomLabel>
-                              </div>
-                           }
-                           event={event}
-                        />
+                     <MonthListItem key={row}>
+                        {
+                           //loop through all event on the same row
+                           events.map((event, key) => {
+                              const { start, duration } = event.timeInfo
+                              const nbStep = 288 / nbrTimeRange
+                              //calculate the distance between the start of the element and the last element / the start of the case
+                              const margleft = key > 0 ? Math.floor((Math.abs(events[key - 1].timeInfo.end.diff(start) / (300000 * nbrTimeRange)) * 100) / nbStep) : Math.floor((Math.abs(moment({ year: start.year(), month: start.month(), date: start.date() }).diff(start) / (300000 * nbrTimeRange)) * 100) / nbStep)
+                              const width = Math.floor((duration * 100) / nbStep)
+                              return (
+                                 <EventPopup
+                                    key={key}
+                                    left
+                                    trigger={
+                                       <div style={{ display: 'inline list-item' }}>
+                                          <CustomLabel onClick={() => appDispatch({ type: OPEN_MODAL, mode: MODIF, event })} margleft={margleft} width={width} backcolor={event.color}></CustomLabel>
+                                       </div>
+                                    }
+                                    event={event}
+                                 />
+                              )
+                           })
+                        }
                      </MonthListItem>
                   )
                })}

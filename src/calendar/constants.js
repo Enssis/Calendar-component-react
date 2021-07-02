@@ -14,7 +14,16 @@ export const SET_EVENTS = 'SET_EVENTS'
 export const MODIF = 'MODIF'
 export const MODIF_EVENT = 'MODIF_EVENT'
 export const DELETE_EVENT = 'DELETE_EVENT'
-export const SETTINGS = 'SETTINGS'
+export const SET_COLORS = 'SET_COLORS'
+export const SET_SETTINGS = 'SET_SETTINGS'
+export const SET_TIME_RANGE = 'SET_TIME_RANGE'
+export const SET_TAGS = 'SET_TAGS'
+export const CLOSE_SETTINGS = 'CLOSE_SETTINGS'
+export const OPEN_SETTINGS = 'OPEN_SETTINGS'
+export const OPEN_TAGS = 'OPEN_TAGS'
+export const CLOSE_TAGS = 'CLOSE_TAGS'
+export const ADD_ACTIVE_TAG = 'ADD_ACTIVE_TAG'
+export const SET_ACTIVE_TAG = 'SET_ACTIVE_TAG'
 
 //names of days and months, days need to start Sunday
 export const DAYS_NAME = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']

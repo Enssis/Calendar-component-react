@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Segment, Table, Grid, Button, Label, List } from 'semantic-ui-react'
+import { Segment, Table, Grid, Button, Label, List, Icon } from 'semantic-ui-react'
 import convert from 'color-convert'
 
 //function wich get a hexadecimal color and return the color a little bit darker
@@ -66,12 +66,17 @@ export const ColorButton = styled(Button)`
 export const CustomLabel = styled(Label)`
    background-color: ${props => props.backcolor} !important;
    font-size: 10px !important;
-   padding: 4px !important;
+   padding: 7px 4px !important;
    width: ${props => (props.width ? props.width : 100)}% !important;
-   margin-left: ${props => (props.margLeft ? props.margLeft : 0)}% !important;
+   margin-left: ${props => (props.margleft ? props.margleft : 0)}% !important;
 `
 
 export const MonthListItem = styled(List.Item)`
-   padding: 0px !important;
-   height: 12px !important;
+   padding: 4px 0 !important;
+   height: 18px !important;
+`
+
+export const MargedIcon = styled(Icon)`
+   margin-left: ${props => (props.margleft ? props.margleft : 0)}px !important;
+   margin-right: ${props => (props.margright ? props.margright : 0)}px !important;
 `
