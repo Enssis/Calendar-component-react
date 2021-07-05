@@ -3,7 +3,7 @@ import { useImmerReducer } from 'use-immer'
 import { Element, scroller } from 'react-scroll'
 import moment from 'moment'
 import { Dimmer, List, Message, Loader, Sidebar, Segment, Modal } from 'semantic-ui-react'
-import { ADD_DAYS, SET_EVENTS, MONTH, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS } from './constants'
+import { ADD_DAYS, SET_EVENTS, MONTH, SET_EVENTLIST, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS } from './constants'
 
 //components
 //header
@@ -99,7 +99,8 @@ const Calendar = props => {
       settingsOpen: false,
       tagsOpen: false,
       activeTags: settings.tagsList,
-      zoom: 1
+      zoom: 1,
+      eventList
    }
 
    //Reducer function used to controle all the generals states
@@ -190,6 +191,9 @@ const Calendar = props => {
             break
          case ZOOM_PLUS:
             if (draft.zoom < 2) draft.zoom += 0.2
+            break
+         case SET_EVENTLIST:
+            draft.eventList = eventList
             break
          default:
             console.log('unrecognized type')
@@ -307,6 +311,7 @@ const Calendar = props => {
       }
 
       dispatch({ type: SET_EVENTS, value: events })
+      dispatch({ type: SET_EVENTLIST, value: eventList })
    }, [eventList, isLoading, settings.table, state.nbrTimeRange, state.activeTags])
 
    useEffect(() => {
@@ -351,7 +356,7 @@ const Calendar = props => {
                      </Element>
                   </div>
                </Sidebar.Pusher>
-               <Modal dimmer="blurring" open={state.modal.open} onClose={() => dispatch({ type: CLOSE_MODAL })}>
+               <Modal dimmer open={state.modal.open} onClose={() => dispatch({ type: CLOSE_MODAL })}>
                   <CreateModal event={state.modal.event} />
                </Modal>
                <SettingsSidebar />

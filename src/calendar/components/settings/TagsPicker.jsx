@@ -44,10 +44,23 @@ const TagsPicker = props => {
       else setNewTagModal(true)
    }
 
+   const makeKey = len => {
+      let res = ''
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      const charsLen = chars.length
+      for (let i = 0; i < len; i++) {
+         res += chars.charAt(Math.floor(Math.random() * charsLen))
+      }
+      return res
+   }
+
    const handleCreate = () => {
       if (newTag.name.length > 0) {
          const newTagsList = Object.assign({}, tagsList)
-         const key = 'deff' + Math.floor(Math.random() * 1000)
+         let key = ''
+         do {
+            key = makeKey(5)
+         } while (newTagsList[key] !== undefined)
          newTagsList[key] = newTag
          console.log(tags.concat(newTag))
          setTags(tags.concat(key))

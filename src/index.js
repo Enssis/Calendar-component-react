@@ -5,6 +5,9 @@ import 'semantic-ui-css/semantic.min.css'
 import moment from 'moment'
 import { useImmer } from 'use-immer'
 
+import TimePicker from 'rc-time-picker'
+import 'rc-time-picker/assets/index.css'
+
 function Main() {
    const [eventList, setEventList] = useState([])
 
@@ -193,6 +196,14 @@ function Main() {
       handleColors: handleSetColors,
       handleTimeRange: handleSetTimeRange
    }
+
+   /*const [selectedMoment, setSelectedMoment] = useState(moment())
+
+   const handleTimeChange = mom => {
+      console.log(mom)
+      if (mom !== null) setSelectedMoment(moment(mom).second(0).millisecond(0))
+   }
+   return <TimePicker value={selectedMoment} onChange={handleTimeChange} minuteStep={5} showSecond={false} allowEmpty={false} />*/
 
    return <Calendar eventList={eventList} settings={settings} handlers={handlers} />
 }

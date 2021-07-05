@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Segment, Table, Grid, Button, Label, List, Icon } from 'semantic-ui-react'
 import convert from 'color-convert'
+import TimePicker from 'rc-time-picker'
 
 //function wich get a hexadecimal color and return the color a little bit darker
 const darkerColor = (hexColor, darkPercent) => {
@@ -79,4 +80,11 @@ export const MonthListItem = styled(List.Item)`
 export const MargedIcon = styled(Icon)`
    margin-left: ${props => (props.margleft ? props.margleft : 0)}px !important;
    margin-right: ${props => (props.margright ? props.margright : 0)}px !important;
+`
+
+export const BiggerTimePicker = styled(TimePicker)`
+   .rc-time-picker-input {
+      height: 40px;
+      font-size: 20px;
+   }
 `

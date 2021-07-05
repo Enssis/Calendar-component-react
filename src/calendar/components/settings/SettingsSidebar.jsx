@@ -39,7 +39,7 @@ const SettingsSidebar = props => {
    }
 
    return (
-      <Sidebar animation="overlay" page as={Segment} inverted visible={settingsOpen} direction="right" vertical onHide={handleClose} width="wide">
+      <Sidebar animation="overlay" page={1} as={Segment} inverted visible={settingsOpen} direction="right" vertical onHide={handleClose} width="wide">
          <Grid container style={{ padding: '15px' }}>
             <Grid.Row>
                <Header inverted as="h3">

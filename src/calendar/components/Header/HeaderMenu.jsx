@@ -29,7 +29,7 @@ const HeaderMenu = () => {
             {
                //add icon used to open the create modal only if it's allowed in the settings
                settings.allowCreation ? (
-                  <Menu.Item name="add" onClick={() => appDispatch({ type: OPEN_MODAL, mode: CREATE, event: moment() })}>
+                  <Menu.Item name="add" onClick={() => appDispatch({ type: OPEN_MODAL, mode: CREATE, event: moment().minute(moment().minute() - (moment().minute() % 5)) })}>
                      <MargedIcon name="add" />
                   </Menu.Item>
                ) : null

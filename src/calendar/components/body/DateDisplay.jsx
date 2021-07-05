@@ -27,7 +27,7 @@ const DateDisplay = props => {
    //show the zoom when it change
    useEffect(() => {
       setShowZoom(true)
-      const delay = setTimeout(() => setShowZoom(false), 700)
+      const delay = setTimeout(() => setShowZoom(false), 1000)
       return () => clearTimeout(delay)
    }, [zoom])
 
@@ -48,7 +48,7 @@ const DateDisplay = props => {
       <Grid.Row columns={listDays.length}>
          {listDays.map((day, key) => (
             <PaddingLessGridColumn paddingright={1} key={key} textAlign={mode !== DAY ? 'center' : 'left'}>
-               <SizedSegment nohover={mode !== WEEK} backcolor="#fff" onClick={() => handleDayClick(getDate(key, displayedDate))}>
+               <SizedSegment nohover={mode !== WEEK ? 1 : 0} backcolor="#fff" onClick={() => handleDayClick(getDate(key, displayedDate))}>
                   {mode === DAY ? (
                      <Menu icon secondary>
                         <Menu.Item header>{displayDate(day, key)}</Menu.Item>

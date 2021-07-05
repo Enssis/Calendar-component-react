@@ -43,7 +43,7 @@ const EventPopup = props => {
    }
 
    return (
-      <Popup {...trigg()} hoverable wide hideOnScroll position={left ? 'left center' : 'top center'}>
+      <Popup {...trigg()} hoverable wide hideOnScroll position={left ? 'left center' : 'left center'}>
          <Popup.Header>
             <Icon name={icon} /> {title}
          </Popup.Header>
@@ -87,7 +87,7 @@ const EventPopup = props => {
                            {tags.map(tagKey => {
                               const tag = tagsList[tagKey]
                               return (
-                                 <List.Item>
+                                 <List.Item key={tagKey}>
                                     <Label tag color={tag.color}>
                                        {tag.name}
                                     </Label>

@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
-import { Button, Container, Modal, Segment } from 'semantic-ui-react'
-import { BigInputMoment, DatePicker } from 'rim-bdsit'
+import { Button, Container, Grid, Header, Modal, Segment } from 'semantic-ui-react'
+import { DatePicker } from 'rim-bdsit'
+import TimePicker from 'rc-time-picker'
+import moment from 'moment'
+import 'rc-time-picker/assets/index.css'
+import { BiggerTimePicker } from '../calendar.style'
 
 const MomentPicker = props => {
    const { date, setSelectedDate, day } = props
@@ -14,12 +18,17 @@ const MomentPicker = props => {
    }
 
    const handleDayChange = mom => {
-      setSelectedMoment(mom.second(0).millisecond(0))
+      setSelectedMoment(moment(mom).second(0).millisecond(0))
+   }
+
+   const handleTimeChange = mom => {
+      console.log(mom)
+      if (mom !== null) setSelectedMoment(moment(mom).second(0).millisecond(0))
    }
 
    //popup to choose the time
    const TimeModal = () => (
-      <Modal dimmer="blurring" open={modalOpen} basic onClose={() => setModalOpen(false)} size="small">
+      <Modal dimmer open={modalOpen} basic onClose={() => setModalOpen(false)} size="small">
          <Modal.Content>
             <Container text>
                <Segment>
@@ -27,7 +36,17 @@ const MomentPicker = props => {
                      <DatePicker moment={selectedMoment} onChange={handleDayChange} locale="fr" />
                   ) : (
                      <Segment>
-                        <BigInputMoment moment={selectedMoment} onChange={handleDayChange} locale="fr" />
+                        <Grid centered container textAlign="center">
+                           <Grid.Row>
+                              <DatePicker moment={selectedMoment} onChange={handleDayChange} locale="fr" />
+                           </Grid.Row>
+                           <Grid.Row>
+                              <Header as="h2"> Heure : </Header>
+                           </Grid.Row>
+                           <Grid.Row>
+                              <BiggerTimePicker value={selectedMoment} onChange={handleTimeChange} minuteStep={5} showSecond={false} allowEmpty={false} />
+                           </Grid.Row>
+                        </Grid>
                      </Segment>
                   )}
                </Segment>

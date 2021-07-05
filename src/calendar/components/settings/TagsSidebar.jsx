@@ -52,7 +52,7 @@ const TagsSidebar = () => {
             <Divider />
             {Object.entries(tagsList).map(([key, tag]) => (
                <Grid.Row key={key}>
-                  <Label inverted image as="a" color={tag.color} onClick={() => handleDeleteTag(key)}>
+                  <Label inverted={1} image as="a" color={tag.color} onClick={() => handleDeleteTag(key)}>
                      <MargedIcon name="cancel" />
                      <Label.Detail>{tag.name}</Label.Detail>
                   </Label>

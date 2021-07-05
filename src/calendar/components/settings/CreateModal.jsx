@@ -14,7 +14,7 @@ import StateContext from '../../StateContext'
 
 const CreateModal = props => {
    const appDispatch = useContext(DispatchContext)
-   const { modal } = useContext(StateContext)
+   const { modal, eventList } = useContext(StateContext)
    const { event } = props
    const createMode = modal.mode === CREATE
 
@@ -89,6 +89,17 @@ const CreateModal = props => {
       return newTime
    }
 
+   //function to create key
+   const makeKey = len => {
+      let res = ''
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      const charsLen = chars.length
+      for (let i = 0; i < len; i++) {
+         res += chars.charAt(Math.floor(Math.random() * charsLen))
+      }
+      return res
+   }
+
    //Add the event created if there isn't any errors
    const handleValidate = () => {
       let error = false
@@ -115,6 +126,14 @@ const CreateModal = props => {
       }
 
       if (!error) {
+         let key = createMode ? makeKey(10) : event.key
+
+         if (createMode) {
+            while (eventList.filter(el => el.key === key).length > 0) {
+               key = makeKey(10)
+            }
+         }
+
          const newEvent = {
             title: state.title,
             color: state.selectedColor,
@@ -123,7 +142,7 @@ const CreateModal = props => {
             icon: state.selectedIcon,
             place: state.place,
             tags: state.tags,
-            key: createMode ? Math.floor(Math.random() * 1000000) : event.key,
+            key,
             description: state.description
          }
          appDispatch({ type: createMode ? ADD_EVENT : MODIF_EVENT, value: newEvent })
