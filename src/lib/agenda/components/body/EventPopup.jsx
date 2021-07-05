@@ -86,6 +86,7 @@ const EventPopup = props => {
                         <List horizontal>
                            {tags.map(tagKey => {
                               const tag = tagsList[tagKey]
+                              if (tag === undefined) return null
                               return (
                                  <List.Item key={tagKey}>
                                     <Label tag color={tag.color}>

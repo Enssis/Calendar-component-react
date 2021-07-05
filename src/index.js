@@ -200,8 +200,9 @@ function Main() {
       handleTimeRange: handleSetTimeRange,
       handleTagList: handleSetTagList
    }
+   //settings={settings}
 
-   return <Calendar eventList={eventList} settings={settings} handlers={handlers} />
+   return <Calendar eventList={eventList} handlers={handlers} />
 }
 
 ReactDOM.render(<Main />, document.querySelector('#root'))
