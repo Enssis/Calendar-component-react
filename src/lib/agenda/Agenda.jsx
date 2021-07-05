@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useImmerReducer } from 'use-immer'
 import { Element, scroller } from 'react-scroll'
 import moment from 'moment'
+import 'semantic-ui-css/semantic.min.css'
 import { Dimmer, List, Message, Loader, Sidebar, Modal } from 'semantic-ui-react'
 import { ADD_DAYS, SET_EVENTS, MONTH, SET_EVENTLIST, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS } from './constants'
 
