@@ -367,6 +367,4 @@ const Agenda = props => {
    )
 }
 
-exports.agenda = Agenda
-
 export default Agenda
