@@ -19,6 +19,9 @@ Use `npm install agenda-rc` to install the package
 
 import Agenda from 'agenda-rc'
 
+//Needed for the css to work because of semantic ui (can be imported once in the top container)
+import 'semantic-ui-css/semantic.min.css'
+
 const settings = {
       //settings window alowed options
       settingsModif: {
