@@ -1,70 +1,105 @@
-# Getting Started with Create React App
+# Agenda React Component
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Capture d’écran du 2021-07-05 13-22-25](https://user-images.githubusercontent.com/49796491/124464132-1872b100-dd94-11eb-93dc-ab2130b23615.png)
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+An Agenda component for your React application. Display a list of events and offer the possibility to create new or modify these events. 
+Offer the possibility to customise options and will add the possibility to style the component.
+For the moment all texts are in French but the possibility to change tehe langage is in devellopement
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Use `npm install agenda-rc` to install the package
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Utilisation
 
-### `npm test`
+```javaScript
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+import Agenda from 'agenda-rc'
 
-### `npm run build`
+//Settings of 
+const settings = {
+      //settings window alowed options
+      settingsModif: {
+         //allow general setting modif
+         allowed: true,
+         //allow color change in settings(true by default)
+         allowColor: true,
+         //allow change of timeRange
+         allowTimeRange: true
+      },
+      //settings link to the eventList
+      table: {
+         //number of months before given
+         before: 1,
+         //number of months after given
+         after: 11,
+         //number total of months
+         total: 12
+      },
+      //title otpions
+      title: {
+         //is the title an image and no a text
+         isImage: false,
+         //text of the title or link to the image
+         value: 'Calendrier',
+         //does it have logo
+         hasLogo: false,
+         //logo path
+         logoPath: 'https://react.semantic-ui.com/images/wireframe/image.png'
+      },
+      //creation and modification options
+      //allow creation of event
+      allowCreation: true,
+      //allow modification of events
+      allowModification: true,
+      //array of default color (in hexaDecimal) for events(optional)
+      eventColors: ['#000', '#f00', '#0f0', '#00f'],
+      //minimal time range (multiple of 5 and one hour can be easily divided in equals part of this time range) must be : 5, 10, 15, 20, 30 or 60 
+      timeRange: 15,
+      //list of tags
+      tagsList: {
+      //can be empty, tags can be created when events are created / modified
+      //else is on the format
+         key: { //the key of the tag (must be unique)
+            name: '', //the name displayed 
+            color: '' //the color, must be one element of : red, orange, yellow, olive, green, teal, blue, violet, purple, pink, brown, grey, black
+         }
+      }
+   }
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  //list of events to be displayed
+  const eventList = [
+    //exemple of event: 
+    {
+               title: '', // title of the event
+               color: '', //color of the event
+               start: moment, //start moment (from moment)
+               end: moment, //end moment
+               icon: '', //name of the icon from semantic ui to be associated (optional)
+               key: '', //the unique key correspoding to the event
+               place: '', //name of the place where the eventit take place
+               tags: [], // list of the keys of the tags associated to this event
+               description: '' // the description of the event
+            }
+  ]
+  
+  //list of handlers to permit changes from the agenda
+  //handle the change of differents value (take the new value for parameters)
+  const handlers = {
+      handleEvent: function, //for the eventList
+      handleColors: function, // for the colorsList
+      handleTimeRange: function, // for the timeRange
+      handleTagList: function // for the tagList
+   }
+   
+   
+   .
+   .
+   .
+   
+   
+   ReactDOM.render(<Calendar eventList={eventList} settings={settings} handlers={handlers} />, document.querySelector('#root'))
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
