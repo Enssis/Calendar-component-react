@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
-import Calendar from './agenda/Agenda'
+import Calendar from './lib/agenda/Agenda'
 import 'semantic-ui-css/semantic.min.css'
 import moment from 'moment'
 import { useImmer } from 'use-immer'
