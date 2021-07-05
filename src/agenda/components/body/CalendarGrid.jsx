@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Grid, Header, Icon, Label, Menu } from 'semantic-ui-react'
-import { PaddingLessGridColumn, SizedSegment } from '../calendar.style'
+import { PaddingLessGridColumn, SizedSegment } from '../agenda.style'
 import moment from 'moment'
 import { CREATE, DAY, DAYS_NAME, MONTH, MONTH_NAMES, OPEN_MODAL, SET_DISPLAYED_DATE, SET_MODE, WEEK, ZOOM_MINUS, ZOOM_PLUS } from '../../constants'
 

@@ -4,7 +4,7 @@ import { DatePicker } from 'rim-bdsit'
 import TimePicker from 'rc-time-picker'
 import moment from 'moment'
 import 'rc-time-picker/assets/index.css'
-import { BiggerTimePicker } from '../calendar.style'
+import { BiggerTimePicker } from '../agenda.style'
 
 const MomentPicker = props => {
    const { date, setSelectedDate, day } = props

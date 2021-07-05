@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { MainSegmentGroup } from '../calendar.style'
+import { MainSegmentGroup } from '../agenda.style'
 import { Grid, Message, Segment } from 'semantic-ui-react'
 import BodyMenu from './BodyMenu'
 import CalendarGrid from './CalendarGrid'

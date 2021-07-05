@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { TwitterPicker } from 'react-color'
 import StateContext from '../../StateContext'
-import { ColorButton } from '../calendar.style'
+import { ColorButton } from '../agenda.style'
 
 const ColorPicker = props => {
    const { color, setColor } = props

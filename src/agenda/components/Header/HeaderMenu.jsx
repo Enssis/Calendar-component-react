@@ -6,7 +6,7 @@ import { DAY, MONTH, OPEN_MODAL, SET_MODE, WEEK, CREATE, OPEN_SETTINGS, OPEN_TAG
 //context
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
-import { MargedIcon } from '../calendar.style'
+import { MargedIcon } from '../agenda.style'
 
 const HeaderMenu = () => {
    const { settings, mode } = useContext(StateContext)

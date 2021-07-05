@@ -5,7 +5,7 @@ import moment from 'moment'
 import StateContext from '../../StateContext'
 //components
 import { Divider, Table, Dimmer, Loader, Segment, Icon, Header } from 'semantic-ui-react'
-import { ScrollableSegment, PaddingLessTableCell, SizedTableRow, SizedSegment } from '../calendar.style'
+import { ScrollableSegment, PaddingLessTableCell, SizedTableRow, SizedSegment } from '../agenda.style'
 import EventSegment from './EventSegment'
 import EventPopup from './EventPopup'
 import DispatchContext from '../../DispatchContext'

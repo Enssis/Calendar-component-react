@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { List } from 'semantic-ui-react'
-import { DaySegment, SizedSegment, CustomLabel, MonthListItem } from '../calendar.style'
+import { DaySegment, SizedSegment, CustomLabel, MonthListItem } from '../agenda.style'
 import moment from 'moment'
 import { SET_DISPLAYED_DATE, SET_MODE, DAY, OPEN_MODAL, MODIF } from '../../constants'
 

@@ -3,7 +3,7 @@ import { Grid, Label, Menu, Header } from 'semantic-ui-react'
 import { DAY, WEEK, OPEN_MODAL, CREATE, ZOOM_MINUS, ZOOM_PLUS, MONTH, MONTH_NAMES, SET_DISPLAYED_DATE, SET_MODE } from '../../constants'
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
-import { PaddingLessGridColumn, SizedSegment } from '../calendar.style'
+import { PaddingLessGridColumn, SizedSegment } from '../agenda.style'
 import moment from 'moment'
 
 const DateDisplay = props => {

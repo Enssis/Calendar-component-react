@@ -6,7 +6,7 @@ import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
 
 //components
-import { SizedSegment } from '../calendar.style'
+import { SizedSegment } from '../agenda.style'
 import { Header, Icon } from 'semantic-ui-react'
 import EventPopup from './EventPopup'
 

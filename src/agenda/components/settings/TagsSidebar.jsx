@@ -4,7 +4,7 @@ import { useImmer } from 'use-immer'
 import { CLOSE_TAGS, SET_ACTIVE_TAG, SET_TAGS } from '../../constants'
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
-import { MargedIcon } from '../calendar.style'
+import { MargedIcon } from '../agenda.style'
 
 const TagsSidebar = () => {
    const { tagsOpen, settings, activeTags } = useContext(StateContext)
