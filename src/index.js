@@ -24,6 +24,12 @@ function Main() {
       setEventList(events)
    }
 
+   const handleSetTagList = tagsList => {
+      setSettings(draft => {
+         draft.tagsList = tagsList
+      })
+   }
+
    const initialSettings = {
       //settings window alowed options
       settingsModif: {
@@ -191,7 +197,8 @@ function Main() {
    const handlers = {
       handleEvent: handleSetEvents,
       handleColors: handleSetColors,
-      handleTimeRange: handleSetTimeRange
+      handleTimeRange: handleSetTimeRange,
+      handleTagList: handleSetTagList
    }
 
    return <Calendar eventList={eventList} settings={settings} handlers={handlers} />

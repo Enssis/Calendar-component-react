@@ -33,6 +33,32 @@ const Agenda = props => {
 
    //check if the options doesn't have errors
    useEffect(() => {
+      if (settings === undefined) {
+         settings = {
+            settingsModif: {
+               allowed: false,
+               allowColor: false,
+               allowTimeRange: false
+            },
+            table: {
+               before: 1,
+               after: 11,
+               total: 12
+            },
+            title: {
+               isImage: false,
+               value: 'Calendrier',
+               hasLogo: false,
+               logoPath: ''
+            },
+            allowCreation: true,
+            allowModification: true,
+            timeRange: 15,
+            tagsList: {}
+         }
+         dispatch({ type: SET_SETTINGS, value: settings })
+      }
+
       const { table, timeRange } = settings
       let optionError = false
       let optionErrMess = []
@@ -105,7 +131,7 @@ const Agenda = props => {
 
    //Reducer function used to controle all the generals states
    const reducer = (draft, action) => {
-      const { handleEvent, handleColors, handleTimeRange } = handlers
+      const { handleEvent, handleColors, handleTimeRange, handleTagList } = handlers
 
       switch (action.type) {
          case SET_MODE:
@@ -155,10 +181,11 @@ const Agenda = props => {
             draft.nbrTimeRange = action.value / 5
             break
          case SET_SETTINGS:
-            draft = action.value
+            draft.settings = action.value
             break
          case SET_TAGS:
             draft.settings.tagsList = action.value
+            handleTagList(action.value)
             handleEvent(
                eventList.map(el => {
                   if (el.tags.length === 0) return el
