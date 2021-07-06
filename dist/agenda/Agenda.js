@@ -19,6 +19,8 @@ var _reactScroll = require("react-scroll");
 
 var _moment = _interopRequireDefault(require("moment"));
 
+require("semantic-ui-css/semantic.min.css");
+
 var _semanticUiReact = require("semantic-ui-react");
 
 var _constants = require("./constants");
@@ -54,7 +56,8 @@ const Agenda = props => {
   const {
     settings,
     eventList,
-    handlers
+    handlers,
+    theme
   } = props; //used in case of options errors
 
   const [error, setError] = (0, _react.useState)({
@@ -62,92 +65,48 @@ const Agenda = props => {
     errorMsg: []
   }); //used to stop any action until the options are verified
 
-  const [isLoading, setIsLoading] = (0, _react.useState)(true); //check if the options doesn't have errors
+  const [isLoading, setIsLoading] = (0, _react.useState)(true); //Default settings in case settings are undefined
 
-  (0, _react.useEffect)(() => {
-    if (settings === undefined) {
-      const newSettings = {
-        settingsModif: {
-          allowed: false,
-          allowColor: false,
-          allowTimeRange: false
-        },
-        table: {
-          before: 1,
-          after: 11,
-          total: 12
-        },
-        title: {
-          isImage: false,
-          value: 'Calendrier',
-          hasLogo: false,
-          logoPath: ''
-        },
-        allowCreation: true,
-        allowModification: true,
-        timeRange: 15,
-        tagsList: {}
-      };
-      dispatch({
-        type: _constants.SET_SETTINGS,
-        value: newSettings
-      });
-    } else {
-      const {
-        table,
-        timeRange
-      } = settings;
-      let optionError = false;
-      let optionErrMess = []; //table settings
+  const defaultSettings = {
+    settingsModif: {
+      allowed: false,
+      allowColor: false,
+      allowTimeRange: false
+    },
+    table: {
+      before: 1,
+      after: 11,
+      total: 12
+    },
+    title: {
+      isImage: false,
+      value: 'Calendrier',
+      hasLogo: false,
+      logoPath: ''
+    },
+    allowCreation: true,
+    allowModification: true,
+    timeRange: 15,
+    tagsList: {}
+  };
+  const defaultTheme = {
+    pageBackground: '#fff',
+    //what you want
+    headerBackground: 'blue',
+    //list of color (segments color)
+    mainBackground: '#e3fcfc',
+    //wyw
+    travelerColor: 'default',
+    //button color + 'default' or ''
+    dayDateColor: '#fff',
+    //wyw
+    caseBackground: 'white',
+    //wyw
+    createBackground: '#fff' // wyw
 
-      const {
-        before,
-        after,
-        total
-      } = table; //check if the total of month is equal to the sum of numbers of months before and after today
+  }; //initials states for the reducer
 
-      if (before + after !== total) {
-        optionError = true;
-        optionErrMess.push("Number of month before and after doesn't match with the total");
-      } //check if the total isn't equal to 0
-
-
-      if (total === 0) {
-        optionError = true;
-        optionErrMess.push('Total is egal to 0');
-      } //check if the time part is usable
-
-
-      if (timeRange % 5 !== 0) {
-        optionError = true;
-        optionErrMess.push("Time range isn't a multiple of 5");
-      } else {
-        const nbTimeRange = timeRange / 5;
-
-        if (nbTimeRange < 1) {
-          optionError = true;
-          optionErrMess.push('Time range is too small');
-        } else if (nbTimeRange > 12) {
-          optionError = true;
-          optionErrMess.push('Time range is too big');
-        }
-
-        if (300 % nbTimeRange !== 0) {
-          optionError = true;
-          optionErrMess.push("A day isn't divisible in equal part with the time range given");
-        }
-      }
-
-      setError({
-        isError: optionError,
-        errorMsg: optionErrMess
-      }); //stop the loading
-
-      setIsLoading(false);
-    }
-  }, [settings]); //initials states for the reducer
-
-  const initialState = {
+  const initialState = settings ? {
     mode: _constants.MONTH,
     date: date,
     displayedDate: date,
@@ -164,8 +123,29 @@ const Agenda = props => {
     settingsOpen: false,
     tagsOpen: false,
     activeTags: settings.tagsList,
+    zoom: 0.6,
+    eventList,
+    theme: theme !== undefined ? theme : defaultTheme
+  } : {
+    mode: _constants.MONTH,
+    date: date,
+    displayedDate: date,
+    event: {},
+    modal: {
+      open: false,
+      mode: '',
+      event: {}
+    },
+    settings: defaultSettings,
+    debug: false,
+    colors: defaultSettings.eventColors ? settings.eventColors : ['#0ed3ed', '#00c21d', '#ff87c3', '#ffd438', '#ff1c14', '#ff7919', '#0055ff', '#cc00ff'],
+    nbrTimeRange: defaultSettings.timeRange / 5,
+    settingsOpen: false,
+    tagsOpen: false,
+    activeTags: defaultSettings.tagsList,
     zoom: 1,
-    eventList
+    eventList,
+    theme: theme !== undefined ? theme : defaultTheme
   }; //Reducer function used to controle all the generals states
 
   const reducer = (draft, action) => {
@@ -298,7 +278,63 @@ const Agenda = props => {
     }
   };
 
-  const [state, dispatch] = (0, _useImmer.useImmerReducer)(reducer, initialState); //loop through the events to assign them to each day
+  const [state, dispatch] = (0, _useImmer.useImmerReducer)(reducer, initialState); //check if the options doesn't have errors
+
+  (0, _react.useEffect)(() => {
+    if (settings !== undefined) {
+      const {
+        table,
+        timeRange
+      } = settings;
+      let optionError = false;
+      let optionErrMess = []; //table settings
+
+      const {
+        before,
+        after,
+        total
+      } = table; //check if the total of month is equal to the sum of numbers of months before and after today
+
+      if (before + after !== total) {
+        optionError = true;
+        optionErrMess.push("Number of month before and after doesn't match with the total");
+      } //check if the total isn't equal to 0
+
+
+      if (total === 0) {
+        optionError = true;
+        optionErrMess.push('Total is egal to 0');
+      } //check if the time part is usable
+
+
+      if (timeRange % 5 !== 0) {
+        optionError = true;
+        optionErrMess.push("Time range isn't a multiple of 5");
+      } else {
+        const nbTimeRange = timeRange / 5;
+
+        if (nbTimeRange < 1) {
+          optionError = true;
+          optionErrMess.push('Time range is too small');
+        } else if (nbTimeRange > 12) {
+          optionError = true;
+          optionErrMess.push('Time range is too big');
+        }
+
+        if (300 % nbTimeRange !== 0) {
+          optionError = true;
+          optionErrMess.push("A day isn't divisible in equal part with the time range given");
+        }
+      }
+
+      setError({
+        isError: optionError,
+        errorMsg: optionErrMess
+      }); //stop the loading
+    }
+
+    setIsLoading(false);
+  }, [state.settings]); //loop through the events to assign them to each day
 
   (0, _react.useEffect)(() => {
     if (isLoading) {
@@ -309,12 +345,12 @@ const Agenda = props => {
     const {
       before,
       after
-    } = settings.table; //dictionnary to associate each event key to a column
+    } = state.settings.table; //dictionnary to associate each event key to a column
 
     const columnList = {}; //sort the events from the first in time to the last and remove these with all tags non active
 
     const timeSortedEvents = [...eventList].filter(el => {
-      if (el.tags.length === 0) return true;
+      if (el.tags.length === 0 || settings === undefined) return true;
 
       for (const tagKey of el.tags) {
         if (state.activeTags[tagKey] !== undefined) return true;
@@ -425,12 +461,14 @@ const Agenda = props => {
       type: _constants.SET_EVENTLIST,
       value: eventList
     });
-  }, [eventList, isLoading, settings.table, state.nbrTimeRange, state.activeTags]);
+  }, [eventList, isLoading, state.settings.table, state.nbrTimeRange, state.activeTags]);
   (0, _react.useEffect)(() => {
-    dispatch({
-      type: _constants.SET_SETTINGS,
-      value: settings
-    });
+    if (settings) {
+      dispatch({
+        type: _constants.SET_SETTINGS,
+        value: settings
+      });
+    }
   }, [settings]); //function to set the scroll to the body component when the mode change
 
   (0, _react.useEffect)(() => {
@@ -444,7 +482,7 @@ const Agenda = props => {
   if (isLoading) return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Dimmer, {
     active: true,
     inverted: true
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Loader, null, " Loading")); //show a error message
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Loader, null, "Loading")); //show a error message
 
   if (error.isError) return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Message, {
     negative: true
@@ -466,7 +504,10 @@ const Agenda = props => {
       minHeight: '100vh'
     }
   }, /*#__PURE__*/_react.default.createElement(_CalendarHeader.default, null), /*#__PURE__*/_react.default.createElement(_reactScroll.Element, {
-    name: "body"
+    name: "body",
+    style: {
+      backgroundColor: state.theme.pageBackground
+    }
   }, /*#__PURE__*/_react.default.createElement(_MainBody.default, null)))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal, {
     dimmer: true,
     open: state.modal.open,

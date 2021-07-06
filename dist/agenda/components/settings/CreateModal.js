@@ -43,8 +43,12 @@ const CreateModal = props => {
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const {
     modal,
-    eventList
+    eventList,
+    theme
   } = (0, _react.useContext)(_StateContext.default);
+  const {
+    createBackground
+  } = theme;
   const {
     event
   } = props;
@@ -201,7 +205,15 @@ const CreateModal = props => {
     }
   };
 
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Header, null, createMode ? "Création d'un nouvel évennement" : "Modification de \"".concat(state.title, "\"")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Input, {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Header, {
+    style: {
+      backgroundColor: createBackground
+    }
+  }, createMode ? "Création d'un nouvel évennement" : "Modification de \"".concat(state.title, "\"")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
+    style: {
+      backgroundColor: createBackground
+    }
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Input, {
     error: state.titleError ? state.titleErrorMessage : null,
     label: "Titre",
     placeholder: "Titre",
@@ -266,7 +278,11 @@ const CreateModal = props => {
     label: "Description",
     value: state.description,
     onChange: handleDescriptionChange
-  }))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, {
+    style: {
+      backgroundColor: createBackground
+    }
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleValidate
   }, "Valider"), createMode ? null : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
@@ -280,7 +296,19 @@ const CreateModal = props => {
   }, "Annuler")), confirm ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal, {
     open: true,
     size: "small"
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Header, null, "\xCAtes vous sur de vouloir supprimer cet \xE9vennement ?"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, null, "Cette action est irr\xE9versible"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Header, {
+    style: {
+      backgroundColor: createBackground
+    }
+  }, "\xCAtes vous sur de vouloir supprimer cet \xE9vennement ?"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
+    style: {
+      backgroundColor: createBackground
+    }
+  }, "Cette action est irr\xE9versible"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, {
+    style: {
+      backgroundColor: createBackground
+    }
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleDelete
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {

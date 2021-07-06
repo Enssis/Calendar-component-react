@@ -127,6 +127,7 @@ const EventPopup = props => {
     horizontal: true
   }, tags.map(tagKey => {
     const tag = tagsList[tagKey];
+    if (tag === undefined) return null;
     return /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, {
       key: tagKey
     }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {

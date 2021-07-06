@@ -12,6 +12,7 @@ For the moment all texts are in French but the possibility to change the langage
 ## Installation
 
 Use `npm install agenda-rc` to install the package
+You need to download [input-moment.min.css](https://github.com/wayofthefuture/react-input-moment/tree/master/css) and add it as a css link in your html page
 
 ## Utilisation
 

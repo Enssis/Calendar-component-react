@@ -47,9 +47,12 @@ const HourCase = props => {
     nbrTimeRange,
     settings,
     activeTags,
-    zoom
+    zoom,
+    theme
   } = (0, _react.useContext)(_StateContext.default);
-  console.log(zoom);
+  const {
+    caseBackground
+  } = theme;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const hours = Array.from(Array(24).keys());
   const {
@@ -175,7 +178,7 @@ const HourCase = props => {
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Table, {
     definition: !week
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Table.Body, null, /*#__PURE__*/_react.default.createElement(_agenda.SizedTableRow, {
-    height: 160 * zoom
+    height: 800
   }, !week && zoom > 0.4 ? hours.map((hour, key) => {
     return /*#__PURE__*/_react.default.createElement(_agenda.SizedTableRow, {
       key: key,
@@ -213,7 +216,7 @@ const HourCase = props => {
             trigger: /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_agenda.SizedSegment, {
               nomargin: 1,
               nopadding: 1,
-              height: value.timeInfo.duration * 3 * nbrTimeRange * zoom,
+              height: value.timeInfo.duration * 3 * nbrTimeRange,
               vertical: true,
               backcolor: value.color,
               onClick: () => handleModifClick(value)
@@ -252,9 +255,9 @@ const HourCase = props => {
       basic: true,
       nomargin: 1,
       nopadding: 1,
-      height: 3 * nbrTimeRange * zoom,
+      height: 3 * nbrTimeRange,
       vertical: true,
-      backcolor: "#fff"
+      backcolor: caseBackground
     });
     return /*#__PURE__*/_react.default.createElement(_EventSegment.default, {
       key: row,

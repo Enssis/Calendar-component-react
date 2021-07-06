@@ -60,8 +60,12 @@ const EventSegment = props => {
   } = props;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const {
-    settings
+    settings,
+    theme
   } = (0, _react.useContext)(_StateContext.default);
+  const {
+    caseBackground
+  } = theme;
   const contextRef = (0, _react.useRef)(null);
   const [open, setOpen] = (0, _react.useState)(false); //in case event is null, open the create modal with the current moment if creation is allowed
 
@@ -91,7 +95,7 @@ const EventSegment = props => {
       height: size,
       vertical: true,
       onClick: handleCreateClick,
-      backcolor: "#fff"
+      backcolor: caseBackground
     });
   }
 

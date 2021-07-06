@@ -21,10 +21,17 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-const CalendarHeader = props => {
+const CalendarHeader = () => {
+  const {
+    settings,
+    theme
+  } = (0, _react.useContext)(_StateContext.default);
   const {
     title
-  } = (0, _react.useContext)(_StateContext.default).settings;
+  } = settings;
+  const {
+    headerBackground
+  } = theme;
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid, {
     celled: true,
     style: {
@@ -32,10 +39,11 @@ const CalendarHeader = props => {
     }
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Column, {
     width: 10,
-    color: "blue"
+    color: headerBackground
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
-    color: "blue",
-    inverted: true,
+    color: headerBackground,
+    inverted: headerBackground !== 'white',
+    basic: true,
     textAlign: "center"
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
     as: "h1"
@@ -46,10 +54,11 @@ const CalendarHeader = props => {
     size: "small"
   }) : /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, title.value)))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Column, {
     width: 6,
-    color: "blue"
+    color: headerBackground
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
-    color: "blue",
-    inverted: true,
+    color: headerBackground,
+    inverted: headerBackground !== 'white',
+    basic: true,
     textAlign: "center"
   }, /*#__PURE__*/_react.default.createElement(_HeaderMenu.default, null))));
 };

@@ -19,6 +19,8 @@ require("rc-time-picker/assets/index.css");
 
 var _agenda = require("../../agenda.style");
 
+var _StateContext = _interopRequireDefault(require("../../StateContext"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -31,6 +33,9 @@ const MomentPicker = props => {
     setSelectedDate,
     day
   } = props;
+  const {
+    createBackground
+  } = (0, _react.useContext)(_StateContext.default).theme;
   const [modalOpen, setModalOpen] = (0, _react.useState)(false);
   const [selectedMoment, setSelectedMoment] = (0, _react.useState)(date);
 
@@ -55,13 +60,25 @@ const MomentPicker = props => {
     basic: true,
     onClose: () => setModalOpen(false),
     size: "small"
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Container, {
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
+    style: {
+      backgroundColor: createBackground,
+      padding: 10
+    }
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Container, {
     text: true
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, null, day ? /*#__PURE__*/_react.default.createElement(_rimBdsit.DatePicker, {
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
+    basic: true,
+    style: {
+      backgroundColor: createBackground
+    }
+  }, day ? /*#__PURE__*/_react.default.createElement(_rimBdsit.DatePicker, {
     moment: selectedMoment,
     onChange: handleDayChange,
     locale: "fr"
-  }) : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid, {
+  }) : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
+    basic: true
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid, {
     centered: true,
     container: true,
     textAlign: "center"
@@ -72,12 +89,17 @@ const MomentPicker = props => {
   })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
     as: "h2"
   }, " Heure : ")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_agenda.BiggerTimePicker, {
+    color: createBackground,
     value: selectedMoment,
     onChange: handleTimeChange,
     minuteStep: 5,
     showSecond: false,
     allowEmpty: false
-  }))))))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }))))))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, {
+    style: {
+      backgroundColor: createBackground
+    }
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleValidate
   }, "Valider"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {

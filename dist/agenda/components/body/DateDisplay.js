@@ -34,8 +34,12 @@ const DateDisplay = props => {
   const {
     zoom,
     mode,
-    displayedDate
+    displayedDate,
+    theme
   } = (0, _react.useContext)(_StateContext.default);
+  const {
+    dayDateColor
+  } = theme;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const [showZoom, setShowZoom] = (0, _react.useState)(false); //return the day choosed by it's number on the week
 
@@ -82,7 +86,7 @@ const DateDisplay = props => {
     textAlign: mode !== _constants.DAY ? 'center' : 'left'
   }, /*#__PURE__*/_react.default.createElement(_agenda.SizedSegment, {
     nohover: mode !== _constants.WEEK ? 1 : 0,
-    backcolor: "#fff",
+    backcolor: dayDateColor,
     onClick: () => handleDayClick(getDate(key, displayedDate))
   }, mode === _constants.DAY ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu, {
     icon: true,

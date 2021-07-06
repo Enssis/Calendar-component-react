@@ -31,8 +31,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const HeaderMenu = () => {
   const {
     settings,
-    mode
+    mode,
+    theme
   } = (0, _react.useContext)(_StateContext.default);
+  const {
+    headerBackground
+  } = theme;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
 
   const handleOpenSettings = () => {
@@ -42,7 +46,7 @@ const HeaderMenu = () => {
   };
 
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu, {
-    inverted: true,
+    inverted: headerBackground !== 'white',
     secondary: true
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
     name: "Mois",

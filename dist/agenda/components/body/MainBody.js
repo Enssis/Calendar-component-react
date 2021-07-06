@@ -36,8 +36,12 @@ const MainBody = () => {
   const {
     settings,
     mode,
-    displayedDate
-  } = (0, _react.useContext)(_StateContext.default); //use to check if the date is in the dates where the event are defined
+    displayedDate,
+    theme
+  } = (0, _react.useContext)(_StateContext.default);
+  const {
+    mainBackground
+  } = theme; //use to check if the date is in the dates where the event are defined
 
   const [eventCharged, setEventCharged] = (0, _react.useState)('totally');
   const [limitDate, setLimitDate] = (0, _react.useState)({
@@ -83,7 +87,9 @@ const MainBody = () => {
     textAlign: "center"
   }, eventCharged !== 'totally' ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Message, {
     warning: true
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Message.Header, null, "Vous regardez ", mode === 'mois' ? 'un mois' : mode === 'jour' ? 'une date' : 'une semaine', " dont les \xE9vennements n'ont pas \xE9t\xE9 ", eventCharged === 'partially' ? 'totallement' : '', " import\xE9s"), /*#__PURE__*/_react.default.createElement("p", null, "Les dates limites sont le ", limitDate.before.format('DD/MM/YYYY'), " et le ", limitDate.after.format('DD/MM/YYYY'), ' ')) : '', /*#__PURE__*/_react.default.createElement(_agenda.MainSegmentGroup, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Message.Header, null, "Vous regardez ", mode === 'mois' ? 'un mois' : mode === 'jour' ? 'une date' : 'une semaine', " dont les \xE9vennements n'ont pas \xE9t\xE9 ", eventCharged === 'partially' ? 'totallement' : '', " import\xE9s"), /*#__PURE__*/_react.default.createElement("p", null, "Les dates limites sont le ", limitDate.before.format('DD/MM/YYYY'), " et le ", limitDate.after.format('DD/MM/YYYY'), ' ')) : '', /*#__PURE__*/_react.default.createElement(_agenda.MainSegmentGroup, {
+    backcolor: mainBackground
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
     basic: true
   }, /*#__PURE__*/_react.default.createElement(_BodyMenu.default, null)), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
     basic: true
