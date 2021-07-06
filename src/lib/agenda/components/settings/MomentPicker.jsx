@@ -9,7 +9,9 @@ import StateContext from '../../StateContext'
 const MomentPicker = props => {
    const { date, setSelectedDate, day } = props
 
-   const { createBackground } = useContext(StateContext).theme
+   const { theme, languageFile } = useContext(StateContext)
+   const { createBackground } = theme
+   const { hour } = languageFile.Creation
 
    const [modalOpen, setModalOpen] = useState(false)
    const [selectedMoment, setSelectedMoment] = useState(date)
@@ -43,7 +45,7 @@ const MomentPicker = props => {
                               <DatePicker moment={selectedMoment} onChange={handleDayChange} locale="fr" />
                            </Grid.Row>
                            <Grid.Row>
-                              <Header as="h2"> Heure : </Header>
+                              <Header as="h2"> {hour} : </Header>
                            </Grid.Row>
                            <Grid.Row>
                               <BiggerTimePicker color={createBackground} value={selectedMoment} onChange={handleTimeChange} minuteStep={5} showSecond={false} allowEmpty={false} />

@@ -7,7 +7,8 @@ import ColorList from './ColorList'
 
 const SettingsSidebar = props => {
    const appState = useContext(StateContext)
-   const { nbrTimeRange, settings, settingsOpen } = appState
+   const { nbrTimeRange, settings, settingsOpen, languageFile } = appState
+   const { Settings, Actions } = languageFile
 
    const appDispatch = useContext(DispatchContext)
 
@@ -38,12 +39,20 @@ const SettingsSidebar = props => {
       if (!modalOpen) appDispatch({ type: CLOSE_SETTINGS })
    }
 
+   const timeRangeOptions = [
+      { key: '5', text: '5 ' + Settings.minutes, value: '5' },
+      { key: '10', text: '10 ' + Settings.minutes, value: '10' },
+      { key: '15', text: '15 ' + Settings.minutes, value: '15' },
+      { key: '30', text: '30 ' + Settings.minutes, value: '30' },
+      { key: '60', text: '60 ' + Settings.minutes, value: '60' }
+   ]
+
    return (
       <Sidebar animation="overlay" page={1} as={Segment} inverted visible={settingsOpen} direction="right" vertical onHide={handleClose} width="wide">
          <Grid container style={{ padding: '15px' }}>
             <Grid.Row>
                <Header inverted as="h3">
-                  Paramètres <Icon name="settings" />
+                  {Settings.settings} <Icon name="settings" />
                </Header>
             </Grid.Row>
 
@@ -54,7 +63,7 @@ const SettingsSidebar = props => {
                      <Grid container>
                         <Grid.Row>
                            <Header as="h4" inverted>
-                              Palette de couleur des évennements :
+                              {Settings.colors} :
                            </Header>
                         </Grid.Row>
                         <Grid.Row>
@@ -71,7 +80,7 @@ const SettingsSidebar = props => {
                      <Grid container>
                         <Grid.Row>
                            <Header as="h4" inverted>
-                              Ecart de temps :
+                              {Settings.time} :
                            </Header>
                         </Grid.Row>
                         <Grid.Row style={{ paddingTop: 0 }}>
@@ -84,15 +93,15 @@ const SettingsSidebar = props => {
             <Divider inverted />
             <Grid.Row>
                <Button positive onClick={handleApplied}>
-                  Appliquer
+                  {Actions.applied}
                </Button>
 
                <Button positive onClick={handleValidate}>
-                  Valider
+                  {Actions.confirm}
                </Button>
 
                <Button negative onClick={() => appDispatch({ type: CLOSE_SETTINGS })}>
-                  Annuler
+                  {Actions.cancel}
                </Button>
             </Grid.Row>
          </Grid>
@@ -101,11 +110,3 @@ const SettingsSidebar = props => {
 }
 
 export default SettingsSidebar
-
-const timeRangeOptions = [
-   { key: '5', text: '5 minutes', value: '5' },
-   { key: '10', text: '10 minutes', value: '10' },
-   { key: '15', text: '15 minutes', value: '15' },
-   { key: '30', text: '30 minutes', value: '30' },
-   { key: '60', text: '60 minutes', value: '60' }
-]

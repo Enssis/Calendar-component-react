@@ -14,7 +14,9 @@ import StateContext from '../../StateContext'
 
 const CreateModal = props => {
    const appDispatch = useContext(DispatchContext)
-   const { modal, eventList, theme } = useContext(StateContext)
+   const { modal, eventList, theme, languageFile } = useContext(StateContext)
+   const { Event, Creation, Actions } = languageFile
+   const { create_title, modif_title, entire_day, color, icon, Errors, Confirm } = Creation
    const { createBackground } = theme
    const { event } = props
    const createMode = modal.mode === CREATE
@@ -28,7 +30,7 @@ const CreateModal = props => {
            place: '',
            title: '',
            titleError: false,
-           titleErrorMessage: { content: 'Veuillez rentrez un titre de plus de 4 charactères', pointing: 'below' },
+           titleErrorMessage: {},
            start: moment(event),
            end: moment(event).add(15, 'minutes'),
            tags: [],
@@ -44,7 +46,7 @@ const CreateModal = props => {
            title: event.title,
            titleError: false,
            tags: event.tags,
-           titleErrorMessage: { content: 'Veuillez rentrez un titre de plus de 4 charactères', pointing: 'below' },
+           titleErrorMessage: {},
            start: event.start,
            end: event.end
         }
@@ -111,7 +113,7 @@ const CreateModal = props => {
             draft.titleError = true
          })
          setState(draft => {
-            draft.titleErrorMessage = { content: 'Veuillez rentrez un titre de plus de 4 charactères', pointing: 'below' }
+            draft.titleErrorMessage = { content: Errors.short_title, pointing: 'below' }
          })
       }
 
@@ -122,7 +124,7 @@ const CreateModal = props => {
             draft.timeError = true
          })
          setState(draft => {
-            draft.timeErrorMessage = "Le début de l'évennement doit se passer avant la fin"
+            draft.timeErrorMessage = Errors.start_end
          })
       }
 
@@ -153,12 +155,12 @@ const CreateModal = props => {
 
    return (
       <>
-         <Modal.Header style={{ backgroundColor: createBackground }}>{createMode ? "Création d'un nouvel évennement" : `Modification de "${state.title}"`}</Modal.Header>
+         <Modal.Header style={{ backgroundColor: createBackground }}>{createMode ? create_title : modif_title.replace('$', state.title)}</Modal.Header>
          <Modal.Content style={{ backgroundColor: createBackground }}>
             <Form>
-               <Form.Input error={state.titleError ? state.titleErrorMessage : null} label="Titre" placeholder="Titre" value={state.title} onChange={handleTitleChange} />
+               <Form.Input error={state.titleError ? state.titleErrorMessage : null} label={Event.title} placeholder={Event.title} value={state.title} onChange={handleTitleChange} />
                <Form.Checkbox
-                  label="Jour entier"
+                  label={entire_day}
                   onChange={(e, { checked }) =>
                      setState(draft => {
                         draft.entireDay = checked
@@ -168,7 +170,7 @@ const CreateModal = props => {
                <Form.Group>
                   <Form.Field
                      control={MomentPicker}
-                     label={state.entireDay ? 'Jour' : 'Début'}
+                     label={state.entireDay ? languageFile.day : Event.start}
                      day={state.entireDay}
                      date={state.start}
                      setSelectedDate={value =>
@@ -183,7 +185,7 @@ const CreateModal = props => {
                   ) : (
                      <Form.Field
                         control={MomentPicker}
-                        label="Fin"
+                        label={Event.end}
                         date={state.end}
                         setSelectedDate={value =>
                            setState(draft => {
@@ -198,7 +200,7 @@ const CreateModal = props => {
                <Form.Group>
                   <Form.Field
                      control={ColorPicker}
-                     label="Couleur :"
+                     label={color + ' :'}
                      color={state.selectedColor}
                      setColor={value =>
                         setState(draft => {
@@ -207,7 +209,7 @@ const CreateModal = props => {
                      }
                   />
                   <Form.Field
-                     label="Icone :"
+                     label={icon + ' :'}
                      control={IconDropdown}
                      selectedIcon={state.selectedIcon}
                      setSelectedIcon={value =>
@@ -218,7 +220,7 @@ const CreateModal = props => {
                   />
                </Form.Group>
                <Form.Field
-                  label="Tags"
+                  label={Event.tags}
                   control={TagsPicker}
                   tags={state.tags}
                   setTags={value =>
@@ -227,34 +229,34 @@ const CreateModal = props => {
                      })
                   }
                />
-               <Form.Input label="Lieu" placeholder="Lieu" value={state.place} onChange={handlePlaceChange} />
-               <Form.TextArea label="Description" value={state.description} onChange={handleDescriptionChange} />
+               <Form.Input label={Event.place} placeholder={Event.place} value={state.place} onChange={handlePlaceChange} />
+               <Form.TextArea label={Event.description} value={state.description} onChange={handleDescriptionChange} />
             </Form>
          </Modal.Content>
          <Modal.Actions style={{ backgroundColor: createBackground }}>
             <Button positive onClick={handleValidate}>
-               Valider
+               {Actions.confirm}
             </Button>
             {createMode ? null : (
                <Button negative onClick={() => setConfirm(true)}>
-                  Supprimer
+                  {Actions.delete}
                </Button>
             )}
 
             <Button negative onClick={() => appDispatch({ type: CLOSE_MODAL })}>
-               Annuler
+               {Actions.cancel}
             </Button>
          </Modal.Actions>
          {confirm ? (
             <Modal open size="small">
-               <Modal.Header style={{ backgroundColor: createBackground }}>Êtes vous sur de vouloir supprimer cet évennement ?</Modal.Header>
-               <Modal.Content style={{ backgroundColor: createBackground }}>Cette action est irréversible</Modal.Content>
+               <Modal.Header style={{ backgroundColor: createBackground }}>{Confirm.sure}</Modal.Header>
+               <Modal.Content style={{ backgroundColor: createBackground }}>{Confirm.irrevocable}</Modal.Content>
                <Modal.Actions style={{ backgroundColor: createBackground }}>
                   <Button positive onClick={handleDelete}>
-                     <Icon name="checkmark" /> Oui
+                     <Icon name="checkmark" /> {Confirm.yes}
                   </Button>
                   <Button negative onClick={() => setConfirm(false)}>
-                     <Icon name="remove" /> Non
+                     <Icon name="remove" /> {Confirm.no}
                   </Button>
                </Modal.Actions>
             </Modal>

@@ -1,0 +1,63 @@
+{
+   "Days_names": ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+   "Month_names": ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Decembre"],
+   "month": "Mois",
+   "week": "Semaine",
+   "day": "Jour",
+   "week_number": "semaine $WW de $YYYY",
+   "new_color": "Nouvelle couleur",
+   "Settings": {
+      "settings": "Paramètres",
+      "colors": "Palette de couleur des évennements",
+      "time": "Ecart de temps",
+      "minutes": "minutes"
+   },
+   "Actions": {
+      "applied": "Appliquer",
+      "validate": "Valider",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+   },
+   "Event": {
+      "start": "Début",
+      "end": "Fin",
+      "title": "Titre",
+      "duration": "Durée",
+      "place": "Lieu",
+      "tags": "Tags",
+      "description": "Description"
+   },
+   "Active_tags": "Tags actifs",
+   "Creation": {
+      "create_title": "Création d'un nouvel évennement",
+      "modif_title": "Modification de '$'",
+      "entire_day": "Jour entier",
+      "color": "Couleur",
+      "icon": "Icone",
+      "hour": "Heure",
+      "Errors": {
+         "short_title": "Veuillez entrer un titre",
+         "start_end": "Le début de l'évennement ne peut pas être après la fin"
+      },
+      "Icones": {
+         "none": "Aucune Icone",
+         "birthday cake": "Anniversaire",
+         "coffee": "Café",
+         "phone": "Téléphone",
+         "suitcase": "Voyage",
+         "hospital": "Hôpital",
+         "plane": "Avion",
+         "taxi": "Taxi",
+         "train": "Train",
+         "utensils": "Repas",
+         "exclamation": "Important",
+         "address book": "Contact"
+      },
+      "Confirm": {
+         "yes": "yes",
+         "no": "no",
+         "sure": "Êtes vous sur de vouloir supprimer cet évennement ?",
+         "irrevocable": "TCette action est irréversible"
+      }
+   }
+}

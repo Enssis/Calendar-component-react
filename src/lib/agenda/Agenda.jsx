@@ -4,7 +4,7 @@ import { Element, scroller } from 'react-scroll'
 import moment from 'moment'
 import 'semantic-ui-css/semantic.min.css'
 import { Dimmer, List, Message, Loader, Sidebar, Modal } from 'semantic-ui-react'
-import { ADD_DAYS, SET_EVENTS, MONTH, SET_EVENTLIST, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS } from './constants'
+import { ADD_DAYS, SET_EVENTS, MONTH, SET_EVENTLIST, SET_LANGUAGE_FILE, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS } from './constants'
 
 //components
 //header
@@ -24,7 +24,7 @@ import { ZOOM_PLUS } from './constants'
 const date = moment()
 
 const Agenda = props => {
-   const { settings, eventList, handlers, theme } = props
+   const { settings, eventList, handlers, theme, language } = props
 
    //used in case of options errors
    const [error, setError] = useState({ isError: false, errorMsg: [] })
@@ -87,7 +87,8 @@ const Agenda = props => {
            activeTags: settings.tagsList,
            zoom: 0.6,
            eventList,
-           theme: theme !== undefined ? theme : defaultTheme
+           theme: theme !== undefined ? theme : defaultTheme,
+           languageFile: require(`./language/fr.json`)
         }
       : {
            mode: MONTH,
@@ -108,7 +109,8 @@ const Agenda = props => {
            activeTags: defaultSettings.tagsList,
            zoom: 1,
            eventList,
-           theme: theme !== undefined ? theme : defaultTheme
+           theme: theme !== undefined ? theme : defaultTheme,
+           languageFile: require(`./language/fr.json`)
         }
 
    //Reducer function used to controle all the generals states
@@ -204,6 +206,11 @@ const Agenda = props => {
          case SET_EVENTLIST:
             draft.eventList = eventList
             break
+         case SET_LANGUAGE_FILE:
+            const languageList = ['fr', 'en']
+            if (languageList.indexOf(language) >= 0) draft.languageFile = require(`./language/${language}.json`)
+            else console.log('non disponible language')
+            break
          default:
             console.log('unrecognized type')
             break
@@ -211,6 +218,10 @@ const Agenda = props => {
    }
 
    const [state, dispatch] = useImmerReducer(reducer, initialState)
+
+   useEffect(() => {
+      dispatch({ type: SET_LANGUAGE_FILE })
+   }, language)
 
    //check if the options doesn't have errors
    useEffect(() => {

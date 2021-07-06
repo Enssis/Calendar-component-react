@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { ADD_MONTHS, MONTH_NAMES } from '../../constants'
+import { ADD_MONTHS } from '../../constants'
 import { useImmer } from 'use-immer'
 import moment from 'moment'
 //context
@@ -11,8 +11,8 @@ import DateTraveler from './GeneralDateTraveler'
    Component used to adapts the Date traveler to month traveling
 */
 const DayTraveler = () => {
-   const { displayedDate } = useContext(StateContext)
-
+   const { displayedDate, languageFile } = useContext(StateContext)
+   const { Month_names } = languageFile
    //change when displayed date change
    const [state, setActual] = useImmer({
       actual: '',
@@ -23,13 +23,13 @@ const DayTraveler = () => {
    //set the actual, next and previous day name
    //change when displayed date change
    useEffect(() => {
-      const actual = MONTH_NAMES[displayedDate.month()] + ' ' + displayedDate.year()
+      const actual = Month_names[displayedDate.month()] + ' ' + displayedDate.year()
 
       const tomorrow = moment(displayedDate).add(1, 'month')
-      const next = MONTH_NAMES[tomorrow.month()] + ' ' + tomorrow.year()
+      const next = Month_names[tomorrow.month()] + ' ' + tomorrow.year()
 
       const yesterday = moment(displayedDate).add(-1, 'month')
-      const last = MONTH_NAMES[yesterday.month()] + ' ' + yesterday.year()
+      const last = Month_names[yesterday.month()] + ' ' + yesterday.year()
 
       setActual({ actual, next, last })
    }, [displayedDate])

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Grid } from 'semantic-ui-react'
 import { PaddingLessGridColumn } from '../../agenda.style'
 import moment from 'moment'
-import { DAY, DAYS_NAME, MONTH, WEEK } from '../../constants'
+import { DAY, MONTH, WEEK } from '../../constants'
 
 //components
 import DayCase from './DayCase'
@@ -21,7 +21,8 @@ import DateDisplay from './DateDisplay'
 */
 
 const CalendarGrid = () => {
-   const { mode, displayedDate } = useContext(StateContext)
+   const { mode, displayedDate, languageFile } = useContext(StateContext)
+   const { Days_names } = languageFile
 
    const [listDays, setListDays] = useState([0])
    const [monthDateList, setmonthDateList] = useState([])
@@ -30,11 +31,11 @@ const CalendarGrid = () => {
    //make a list with all the days of the week or only one day if it's in mode day
    useEffect(() => {
       if (mode !== DAY) {
-         const newList = DAYS_NAME.concat(DAYS_NAME[0])
+         const newList = Days_names.concat(Days_names[0])
          newList.shift()
          setListDays(newList)
       } else {
-         setListDays([DAYS_NAME[displayedDate.day()]])
+         setListDays([Days_names[displayedDate.day()]])
       }
    }, [mode, displayedDate])
 

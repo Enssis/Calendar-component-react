@@ -6,7 +6,8 @@ import moment from 'moment'
 import { ADD_DAYS } from '../../constants'
 
 const WeekTraveler = props => {
-   const { displayedDate } = useContext(StateContext)
+   const { displayedDate, languageFile } = useContext(StateContext)
+   const { week_number } = languageFile
 
    //change when displayed date change
    const [state, setActual] = useImmer({
@@ -15,14 +16,19 @@ const WeekTraveler = props => {
       last: ''
    })
 
+   //function to format the string output
+   const weekFormat = (weekNb, year) => {
+      return week_number.replace('WW', weekNb).replace('YYYY', year)
+   }
+
    useEffect(() => {
-      const actual = 'semaine ' + displayedDate.week() + ' de ' + displayedDate.year()
+      const actual = weekFormat(displayedDate.week(), displayedDate.year())
 
       const nextWeek = moment(displayedDate).add(7, 'days')
-      const next = 'semaine ' + nextWeek.week() + ' de ' + nextWeek.year()
+      const next = weekFormat(nextWeek.week(), nextWeek.year())
 
       const lastWeek = moment(displayedDate).add(-7, 'days')
-      const last = 'semaine ' + lastWeek.week() + ' de ' + lastWeek.year()
+      const last = weekFormat(lastWeek.week(), lastWeek.year())
 
       setActual({ actual, next, last })
    }, [displayedDate, setActual])

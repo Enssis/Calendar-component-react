@@ -27,6 +27,7 @@ export const SET_ACTIVE_TAG = 'SET_ACTIVE_TAG'
 export const ZOOM_PLUS = 'ZOOM_PLUS'
 export const ZOOM_MINUS = 'ZOOM_MINUS'
 export const SET_EVENTLIST = 'SET_EVENTLIST'
+export const SET_LANGUAGE_FILE = 'SET_LANGUAGE_FILE'
 
 //names of days and months, days need to start Sunday
 export const DAYS_NAME = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']

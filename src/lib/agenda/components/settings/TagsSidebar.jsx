@@ -7,7 +7,8 @@ import StateContext from '../../StateContext'
 import { MargedIcon } from '../../agenda.style'
 
 const TagsSidebar = () => {
-   const { tagsOpen, settings, activeTags } = useContext(StateContext)
+   const { tagsOpen, settings, activeTags, languageFile } = useContext(StateContext)
+   const { active_tags, Actions } = languageFile
    const appDispatch = useContext(DispatchContext)
 
    const [checkedTags, setCheckedTags] = useImmer(activeTags)
@@ -46,7 +47,7 @@ const TagsSidebar = () => {
          <Grid container style={{ padding: '15px' }}>
             <Grid.Row>
                <Header inverted as="h3">
-                  <Icon name="tags" /> Tags actifs
+                  <Icon name="tags" /> {active_tags}
                </Header>
             </Grid.Row>
             <Divider />
@@ -63,10 +64,10 @@ const TagsSidebar = () => {
             <Divider />
             <Grid.Row>
                <Button positive onClick={handleValidate}>
-                  Valider
+                  {Actions.confirm}
                </Button>
                <Button negative onClick={handleClose}>
-                  Annuler
+                  {Actions.cancel}
                </Button>
             </Grid.Row>
          </Grid>

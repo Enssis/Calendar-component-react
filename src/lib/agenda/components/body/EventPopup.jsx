@@ -16,8 +16,9 @@ const EventPopup = props => {
    const { start, end, title, description, place, icon, tags } = event
 
    const appDispatch = useContext(DispatchContext)
-   const { mode, displayedDate, debug, settings } = useContext(StateContext)
+   const { mode, displayedDate, debug, settings, languageFile } = useContext(StateContext)
    const { tagsList } = settings
+   const { Event } = languageFile
 
    //stock the duration of the event
    const duration = Math.ceil(Math.abs(start.diff(end) / 900000))
@@ -52,37 +53,37 @@ const EventPopup = props => {
                <List>
                   <List.Item>
                      <Label color="green" image as="a" onClick={() => goToDay(start)}>
-                        Début
-                        <Label.Detail> {`${start.format('DD/MM/YYYY')} à ${start.format('kk:mm')}h `} </Label.Detail>
+                        {Event.start}
+                        <Label.Detail> {start.format('DD/MM/YYYY kk:mm')} </Label.Detail>
                      </Label>
                   </List.Item>
                   <List.Item>
                      <Label color="red" image as="a" onClick={() => goToDay(end)}>
-                        Fin
-                        <Label.Detail> {`${end.format('DD/MM/YYYY')} à ${end.format('kk:mm')}h `} </Label.Detail>
+                        {Event.end}
+                        <Label.Detail> {end.format('DD/MM/YYYY kk:mm')} </Label.Detail>
                      </Label>
                   </List.Item>
                   <List.Item>
                      <Label color="yellow" image>
-                        Durée
+                        {Event.duration}
                         <Label.Detail> {`${Math.floor(duration / 96) > 0 ? `${Math.floor(duration / 96)} jours ` : ''}${Math.floor(duration / 4) % 24 > 0 ? `${Math.floor(duration / 4) % 24} heures ` : ''}${duration % 4 > 0 ? `${(duration % 4) * 15} minutes` : ''} `} </Label.Detail>
                      </Label>
                   </List.Item>
                   <List.Item>
                      <Label color="teal" image onClick={() => setShowFullDesc(!showFullDesc)} as="a">
-                        {!showFullDesc ? 'Description' : ''}
+                        {!showFullDesc ? Event.description : ''}
                         <Label.Detail> {!showFullDesc && description.length > 20 ? `${description.substring(0, 20)}...` : description} </Label.Detail>
                      </Label>
                   </List.Item>
                   <List.Item>
                      <Label color="orange" image onClick={() => setShowFullPlace(!showFullPlace)} as="a">
-                        {!showFullPlace ? 'Lieu' : ''}
+                        {!showFullPlace ? Event.place : ''}
                         <Label.Detail> {!showFullPlace && place.length > 20 ? `${place.substring(0, 20)}...` : place} </Label.Detail>
                      </Label>
                   </List.Item>
                   {tags.length > 0 ? (
                      <List.Item>
-                        <Header as="h5">Tags : </Header>
+                        <Header as="h5">{Event.tags} : </Header>
                         <List horizontal>
                            {tags.map(tagKey => {
                               const tag = tagsList[tagKey]
@@ -112,13 +113,13 @@ const EventPopup = props => {
                            <List.Item>
                               <Label color="blue" image>
                                  Start
-                                 <Label.Detail> {`${event.timeInfo.start.format('DD/MM/YYYY')} à ${event.timeInfo.start.format('kk:mm')}h `} </Label.Detail>
+                                 <Label.Detail> {event.timeInfo.start.format('DD/MM/YYYY kk:mm')} </Label.Detail>
                               </Label>
                            </List.Item>
                            <List.Item>
                               <Label color="blue" image>
                                  End
-                                 <Label.Detail> {`${event.timeInfo.end.format('DD/MM/YYYY')} à ${event.timeInfo.end.format('kk:mm')}h `} </Label.Detail>
+                                 <Label.Detail> {event.timeInfo.end.format('DD/MM/YYYY kk:mm')} </Label.Detail>
                               </Label>
                            </List.Item>
                         </>

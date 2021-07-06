@@ -1,0 +1,63 @@
+{
+   "Days_names": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Fryday", "Saturday"],
+   "Month_names": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+   "month": "Month",
+   "week": "Week",
+   "day": "Day",
+   "week_number": "week WW of YYYY",
+   "new_color": "New color",
+   "Settings": {
+      "settings": "Settings",
+      "colors": "Event color palette",
+      "time": "Time gap",
+      "minutes": "minutes"
+   },
+   "Actions": {
+      "applied": "Applied",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "delete": "Delete"
+   },
+   "Event": {
+      "start": "Start",
+      "end": "End",
+      "title": "Title",
+      "duration": "Duration",
+      "place": "Place",
+      "tags": "Tags",
+      "description": "Description"
+   },
+   "active_tags": "Active tags",
+   "Creation": {
+      "create_title": "Creation of a new event",
+      "modif_title": "Modification of '$'",
+      "entire_day": "Entire day",
+      "color": "Color",
+      "icon": "Icon",
+      "hour": "Hour",
+      "Errors": {
+         "short_title": "Enter a title",
+         "start_end": "Start of the event cannot be after the end"
+      },
+      "Icones": {
+         "none": "No Icon",
+         "birthday cake": "Birthday",
+         "coffee": "Coffee",
+         "phone": "Phone",
+         "suitcase": "Travel",
+         "hospital": "Hospital",
+         "plane": "Plane",
+         "taxi": "Taxi",
+         "train": "Train",
+         "utensils": "Meal",
+         "exclamation": "Important",
+         "address book": "Contact"
+      },
+      "Confirm": {
+         "yes": "yes",
+         "no": "no",
+         "sure": "Do you really want to delete this Event ?",
+         "irrevocable": "This action is irrevocable"
+      }
+   }
+}

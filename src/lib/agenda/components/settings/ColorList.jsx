@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { List, Segment, Button, Modal } from 'semantic-ui-react'
 import { PhotoshopPicker } from 'react-color'
+import StateContext from '../../StateContext'
 
 const ColorList = props => {
    const { colors, setColors, setModalOpen } = props
+
+   const { new_color } = useContext(StateContext).languageFile
 
    const [showKey, setShowKey] = useState(-1)
    const [openColorModal, setOpenColorModal] = useState(false)
@@ -44,7 +47,7 @@ const ColorList = props => {
          </List>
          <Modal basic size="tiny" open={openColorModal} onClose={() => handleModalChange(false)}>
             <Modal.Content>
-               <PhotoshopPicker color={color} onChange={color => setColor(color)} header="Nouvelle Couleur" onAccept={handleAccept} onCancel={() => handleModalChange(false)} />
+               <PhotoshopPicker color={color} onChange={color => setColor(color)} header={new_color} onAccept={handleAccept} onCancel={() => handleModalChange(false)} />
             </Modal.Content>
          </Modal>
       </Segment>

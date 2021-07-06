@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Grid, Label, Menu, Header } from 'semantic-ui-react'
-import { DAY, WEEK, OPEN_MODAL, CREATE, ZOOM_MINUS, ZOOM_PLUS, MONTH, MONTH_NAMES, SET_DISPLAYED_DATE, SET_MODE } from '../../constants'
+import { DAY, WEEK, OPEN_MODAL, CREATE, ZOOM_MINUS, ZOOM_PLUS, MONTH, SET_DISPLAYED_DATE, SET_MODE } from '../../constants'
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
 import { PaddingLessGridColumn, SizedSegment } from '../../agenda.style'
@@ -8,8 +8,9 @@ import moment from 'moment'
 
 const DateDisplay = props => {
    const { listDays } = props
-   const { zoom, mode, displayedDate, theme } = useContext(StateContext)
+   const { zoom, mode, displayedDate, theme, languageFile } = useContext(StateContext)
    const { dayDateColor } = theme
+   const { Month_names } = languageFile
    const appDispatch = useContext(DispatchContext)
 
    const [showZoom, setShowZoom] = useState(false)
@@ -35,7 +36,7 @@ const DateDisplay = props => {
    //return the date with the good format depending on the mode
    const displayDate = (day, key) => {
       const date = getDate(key, displayedDate)
-      return day + (mode !== MONTH ? ` ${date.date() + ' ' + MONTH_NAMES[date.month()]}` : '')
+      return day + (mode !== MONTH ? ` ${date.date() + ' ' + Month_names[date.month()]}` : '')
    }
 
    const handleDayClick = date => {

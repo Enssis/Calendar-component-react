@@ -54,7 +54,7 @@ function Main() {
          //is the title an image and no a text
          isImage: false,
          //text of the title or link to the image
-         value: 'Calendrier',
+         value: 'Agenda',
          //does it have logo
          hasLogo: false,
          //logo path
@@ -211,7 +211,7 @@ function Main() {
       createBackground: '#a4f6c5'
    }
 
-   return <Calendar eventList={eventList} settings={settings} handlers={handlers} />
+   return <Calendar eventList={eventList} language="en" settings={settings} handlers={handlers} />
 }
 
 ReactDOM.render(<Main />, document.querySelector('#root'))

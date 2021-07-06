@@ -47,7 +47,7 @@ const settings = {
          //is the title an image and no a text
          isImage: false,
          //text of the title or link to the image
-         value: 'Calendrier',
+         value: 'Agenda',
          //does it have logo
          hasLogo: false,
          //logo path

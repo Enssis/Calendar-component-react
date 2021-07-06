@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { ADD_DAYS, DAYS_NAME, MONTH_NAMES } from '../../constants'
+import { ADD_DAYS } from '../../constants'
 import moment from 'moment'
 
 //Context
@@ -12,8 +12,9 @@ import DateTraveler from './GeneralDateTraveler'
    Component used to adapts the Date traveler to day traveling
 */
 const DayTraveler = () => {
-   const { displayedDate } = useContext(StateContext)
+   const { displayedDate, languageFile } = useContext(StateContext)
 
+   const { Days_names, Month_names } = languageFile
    //stock the actual, next and previous day name
    const [state, setActual] = useState({
       actual: '',
@@ -25,15 +26,15 @@ const DayTraveler = () => {
    //change when displayed date change
    useEffect(() => {
       let dayOfTheWeek = displayedDate.day()
-      const actual = DAYS_NAME[dayOfTheWeek] + ' ' + displayedDate.date() + ' ' + MONTH_NAMES[displayedDate.month()] + ' ' + displayedDate.year()
+      const actual = Days_names[dayOfTheWeek] + ' ' + displayedDate.date() + ' ' + Month_names[displayedDate.month()] + ' ' + displayedDate.year()
 
       const tomorrow = moment(displayedDate).add(1, 'days')
       dayOfTheWeek = tomorrow.day()
-      const next = DAYS_NAME[dayOfTheWeek] + ' ' + tomorrow.date() + ' ' + MONTH_NAMES[tomorrow.month()] + ' ' + tomorrow.year()
+      const next = Days_names[dayOfTheWeek] + ' ' + tomorrow.date() + ' ' + Month_names[tomorrow.month()] + ' ' + tomorrow.year()
 
       const yesterday = moment(displayedDate).add(-1, 'days')
       dayOfTheWeek = yesterday.day()
-      const last = DAYS_NAME[dayOfTheWeek] + ' ' + yesterday.date() + ' ' + MONTH_NAMES[yesterday.month()] + ' ' + yesterday.year()
+      const last = Days_names[dayOfTheWeek] + ' ' + yesterday.date() + ' ' + Month_names[yesterday.month()] + ' ' + yesterday.year()
 
       setActual({ actual, next, last })
    }, [displayedDate])
