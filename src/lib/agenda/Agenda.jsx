@@ -24,7 +24,7 @@ import { ZOOM_PLUS } from './constants'
 const date = moment()
 
 const Agenda = props => {
-   const { settings, eventList, handlers } = props
+   const { settings, eventList, handlers, theme } = props
 
    //used in case of options errors
    const [error, setError] = useState({ isError: false, errorMsg: [] })
@@ -56,6 +56,16 @@ const Agenda = props => {
       tagsList: {}
    }
 
+   const defaultTheme = {
+      pageBackground: '#fff', //what you want
+      headerBackground: 'blue', //list of color (segments color)
+      mainBackground: '#e3fcfc', //wyw
+      travelerColor: 'default', //button color + 'default' or ''
+      dayDateColor: '#fff', //wyw
+      caseBackground: 'white', //wyw
+      createBackground: '#fff' // wyw
+   }
+
    //initials states for the reducer
    const initialState = settings
       ? {
@@ -75,8 +85,9 @@ const Agenda = props => {
            settingsOpen: false,
            tagsOpen: false,
            activeTags: settings.tagsList,
-           zoom: 1,
-           eventList
+           zoom: 0.6,
+           eventList,
+           theme: theme !== undefined ? theme : defaultTheme
         }
       : {
            mode: MONTH,
@@ -96,7 +107,8 @@ const Agenda = props => {
            tagsOpen: false,
            activeTags: defaultSettings.tagsList,
            zoom: 1,
-           eventList
+           eventList,
+           theme: theme !== undefined ? theme : defaultTheme
         }
 
    //Reducer function used to controle all the generals states
@@ -382,7 +394,7 @@ const Agenda = props => {
    if (isLoading)
       return (
          <Dimmer active inverted>
-            <Loader> Loading</Loader>
+            <Loader>Loading</Loader>
          </Dimmer>
       )
 
@@ -402,7 +414,7 @@ const Agenda = props => {
                <Sidebar.Pusher dimmed={state.settingsOpen || state.tagsOpen}>
                   <div style={{ minHeight: '100vh' }}>
                      <CalendarHeader />
-                     <Element name="body">
+                     <Element name="body" style={{ backgroundColor: state.theme.pageBackground }}>
                         <MainBody />
                      </Element>
                   </div>

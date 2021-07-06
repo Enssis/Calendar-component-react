@@ -6,8 +6,8 @@
 
 An Agenda component for your React application. Display a list of events and offer the possibility to create new or modify these events.
 
-Offer the possibility to customise options and will add the possibility to style the component.
-For the moment all texts are in French but the possibility to change tehe langage is in devellopement
+Offer the possibility to customise options and colors of the component.
+For the moment all texts are in French but the possibility to change the langage is in devellopement
 
 ## Installation
 
@@ -97,12 +97,23 @@ const settings = {
       handleTagList: function // for the tagList
    }
 
+   //theme of the app (optional)
+   const theme = {
+      pageBackground: '', //color of the background of the page
+      //color of the background of the page (need to be one of : red, orange, yellow, olive, green, teal, blue, violet, purple, pink, brown, grey, black, white)
+      headerBackground: '',
+      mainBackground: '', //color of the background of the agenda
+      travelerColor: '', //color of the background of the date traveler (need to be one of : red, orange, yellow, olive, green, teal, blue, violet, purple, pink, brown, grey, black, default)
+      dayDateColor: '', //Color of the background of the date display
+      caseBackground: '', //Color of the background of the cases
+      createBackground: '' // Color of the background of the create / modif popup
+   }
 
    .
    .
    .
 
 
-   ReactDOM.render(<Calendar eventList={eventList} settings={settings} handlers={handlers} />, document.querySelector('#root'))
+   ReactDOM.render(<Calendar eventList={eventList} theme={theme} settings={settings} handlers={handlers} />, document.querySelector('#root'))
 
 ```

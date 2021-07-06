@@ -18,7 +18,8 @@ const DayCase = props => {
    const { date } = props
 
    const appDispatch = useContext(DispatchContext)
-   const { event, nbrTimeRange } = useContext(StateContext)
+   const { event, nbrTimeRange, theme } = useContext(StateContext)
+   const { caseBackground } = theme
 
    const [rows, setRows] = useState([])
 
@@ -62,7 +63,7 @@ const DayCase = props => {
          <DaySegment tertiary size={'mini'} attached="top" backcolor="#fff" onClick={() => goToDay(date)}>
             {date.date()}
          </DaySegment>
-         <SizedSegment height="100" nopadding={1} attached="bottom" backcolor="#fff" nohover={1}>
+         <SizedSegment height="100" nopadding={1} attached="bottom" backcolor={caseBackground} nohover={1}>
             <List>
                {rows.map((events, row) => {
                   if (events === '') return <div key={row} style={{ padding: 9 }}></div>

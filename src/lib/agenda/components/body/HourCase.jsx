@@ -16,8 +16,8 @@ import { useImmer } from 'use-immer'
    Component rendering all the events of the day by time block defined
 */
 const HourCase = props => {
-   const { event, nbrTimeRange, settings, activeTags, zoom } = useContext(StateContext)
-   console.log(zoom)
+   const { event, nbrTimeRange, settings, activeTags, zoom, theme } = useContext(StateContext)
+   const { caseBackground } = theme
    const appDispatch = useContext(DispatchContext)
    const hours = Array.from(Array(24).keys())
    const { date, week } = props
@@ -115,7 +115,7 @@ const HourCase = props => {
       <ScrollableSegment height={week ? 900 : 800} nopadding={1} basic id="container">
          <Table definition={!week}>
             <Table.Body>
-               <SizedTableRow height={160 * zoom}>
+               <SizedTableRow height={800}>
                   {!week && zoom > 0.4
                      ? hours.map((hour, key) => {
                           return (
@@ -155,7 +155,7 @@ const HourCase = props => {
                                                 <EventPopup
                                                    trigger={
                                                       <div>
-                                                         <SizedSegment nomargin={1} nopadding={1} height={value.timeInfo.duration * 3 * nbrTimeRange * zoom} vertical backcolor={value.color} onClick={() => handleModifClick(value)}>
+                                                         <SizedSegment nomargin={1} nopadding={1} height={value.timeInfo.duration * 3 * nbrTimeRange} vertical backcolor={value.color} onClick={() => handleModifClick(value)}>
                                                             {nbCol <= 2 && nbrTimeRange > 2 && value.timeInfo.duration * nbrTimeRange > 50 ? (
                                                                <Header as="h5" style={{ paddingTop: value.timeInfo.duration * 4 - 8 }}>
                                                                   <Icon name={value.icon} size="tiny" />
@@ -183,7 +183,7 @@ const HourCase = props => {
                                        } else return ''
                                     }
 
-                                    if (week) return <SizedSegment nohover={1} basic nomargin={1} nopadding={1} height={3 * nbrTimeRange * zoom} vertical backcolor="#fff"></SizedSegment>
+                                    if (week) return <SizedSegment nohover={1} basic nomargin={1} nopadding={1} height={3 * nbrTimeRange} vertical backcolor={caseBackground}></SizedSegment>
                                     return <EventSegment key={row} event={null} moment={quarterHourEvent.time} size={15 * nbrTimeRange * zoom} />
                                  })}
                               </Segment.Group>

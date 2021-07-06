@@ -11,7 +11,8 @@ import { MONTH, WEEK } from '../../constants'
    Component used to render all differnt elements inside of the body
 */
 const MainBody = () => {
-   const { settings, mode, displayedDate } = useContext(StateContext)
+   const { settings, mode, displayedDate, theme } = useContext(StateContext)
+   const { mainBackground } = theme
 
    //use to check if the date is in the dates where the event are defined
    const [eventCharged, setEventCharged] = useState('totally')
@@ -65,7 +66,7 @@ const MainBody = () => {
             ) : (
                ''
             )}
-            <MainSegmentGroup>
+            <MainSegmentGroup backcolor={mainBackground}>
                <Segment basic>
                   <BodyMenu />
                </Segment>

@@ -10,9 +10,9 @@ const darkerColor = (hexColor, darkPercent) => {
    return '#' + convert.hsv.hex(h, s, v)
 }
 
-export const MainSegmentGroup = styled(Segment.Group)({
-   background: '#e3fcfc'
-})
+export const MainSegmentGroup = styled(Segment.Group)`
+   background-color: ${props => props.backcolor};
+`
 
 export const DaySegment = styled(Segment)`
    max-height: 20px;
@@ -86,5 +86,6 @@ export const BiggerTimePicker = styled(TimePicker)`
    .rc-time-picker-input {
       height: 40px;
       font-size: 20px;
+      background-color: ${props => props.color};
    }
 `

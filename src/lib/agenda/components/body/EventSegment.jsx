@@ -37,7 +37,8 @@ function createContextFromEvent(e) {
 const EventSegment = props => {
    const { event, size, moment } = props
    const appDispatch = useContext(DispatchContext)
-   const { settings } = useContext(StateContext)
+   const { settings, theme } = useContext(StateContext)
+   const { caseBackground } = theme
    const contextRef = useRef(null)
    const [open, setOpen] = useState(false)
 
@@ -53,7 +54,7 @@ const EventSegment = props => {
 
    //empty case
    if (event == null) {
-      return <SizedSegment nohover={!settings.allowCreation} nomargin={1} nopadding={1} height={size} vertical onClick={handleCreateClick} backcolor="#fff"></SizedSegment>
+      return <SizedSegment nohover={!settings.allowCreation} nomargin={1} nopadding={1} height={size} vertical onClick={handleCreateClick} backcolor={caseBackground}></SizedSegment>
    }
 
    return (

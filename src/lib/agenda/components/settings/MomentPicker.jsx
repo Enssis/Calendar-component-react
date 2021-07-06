@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Container, Grid, Header, Modal, Segment } from 'semantic-ui-react'
 import { DatePicker } from 'rim-bdsit'
 import moment from 'moment'
 import 'rc-time-picker/assets/index.css'
 import { BiggerTimePicker } from '../../agenda.style'
+import StateContext from '../../StateContext'
 
 const MomentPicker = props => {
    const { date, setSelectedDate, day } = props
+
+   const { createBackground } = useContext(StateContext).theme
 
    const [modalOpen, setModalOpen] = useState(false)
    const [selectedMoment, setSelectedMoment] = useState(date)
@@ -28,13 +31,13 @@ const MomentPicker = props => {
    //popup to choose the time
    const TimeModal = () => (
       <Modal dimmer open={modalOpen} basic onClose={() => setModalOpen(false)} size="small">
-         <Modal.Content>
+         <Modal.Content style={{ backgroundColor: createBackground, padding: 10 }}>
             <Container text>
-               <Segment>
+               <Segment basic style={{ backgroundColor: createBackground }}>
                   {day ? (
                      <DatePicker moment={selectedMoment} onChange={handleDayChange} locale="fr" />
                   ) : (
-                     <Segment>
+                     <Segment basic>
                         <Grid centered container textAlign="center">
                            <Grid.Row>
                               <DatePicker moment={selectedMoment} onChange={handleDayChange} locale="fr" />
@@ -43,7 +46,7 @@ const MomentPicker = props => {
                               <Header as="h2"> Heure : </Header>
                            </Grid.Row>
                            <Grid.Row>
-                              <BiggerTimePicker value={selectedMoment} onChange={handleTimeChange} minuteStep={5} showSecond={false} allowEmpty={false} />
+                              <BiggerTimePicker color={createBackground} value={selectedMoment} onChange={handleTimeChange} minuteStep={5} showSecond={false} allowEmpty={false} />
                            </Grid.Row>
                         </Grid>
                      </Segment>
@@ -51,7 +54,7 @@ const MomentPicker = props => {
                </Segment>
             </Container>
          </Modal.Content>
-         <Modal.Actions>
+         <Modal.Actions style={{ backgroundColor: createBackground }}>
             <Button positive onClick={handleValidate}>
                Valider
             </Button>

@@ -14,7 +14,8 @@ import StateContext from '../../StateContext'
 
 const CreateModal = props => {
    const appDispatch = useContext(DispatchContext)
-   const { modal, eventList } = useContext(StateContext)
+   const { modal, eventList, theme } = useContext(StateContext)
+   const { createBackground } = theme
    const { event } = props
    const createMode = modal.mode === CREATE
 
@@ -152,8 +153,8 @@ const CreateModal = props => {
 
    return (
       <>
-         <Modal.Header>{createMode ? "Création d'un nouvel évennement" : `Modification de "${state.title}"`}</Modal.Header>
-         <Modal.Content>
+         <Modal.Header style={{ backgroundColor: createBackground }}>{createMode ? "Création d'un nouvel évennement" : `Modification de "${state.title}"`}</Modal.Header>
+         <Modal.Content style={{ backgroundColor: createBackground }}>
             <Form>
                <Form.Input error={state.titleError ? state.titleErrorMessage : null} label="Titre" placeholder="Titre" value={state.title} onChange={handleTitleChange} />
                <Form.Checkbox
@@ -230,7 +231,7 @@ const CreateModal = props => {
                <Form.TextArea label="Description" value={state.description} onChange={handleDescriptionChange} />
             </Form>
          </Modal.Content>
-         <Modal.Actions>
+         <Modal.Actions style={{ backgroundColor: createBackground }}>
             <Button positive onClick={handleValidate}>
                Valider
             </Button>
@@ -246,9 +247,9 @@ const CreateModal = props => {
          </Modal.Actions>
          {confirm ? (
             <Modal open size="small">
-               <Modal.Header>Êtes vous sur de vouloir supprimer cet évennement ?</Modal.Header>
-               <Modal.Content>Cette action est irréversible</Modal.Content>
-               <Modal.Actions>
+               <Modal.Header style={{ backgroundColor: createBackground }}>Êtes vous sur de vouloir supprimer cet évennement ?</Modal.Header>
+               <Modal.Content style={{ backgroundColor: createBackground }}>Cette action est irréversible</Modal.Content>
+               <Modal.Actions style={{ backgroundColor: createBackground }}>
                   <Button positive onClick={handleDelete}>
                      <Icon name="checkmark" /> Oui
                   </Button>

@@ -200,9 +200,18 @@ function Main() {
       handleTimeRange: handleSetTimeRange,
       handleTagList: handleSetTagList
    }
-   //settings={settings}
 
-   return <Calendar eventList={eventList} handlers={handlers} />
+   const theme = {
+      pageBackground: '#000',
+      headerBackground: 'yellow',
+      mainBackground: '#f56f82',
+      travelerColor: 'red',
+      dayDateColor: 'green',
+      caseBackground: 'yellow',
+      createBackground: '#a4f6c5'
+   }
+
+   return <Calendar eventList={eventList} settings={settings} handlers={handlers} />
 }
 
 ReactDOM.render(<Main />, document.querySelector('#root'))

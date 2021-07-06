@@ -9,7 +9,8 @@ import StateContext from '../../StateContext'
 import { MargedIcon } from '../../agenda.style'
 
 const HeaderMenu = () => {
-   const { settings, mode } = useContext(StateContext)
+   const { settings, mode, theme } = useContext(StateContext)
+   const { headerBackground } = theme
    const appDispatch = useContext(DispatchContext)
 
    const handleOpenSettings = () => {
@@ -17,7 +18,7 @@ const HeaderMenu = () => {
    }
 
    return (
-      <Menu inverted secondary>
+      <Menu inverted={headerBackground !== 'white'} secondary>
          <Menu.Item name="Mois" active={mode === MONTH} onClick={() => appDispatch({ type: SET_MODE, data: MONTH })} />
          <Menu.Item name="Semaine" active={mode === WEEK} onClick={() => appDispatch({ type: SET_MODE, data: WEEK })} />
          <Menu.Item name="Jour" active={mode === DAY} onClick={() => appDispatch({ type: SET_MODE, data: DAY })} />
