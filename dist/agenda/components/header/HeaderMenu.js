@@ -32,8 +32,14 @@ const HeaderMenu = () => {
   const {
     settings,
     mode,
-    theme
+    theme,
+    languageFile
   } = (0, _react.useContext)(_StateContext.default);
+  const {
+    month,
+    week,
+    day
+  } = languageFile;
   const {
     headerBackground
   } = theme;
@@ -49,21 +55,21 @@ const HeaderMenu = () => {
     inverted: headerBackground !== 'white',
     secondary: true
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
-    name: "Mois",
+    name: month,
     active: mode === _constants.MONTH,
     onClick: () => appDispatch({
       type: _constants.SET_MODE,
       data: _constants.MONTH
     })
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
-    name: "Semaine",
+    name: week,
     active: mode === _constants.WEEK,
     onClick: () => appDispatch({
       type: _constants.SET_MODE,
       data: _constants.WEEK
     })
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
-    name: "Jour",
+    name: day,
     active: mode === _constants.DAY,
     onClick: () => appDispatch({
       type: _constants.SET_MODE,

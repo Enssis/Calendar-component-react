@@ -34,8 +34,15 @@ const MomentPicker = props => {
     day
   } = props;
   const {
+    theme,
+    languageFile
+  } = (0, _react.useContext)(_StateContext.default);
+  const {
     createBackground
-  } = (0, _react.useContext)(_StateContext.default).theme;
+  } = theme;
+  const {
+    hour
+  } = languageFile.Creation;
   const [modalOpen, setModalOpen] = (0, _react.useState)(false);
   const [selectedMoment, setSelectedMoment] = (0, _react.useState)(date);
 
@@ -88,7 +95,7 @@ const MomentPicker = props => {
     locale: "fr"
   })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
     as: "h2"
-  }, " Heure : ")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_agenda.BiggerTimePicker, {
+  }, " ", hour, " : ")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_agenda.BiggerTimePicker, {
     color: createBackground,
     value: selectedMoment,
     onChange: handleTimeChange,

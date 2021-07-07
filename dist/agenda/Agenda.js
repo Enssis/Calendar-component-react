@@ -55,10 +55,11 @@ const date = (0, _moment.default)();
 const Agenda = props => {
   const {
     settings,
-    eventList,
     handlers,
-    theme
-  } = props; //used in case of options errors
+    theme,
+    language
+  } = props;
+  const [eventList, setEventList] = (0, _react.useState)(props.eventList); //used in case of options errors
 
   const [error, setError] = (0, _react.useState)({
     isError: false,
@@ -125,7 +126,8 @@ const Agenda = props => {
     activeTags: settings.tagsList,
     zoom: 0.6,
     eventList,
-    theme: theme !== undefined ? theme : defaultTheme
+    theme: theme !== undefined ? theme : defaultTheme,
+    languageFile: require("./language/fr.json")
   } : {
     mode: _constants.MONTH,
     date: date,
@@ -145,7 +147,8 @@ const Agenda = props => {
     activeTags: defaultSettings.tagsList,
     zoom: 1,
     eventList,
-    theme: theme !== undefined ? theme : defaultTheme
+    theme: theme !== undefined ? theme : defaultTheme,
+    languageFile: require("./language/fr.json")
   }; //Reducer function used to controle all the generals states
 
   const reducer = (draft, action) => {
@@ -181,18 +184,22 @@ const Agenda = props => {
       case _constants.ADD_EVENT:
         if (eventList.filter(el => el.key === action.value.key).length === 0) {
           handleEvent(eventList.concat(action.value));
+          setEventList(eventList.concat(action.value));
         }
 
         break;
 
       case _constants.MODIF_EVENT:
         const event = action.value;
-        const newEventList = [...eventList.filter(el => el.key !== event.key)];
-        handleEvent(newEventList.concat(event));
+        const newEventList = [...eventList.filter(el => el.key !== event.key)].concat(event);
+        handleEvent(newEventList);
+        setEventList(newEventList);
         break;
 
       case _constants.DELETE_EVENT:
-        handleEvent([...eventList.filter(el => el.key !== action.value.key)]);
+        const filteredList = [...eventList.filter(el => el.key !== action.value.key)];
+        handleEvent(filteredList);
+        setEventList(filteredList);
         break;
 
       case _constants.OPEN_MODAL:
@@ -272,13 +279,26 @@ const Agenda = props => {
         draft.eventList = eventList;
         break;
 
+      case _constants.SET_LANGUAGE_FILE:
+        const languageList = ['fr', 'en'];
+        if (languageList.indexOf(language) >= 0) draft.languageFile = require("./language/".concat(language, ".json"));else console.log('non disponible language');
+        break;
+
       default:
         console.log('unrecognized type');
         break;
     }
   };
 
-  const [state, dispatch] = (0, _useImmer.useImmerReducer)(reducer, initialState); //check if the options doesn't have errors
+  const [state, dispatch] = (0, _useImmer.useImmerReducer)(reducer, initialState);
+  (0, _react.useEffect)(() => {
+    setEventList(props.eventList);
+  }, [props.eventList]);
+  (0, _react.useEffect)(() => {
+    dispatch({
+      type: _constants.SET_LANGUAGE_FILE
+    });
+  }, [language]); //check if the options doesn't have errors
 
   (0, _react.useEffect)(() => {
     if (settings !== undefined) {
@@ -334,7 +354,54 @@ const Agenda = props => {
     }
 
     setIsLoading(false);
-  }, [state.settings]); //loop through the events to assign them to each day
+  }, [state.settings]); //function to add an event to the list
+
+  const addEvent = newEvent => {
+    let active = false; //check if at least one of it's tag is active
+
+    if (newEvent.tags.length === 0 || settings === undefined) active = true;else for (const tagKey of newEvent.tags) {
+      if (state.activeTags[tagKey] !== undefined) active = true;
+    }
+    if (!active) return;
+    const {
+      event
+    } = state;
+    const containedEvents = findContainedEvent(newEvent, event);
+    const containedIn = event.filter(el => {
+      const {
+        start,
+        end
+      } = el; //start and end considering the time division
+
+      const startByPart = (0, _moment.default)(start).minutes(start.minutes() - start.minutes() % (5 * state.nbrTimeRange));
+      const endByPart = (0, _moment.default)(end).minutes(end.minutes() + 5 * state.nbrTimeRange - end.minutes() % (5 * state.nbrTimeRange));
+
+      if (startByPart.diff(newEvent.start) <= 0 && endByPart.diff(newEvent.start) > 0 && newEvent.key !== el.key) {
+        return true;
+      }
+
+      return false;
+    });
+  }; //search all events who have their start between the start and the end of this event
+
+
+  const findContainedEvent = (event, eventList) => {
+    const {
+      start,
+      end
+    } = event; //start and end considering the time division
+
+    const startByPart = (0, _moment.default)(start).minutes(start.minutes() - start.minutes() % (5 * state.nbrTimeRange));
+    const endByPart = (0, _moment.default)(end).minutes(end.minutes() + 5 * state.nbrTimeRange - end.minutes() % (5 * state.nbrTimeRange));
+    return eventList.filter(element => {
+      if (startByPart.diff(element.start) <= 0 && endByPart.diff(element.start) > 0 && element.key !== event.key) {
+        return true;
+      }
+
+      return false;
+    });
+  }; //loop through the events to assign them to each day
+
 
   (0, _react.useEffect)(() => {
     if (isLoading) {
@@ -373,19 +440,9 @@ const Agenda = props => {
 
       if (columnList[event.key] === undefined) {
         columnList[event.key] = 0;
-      } //search all events who have their start between the start and the end of this event
-      //start considering the time division
+      }
 
-
-      const startByPart = (0, _moment.default)(start).minutes(start.minutes() - start.minutes() % (5 * state.nbrTimeRange));
-      const endByPart = (0, _moment.default)(end).minutes(end.minutes() + 5 * state.nbrTimeRange - end.minutes() % (5 * state.nbrTimeRange));
-      const sameTimeEvents = timeSortedEvents.filter(element => {
-        if (startByPart.diff(element.start) <= 0 && endByPart.diff(element.start) > 0 && element.key !== event.key) {
-          return true;
-        }
-
-        return false;
-      }); //if there is some, need to assign a column number for each
+      const sameTimeEvents = findContainedEvent(event, timeSortedEvents); //if there is some, need to assign a column number for each
 
       if (sameTimeEvents.length > 0) {
         //list of col already taken

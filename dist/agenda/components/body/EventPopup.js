@@ -54,11 +54,15 @@ const EventPopup = props => {
     mode,
     displayedDate,
     debug,
-    settings
+    settings,
+    languageFile
   } = (0, _react.useContext)(_StateContext.default);
   const {
     tagsList
-  } = settings; //stock the duration of the event
+  } = settings;
+  const {
+    Event
+  } = languageFile; //stock the duration of the event
 
   const duration = Math.ceil(Math.abs(start.diff(end) / 900000));
   const [showFullDesc, setShowFullDesc] = (0, _react.useState)(false);
@@ -103,27 +107,27 @@ const EventPopup = props => {
     image: true,
     as: "a",
     onClick: () => goToDay(start)
-  }, "D\xE9but", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", "".concat(start.format('DD/MM/YYYY'), " \xE0 ").concat(start.format('kk:mm'), "h "), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
+  }, Event.start, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", start.format('DD/MM/YYYY kk:mm'), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
     color: "red",
     image: true,
     as: "a",
     onClick: () => goToDay(end)
-  }, "Fin", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", "".concat(end.format('DD/MM/YYYY'), " \xE0 ").concat(end.format('kk:mm'), "h "), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
+  }, Event.end, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", end.format('DD/MM/YYYY kk:mm'), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
     color: "yellow",
     image: true
-  }, "Dur\xE9e", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", "".concat(Math.floor(duration / 96) > 0 ? "".concat(Math.floor(duration / 96), " jours ") : '').concat(Math.floor(duration / 4) % 24 > 0 ? "".concat(Math.floor(duration / 4) % 24, " heures ") : '').concat(duration % 4 > 0 ? "".concat(duration % 4 * 15, " minutes") : '', " "), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
+  }, Event.duration, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", "".concat(Math.floor(duration / 96) > 0 ? "".concat(Math.floor(duration / 96), " jours ") : '').concat(Math.floor(duration / 4) % 24 > 0 ? "".concat(Math.floor(duration / 4) % 24, " heures ") : '').concat(duration % 4 > 0 ? "".concat(duration % 4 * 15, " minutes") : '', " "), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
     color: "teal",
     image: true,
     onClick: () => setShowFullDesc(!showFullDesc),
     as: "a"
-  }, !showFullDesc ? 'Description' : '', /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", !showFullDesc && description.length > 20 ? "".concat(description.substring(0, 20), "...") : description, " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
+  }, !showFullDesc ? Event.description : '', /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", !showFullDesc && description.length > 20 ? "".concat(description.substring(0, 20), "...") : description, " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
     color: "orange",
     image: true,
     onClick: () => setShowFullPlace(!showFullPlace),
     as: "a"
-  }, !showFullPlace ? 'Lieu' : '', /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", !showFullPlace && place.length > 20 ? "".concat(place.substring(0, 20), "...") : place, " "))), tags.length > 0 ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
+  }, !showFullPlace ? Event.place : '', /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", !showFullPlace && place.length > 20 ? "".concat(place.substring(0, 20), "...") : place, " "))), tags.length > 0 ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
     as: "h5"
-  }, "Tags : "), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List, {
+  }, Event.tags, " : "), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List, {
     horizontal: true
   }, tags.map(tagKey => {
     const tag = tagsList[tagKey];
@@ -142,10 +146,10 @@ const EventPopup = props => {
   }, "Column", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", event.timeInfo.column, " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
     color: "blue",
     image: true
-  }, "Start", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", "".concat(event.timeInfo.start.format('DD/MM/YYYY'), " \xE0 ").concat(event.timeInfo.start.format('kk:mm'), "h "), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
+  }, "Start", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", event.timeInfo.start.format('DD/MM/YYYY kk:mm'), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
     color: "blue",
     image: true
-  }, "End", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", "".concat(event.timeInfo.end.format('DD/MM/YYYY'), " \xE0 ").concat(event.timeInfo.end.format('kk:mm'), "h "), " ")))) : ''))));
+  }, "End", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", event.timeInfo.end.format('DD/MM/YYYY kk:mm'), " ")))) : ''))));
 };
 
 var _default = EventPopup;

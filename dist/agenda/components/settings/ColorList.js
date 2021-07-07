@@ -13,6 +13,10 @@ var _semanticUiReact = require("semantic-ui-react");
 
 var _reactColor = require("react-color");
 
+var _StateContext = _interopRequireDefault(require("../../StateContext"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -23,6 +27,9 @@ const ColorList = props => {
     setColors,
     setModalOpen
   } = props;
+  const {
+    new_color
+  } = (0, _react.useContext)(_StateContext.default).languageFile;
   const [showKey, setShowKey] = (0, _react.useState)(-1);
   const [openColorModal, setOpenColorModal] = (0, _react.useState)(false);
   const [color, setColor] = (0, _react.useState)('#fff'); //check if the color doesn't already exist, add it and close the modal
@@ -80,7 +87,7 @@ const ColorList = props => {
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, null, /*#__PURE__*/_react.default.createElement(_reactColor.PhotoshopPicker, {
     color: color,
     onChange: color => setColor(color),
-    header: "Nouvelle Couleur",
+    header: new_color,
     onAccept: handleAccept,
     onCancel: () => handleModalChange(false)
   }))));

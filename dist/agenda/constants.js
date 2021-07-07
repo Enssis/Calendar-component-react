@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MONTH_NAMES = exports.DAYS_NAME = exports.SET_EVENTLIST = exports.ZOOM_MINUS = exports.ZOOM_PLUS = exports.SET_ACTIVE_TAG = exports.ADD_ACTIVE_TAG = exports.CLOSE_TAGS = exports.OPEN_TAGS = exports.OPEN_SETTINGS = exports.CLOSE_SETTINGS = exports.SET_TAGS = exports.SET_TIME_RANGE = exports.SET_SETTINGS = exports.SET_COLORS = exports.DELETE_EVENT = exports.MODIF_EVENT = exports.MODIF = exports.SET_EVENTS = exports.CLOSE_MODAL = exports.ADD_EVENT = exports.ADD_MONTHS = exports.ADD_DAYS = exports.SET_DISPLAYED_DATE = exports.UPDATE_DATE = exports.CREATE = exports.OPEN_MODAL = exports.WEEK = exports.DAY = exports.MONTH = exports.SET_MODE = void 0;
+exports.MONTH_NAMES = exports.DAYS_NAME = exports.SET_LANGUAGE_FILE = exports.SET_EVENTLIST = exports.ZOOM_MINUS = exports.ZOOM_PLUS = exports.SET_ACTIVE_TAG = exports.ADD_ACTIVE_TAG = exports.CLOSE_TAGS = exports.OPEN_TAGS = exports.OPEN_SETTINGS = exports.CLOSE_SETTINGS = exports.SET_TAGS = exports.SET_TIME_RANGE = exports.SET_SETTINGS = exports.SET_COLORS = exports.DELETE_EVENT = exports.MODIF_EVENT = exports.MODIF = exports.SET_EVENTS = exports.CLOSE_MODAL = exports.ADD_EVENT = exports.ADD_MONTHS = exports.ADD_DAYS = exports.SET_DISPLAYED_DATE = exports.UPDATE_DATE = exports.CREATE = exports.OPEN_MODAL = exports.WEEK = exports.DAY = exports.MONTH = exports.SET_MODE = void 0;
 const SET_MODE = 'SET_MODE';
 exports.SET_MODE = SET_MODE;
 const MONTH = 'MONTH';
@@ -60,9 +60,11 @@ const ZOOM_PLUS = 'ZOOM_PLUS';
 exports.ZOOM_PLUS = ZOOM_PLUS;
 const ZOOM_MINUS = 'ZOOM_MINUS';
 exports.ZOOM_MINUS = ZOOM_MINUS;
-const SET_EVENTLIST = 'SET_EVENTLIST'; //names of days and months, days need to start Sunday
-
+const SET_EVENTLIST = 'SET_EVENTLIST';
 exports.SET_EVENTLIST = SET_EVENTLIST;
+const SET_LANGUAGE_FILE = 'SET_LANGUAGE_FILE'; //names of days and months, days need to start Sunday
+
+exports.SET_LANGUAGE_FILE = SET_LANGUAGE_FILE;
 const DAYS_NAME = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 exports.DAYS_NAME = DAYS_NAME;
 const MONTH_NAMES = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Decembre'];

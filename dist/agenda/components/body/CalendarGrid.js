@@ -45,20 +45,23 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 const CalendarGrid = () => {
   const {
     mode,
-    displayedDate
+    displayedDate,
+    languageFile
   } = (0, _react.useContext)(_StateContext.default);
+  const {
+    Days_names
+  } = languageFile;
   const [listDays, setListDays] = (0, _react.useState)([0]);
   const [monthDateList, setmonthDateList] = (0, _react.useState)([]);
   const [dayDateList, setDayDateList] = (0, _react.useState)([]); //make a list with all the days of the week or only one day if it's in mode day
 
   (0, _react.useEffect)(() => {
     if (mode !== _constants.DAY) {
-      const newList = _constants.DAYS_NAME.concat(_constants.DAYS_NAME[0]);
-
+      const newList = Days_names.concat(Days_names[0]);
       newList.shift();
       setListDays(newList);
     } else {
-      setListDays([_constants.DAYS_NAME[displayedDate.day()]]);
+      setListDays([Days_names[displayedDate.day()]]);
     }
   }, [mode, displayedDate]); //return the day choosed by it's number on the week
 

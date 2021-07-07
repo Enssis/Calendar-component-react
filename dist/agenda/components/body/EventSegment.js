@@ -107,9 +107,6 @@ const EventSegment = props => {
       vertical: true,
       onClick: handleModifClick,
       backcolor: event.color,
-      onMouseLeave: () =>
-      /*setOpen(false)*/
-      '',
       onMouseMove: e => {
         e.preventDefault();
         contextRef.current = createContextFromEvent(e);

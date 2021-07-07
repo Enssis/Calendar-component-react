@@ -17,13 +17,13 @@ You need to download [input-moment.min.css](https://github.com/wayofthefuture/re
 
 ### Props
 
-| Props     | Description                                          | Type                  | Optional             |
-| --------- | ---------------------------------------------------- | --------------------- | -------------------- |
-| eventList | List of events which will be displayed in the agenda | Array                 | false                |
-| language  | language of the text displayed                       | String ("en" or "fr") | true (fr by default) |
-| theme     | object with colors of each element                   | Object                | true                 |
-| settings  | list of settings of the app                          | Object                | true                 |
-| handlers  | list of function to update value of different props  | Object                | true                 |
+| Props     | Description                                                                                | Type                  | Optional             |
+| --------- | ------------------------------------------------------------------------------------------ | --------------------- | -------------------- |
+| eventList | List of events which will be displayed in the agenda                                       | Array                 | false                |
+| language  | language of the text displayed                                                             | String ("en" or "fr") | true (fr by default) |
+| theme     | object with colors of each element                                                         | Object                | true                 |
+| settings  | list of settings of the app                                                                | Object                | true                 |
+| handlers  | list of function to update value of different props (no need to update the props directly) | Object                | true                 |
 
 ### Example
 

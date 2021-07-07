@@ -31,8 +31,13 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 */
 const DayTraveler = () => {
   const {
-    displayedDate
-  } = (0, _react.useContext)(_StateContext.default); //stock the actual, next and previous day name
+    displayedDate,
+    languageFile
+  } = (0, _react.useContext)(_StateContext.default);
+  const {
+    Days_names,
+    Month_names
+  } = languageFile; //stock the actual, next and previous day name
 
   const [state, setActual] = (0, _react.useState)({
     actual: '',
@@ -43,13 +48,13 @@ const DayTraveler = () => {
 
   (0, _react.useEffect)(() => {
     let dayOfTheWeek = displayedDate.day();
-    const actual = _constants.DAYS_NAME[dayOfTheWeek] + ' ' + displayedDate.date() + ' ' + _constants.MONTH_NAMES[displayedDate.month()] + ' ' + displayedDate.year();
+    const actual = Days_names[dayOfTheWeek] + ' ' + displayedDate.date() + ' ' + Month_names[displayedDate.month()] + ' ' + displayedDate.year();
     const tomorrow = (0, _moment.default)(displayedDate).add(1, 'days');
     dayOfTheWeek = tomorrow.day();
-    const next = _constants.DAYS_NAME[dayOfTheWeek] + ' ' + tomorrow.date() + ' ' + _constants.MONTH_NAMES[tomorrow.month()] + ' ' + tomorrow.year();
+    const next = Days_names[dayOfTheWeek] + ' ' + tomorrow.date() + ' ' + Month_names[tomorrow.month()] + ' ' + tomorrow.year();
     const yesterday = (0, _moment.default)(displayedDate).add(-1, 'days');
     dayOfTheWeek = yesterday.day();
-    const last = _constants.DAYS_NAME[dayOfTheWeek] + ' ' + yesterday.date() + ' ' + _constants.MONTH_NAMES[yesterday.month()] + ' ' + yesterday.year();
+    const last = Days_names[dayOfTheWeek] + ' ' + yesterday.date() + ' ' + Month_names[yesterday.month()] + ' ' + yesterday.year();
     setActual({
       actual,
       next,

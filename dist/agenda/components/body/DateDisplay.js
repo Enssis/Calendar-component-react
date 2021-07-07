@@ -35,11 +35,15 @@ const DateDisplay = props => {
     zoom,
     mode,
     displayedDate,
-    theme
+    theme,
+    languageFile
   } = (0, _react.useContext)(_StateContext.default);
   const {
     dayDateColor
   } = theme;
+  const {
+    Month_names
+  } = languageFile;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const [showZoom, setShowZoom] = (0, _react.useState)(false); //return the day choosed by it's number on the week
 
@@ -62,7 +66,7 @@ const DateDisplay = props => {
 
   const displayDate = (day, key) => {
     const date = getDate(key, displayedDate);
-    return day + (mode !== _constants.MONTH ? " ".concat(date.date() + ' ' + _constants.MONTH_NAMES[date.month()]) : '');
+    return day + (mode !== _constants.MONTH ? " ".concat(date.date() + ' ' + Month_names[date.month()]) : '');
   };
 
   const handleDayClick = date => {

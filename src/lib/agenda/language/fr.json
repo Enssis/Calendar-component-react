@@ -54,10 +54,10 @@
          "address book": "Contact"
       },
       "Confirm": {
-         "yes": "yes",
-         "no": "no",
+         "yes": "oui",
+         "no": "non",
          "sure": "Êtes vous sur de vouloir supprimer cet évennement ?",
-         "irrevocable": "TCette action est irréversible"
+         "irrevocable": "Cette action est irréversible"
       }
    }
 }

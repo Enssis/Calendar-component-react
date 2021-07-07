@@ -31,8 +31,13 @@ const TagsSidebar = () => {
   const {
     tagsOpen,
     settings,
-    activeTags
+    activeTags,
+    languageFile
   } = (0, _react.useContext)(_StateContext.default);
+  const {
+    active_tags,
+    Actions
+  } = languageFile;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const [checkedTags, setCheckedTags] = (0, _useImmer.useImmer)(activeTags);
   const [tagsList, setTagsList] = (0, _useImmer.useImmer)(settings.tagsList);
@@ -90,7 +95,7 @@ const TagsSidebar = () => {
     as: "h3"
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "tags"
-  }), " Tags actifs")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Divider, null), Object.entries(tagsList).map(_ref => {
+  }), " ", active_tags)), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Divider, null), Object.entries(tagsList).map(_ref => {
     let [key, tag] = _ref;
     return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, {
       key: key
@@ -113,10 +118,10 @@ const TagsSidebar = () => {
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Divider, null), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleValidate
-  }, "Valider"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, Actions.confirm), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     negative: true,
     onClick: handleClose
-  }, "Annuler"))));
+  }, Actions.cancel))));
 };
 
 var _default = TagsSidebar;

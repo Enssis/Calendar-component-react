@@ -1,17 +1,37 @@
 "use strict";
 
+require("core-js/modules/web.dom-collections.iterator.js");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _semanticUiReact = require("semantic-ui-react");
 
+var _StateContext = _interopRequireDefault(require("../../StateContext"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 const IconDropdown = props => {
+  const {
+    Icones
+  } = (0, _react.useContext)(_StateContext.default).languageFile.Creation; //aray of al the icons option and the way they render
+
+  const iconKeys = ['birthday cake', 'coffee', 'phone', 'suitcase', 'hospital', 'plane', 'taxi', 'train', 'utensils', 'exclamation', 'address book'];
+  const iconsOption = iconKeys.map(key => ({
+    key: key,
+    value: key,
+    text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
+      name: key
+    }), /*#__PURE__*/_react.default.createElement("span", null, Icones[key]))
+  }));
   const {
     selectedIcon,
     setSelectedIcon
@@ -24,78 +44,10 @@ const IconDropdown = props => {
     labeled: true,
     options: iconsOption,
     clearable: true,
-    placeholder: "Aucune Icone",
+    placeholder: Icones.none,
     onChange: (_, data) => setSelectedIcon(data.value)
   });
 };
 
-var _default = IconDropdown; //aray of al the icons option and the way they render
-
+var _default = IconDropdown;
 exports.default = _default;
-const iconsOption = [{
-  key: 'birthday cake',
-  value: 'birthday cake',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "birthday cake"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Anniversaire"))
-}, {
-  key: 'coffee',
-  value: 'coffee',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "coffee"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Caf\xE9"))
-}, {
-  key: 'phone',
-  value: 'phone',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "phone"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "T\xE9l\xE9phone"))
-}, {
-  key: 'suitcase',
-  value: 'suitcase',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "suitcase"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Voyage"))
-}, {
-  key: 'hospital',
-  value: 'hospital',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "hospital"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Hopital"))
-}, {
-  key: 'plane',
-  value: 'plane',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "plane"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Avion"))
-}, {
-  key: 'taxi',
-  value: 'taxi',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "taxi"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Taxi"))
-}, {
-  key: 'train',
-  value: 'train',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "train"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Train"))
-}, {
-  key: 'utensils',
-  value: 'utensils',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "utensils"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Repas"))
-}, {
-  key: 'exclamation',
-  value: 'exclamation',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "exclamation"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Important"))
-}, {
-  key: 'address book',
-  value: 'address book',
-  text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-    name: "address book"
-  }), /*#__PURE__*/_react.default.createElement("span", null, "Contact"))
-}];

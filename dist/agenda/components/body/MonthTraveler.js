@@ -33,8 +33,12 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 */
 const DayTraveler = () => {
   const {
-    displayedDate
-  } = (0, _react.useContext)(_StateContext.default); //change when displayed date change
+    displayedDate,
+    languageFile
+  } = (0, _react.useContext)(_StateContext.default);
+  const {
+    Month_names
+  } = languageFile; //change when displayed date change
 
   const [state, setActual] = (0, _useImmer.useImmer)({
     actual: '',
@@ -44,11 +48,11 @@ const DayTraveler = () => {
   //change when displayed date change
 
   (0, _react.useEffect)(() => {
-    const actual = _constants.MONTH_NAMES[displayedDate.month()] + ' ' + displayedDate.year();
+    const actual = Month_names[displayedDate.month()] + ' ' + displayedDate.year();
     const tomorrow = (0, _moment.default)(displayedDate).add(1, 'month');
-    const next = _constants.MONTH_NAMES[tomorrow.month()] + ' ' + tomorrow.year();
+    const next = Month_names[tomorrow.month()] + ' ' + tomorrow.year();
     const yesterday = (0, _moment.default)(displayedDate).add(-1, 'month');
-    const last = _constants.MONTH_NAMES[yesterday.month()] + ' ' + yesterday.year();
+    const last = Month_names[yesterday.month()] + ' ' + yesterday.year();
     setActual({
       actual,
       next,

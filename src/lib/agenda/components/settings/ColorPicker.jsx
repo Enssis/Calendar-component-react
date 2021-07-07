@@ -13,7 +13,6 @@ const ColorPicker = props => {
       setColor(color.hex)
       setDisplayPicker(false)
    }
-
    return (
       <>
          <ColorButton backcolor={color} onClick={() => setDisplayPicker(value => !value)} fluid>

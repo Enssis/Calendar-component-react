@@ -9,6 +9,8 @@ require("core-js/modules/es.symbol.description.js");
 
 require("core-js/modules/web.dom-collections.iterator.js");
 
+require("core-js/modules/es.string.replace.js");
+
 var _react = _interopRequireWildcard(require("react"));
 
 var _useImmer = require("use-immer");
@@ -44,8 +46,23 @@ const CreateModal = props => {
   const {
     modal,
     eventList,
-    theme
+    theme,
+    languageFile
   } = (0, _react.useContext)(_StateContext.default);
+  const {
+    Event,
+    Creation,
+    Actions
+  } = languageFile;
+  const {
+    create_title,
+    modif_title,
+    entire_day,
+    color,
+    icon,
+    Errors,
+    Confirm
+  } = Creation;
   const {
     createBackground
   } = theme;
@@ -55,16 +72,13 @@ const CreateModal = props => {
   const createMode = modal.mode === _constants.CREATE;
   const initialState = createMode ? {
     entireDay: false,
-    selectedColor: '#0ed3ed',
+    selectedColor: '',
     selectedIcon: '',
     description: '',
     place: '',
     title: '',
     titleError: false,
-    titleErrorMessage: {
-      content: 'Veuillez rentrez un titre de plus de 4 charactères',
-      pointing: 'below'
-    },
+    titleErrorMessage: {},
     start: (0, _moment.default)(event),
     end: (0, _moment.default)(event).add(15, 'minutes'),
     tags: [],
@@ -79,10 +93,7 @@ const CreateModal = props => {
     title: event.title,
     titleError: false,
     tags: event.tags,
-    titleErrorMessage: {
-      content: 'Veuillez rentrez un titre de plus de 4 charactères',
-      pointing: 'below'
-    },
+    titleErrorMessage: {},
     start: event.start,
     end: event.end
   };
@@ -158,7 +169,7 @@ const CreateModal = props => {
       });
       setState(draft => {
         draft.titleErrorMessage = {
-          content: 'Veuillez rentrez un titre de plus de 4 charactères',
+          content: Errors.short_title,
           pointing: 'below'
         };
       });
@@ -171,7 +182,7 @@ const CreateModal = props => {
         draft.timeError = true;
       });
       setState(draft => {
-        draft.timeErrorMessage = "Le début de l'évennement doit se passer avant la fin";
+        draft.timeErrorMessage = Errors.start_end;
       });
     }
 
@@ -209,18 +220,18 @@ const CreateModal = props => {
     style: {
       backgroundColor: createBackground
     }
-  }, createMode ? "Création d'un nouvel évennement" : "Modification de \"".concat(state.title, "\"")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
+  }, createMode ? create_title : modif_title.replace('$', state.title)), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
     style: {
       backgroundColor: createBackground
     }
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Input, {
     error: state.titleError ? state.titleErrorMessage : null,
-    label: "Titre",
-    placeholder: "Titre",
+    label: Event.title,
+    placeholder: Event.title,
     value: state.title,
     onChange: handleTitleChange
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Checkbox, {
-    label: "Jour entier",
+    label: entire_day,
     onChange: (e, _ref) => {
       let {
         checked
@@ -231,7 +242,7 @@ const CreateModal = props => {
     }
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Group, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
     control: _MomentPicker.default,
-    label: state.entireDay ? 'Jour' : 'Début',
+    label: state.entireDay ? languageFile.day : Event.start,
     day: state.entireDay,
     date: state.start,
     setSelectedDate: value => setState(draft => {
@@ -240,7 +251,7 @@ const CreateModal = props => {
     })
   }), state.entireDay ? '' : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
     control: _MomentPicker.default,
-    label: "Fin",
+    label: Event.end,
     date: state.end,
     setSelectedDate: value => setState(draft => {
       draft.end = value;
@@ -250,32 +261,32 @@ const CreateModal = props => {
     negative: true
   }, state.timeErrorMessage) : '', /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Group, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
     control: _ColorPicker.default,
-    label: "Couleur :",
+    label: color + ' :',
     color: state.selectedColor,
     setColor: value => setState(draft => {
       draft.selectedColor = value;
     })
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
-    label: "Icone :",
+    label: icon + ' :',
     control: _IconDropdown.default,
     selectedIcon: state.selectedIcon,
     setSelectedIcon: value => setState(draft => {
       draft.selectedIcon = value;
     })
   })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
-    label: "Tags",
+    label: Event.tags,
     control: _TagsPicker.default,
     tags: state.tags,
     setTags: value => setState(draft => {
       draft.tags = value;
     })
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Input, {
-    label: "Lieu",
-    placeholder: "Lieu",
+    label: Event.place,
+    placeholder: Event.place,
     value: state.place,
     onChange: handlePlaceChange
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.TextArea, {
-    label: "Description",
+    label: Event.description,
     value: state.description,
     onChange: handleDescriptionChange
   }))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, {
@@ -285,26 +296,26 @@ const CreateModal = props => {
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleValidate
-  }, "Valider"), createMode ? null : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, Actions.confirm), createMode ? null : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     negative: true,
     onClick: () => setConfirm(true)
-  }, "Supprimer"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, Actions.delete), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     negative: true,
     onClick: () => appDispatch({
       type: _constants.CLOSE_MODAL
     })
-  }, "Annuler")), confirm ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal, {
+  }, Actions.cancel)), confirm ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal, {
     open: true,
     size: "small"
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Header, {
     style: {
       backgroundColor: createBackground
     }
-  }, "\xCAtes vous sur de vouloir supprimer cet \xE9vennement ?"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
+  }, Confirm.sure), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
     style: {
       backgroundColor: createBackground
     }
-  }, "Cette action est irr\xE9versible"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, {
+  }, Confirm.irrevocable), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, {
     style: {
       backgroundColor: createBackground
     }
@@ -313,12 +324,12 @@ const CreateModal = props => {
     onClick: handleDelete
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "checkmark"
-  }), " Oui"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }), " ", Confirm.yes), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     negative: true,
     onClick: () => setConfirm(false)
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "remove"
-  }), " Non"))) : '');
+  }), " ", Confirm.no))) : '');
 };
 
 var _default = CreateModal;

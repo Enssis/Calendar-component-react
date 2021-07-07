@@ -174,16 +174,16 @@ const HourCase = props => {
                                              if (firstElement) {
                                                 if (!firstEventReady) setFirstEventReady(true)
                                                 return (
-                                                   <Element name="firstEvent">
+                                                   <Element key={row} name="firstEvent">
                                                       <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 15 * nbrTimeRange * zoom} />
                                                    </Element>
                                                 )
-                                             } else return <EventSegment moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 15 * nbrTimeRange * zoom} />
+                                             } else return <EventSegment key={row} moment={quarterHourEvent.time} event={value} size={value.timeInfo.duration * 15 * nbrTimeRange * zoom} />
                                           }
                                        } else return ''
                                     }
 
-                                    if (week) return <SizedSegment nohover={1} basic nomargin={1} nopadding={1} height={3 * nbrTimeRange} vertical backcolor={caseBackground}></SizedSegment>
+                                    if (week) return <SizedSegment key={row} nohover={1} basic nomargin={1} nopadding={1} height={3 * nbrTimeRange} vertical backcolor={caseBackground}></SizedSegment>
                                     return <EventSegment key={row} event={null} moment={quarterHourEvent.time} size={15 * nbrTimeRange * zoom} />
                                  })}
                               </Segment.Group>

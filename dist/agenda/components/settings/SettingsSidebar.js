@@ -30,8 +30,13 @@ const SettingsSidebar = props => {
   const {
     nbrTimeRange,
     settings,
-    settingsOpen
+    settingsOpen,
+    languageFile
   } = appState;
+  const {
+    Settings,
+    Actions
+  } = languageFile;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const {
     allowColor,
@@ -71,6 +76,27 @@ const SettingsSidebar = props => {
     });
   };
 
+  const timeRangeOptions = [{
+    key: '5',
+    text: '5 ' + Settings.minutes,
+    value: '5'
+  }, {
+    key: '10',
+    text: '10 ' + Settings.minutes,
+    value: '10'
+  }, {
+    key: '15',
+    text: '15 ' + Settings.minutes,
+    value: '15'
+  }, {
+    key: '30',
+    text: '30 ' + Settings.minutes,
+    value: '30'
+  }, {
+    key: '60',
+    text: '60 ' + Settings.minutes,
+    value: '60'
+  }];
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Sidebar, {
     animation: "overlay",
     page: 1,
@@ -89,7 +115,7 @@ const SettingsSidebar = props => {
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
     inverted: true,
     as: "h3"
-  }, "Param\xE8tres ", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
+  }, Settings.settings, " ", /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "settings"
   }))), allowColor || allowColor === undefined ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Divider, {
     inverted: true
@@ -98,7 +124,7 @@ const SettingsSidebar = props => {
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
     as: "h4",
     inverted: true
-  }, "Palette de couleur des \xE9vennements :")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_ColorList.default, {
+  }, Settings.colors, " :")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_ColorList.default, {
     colors: colors,
     setColors: handleColorChange,
     setModalOpen: value => _setModalOpen(value)
@@ -109,7 +135,7 @@ const SettingsSidebar = props => {
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
     as: "h4",
     inverted: true
-  }, "Ecart de temps :")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, {
+  }, Settings.time, " :")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, {
     style: {
       paddingTop: 0
     }
@@ -123,37 +149,16 @@ const SettingsSidebar = props => {
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleApplied
-  }, "Appliquer"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, Actions.applied), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleValidate
-  }, "Valider"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, Actions.confirm), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     negative: true,
     onClick: () => appDispatch({
       type: _constants.CLOSE_SETTINGS
     })
-  }, "Annuler"))));
+  }, Actions.cancel))));
 };
 
 var _default = SettingsSidebar;
 exports.default = _default;
-const timeRangeOptions = [{
-  key: '5',
-  text: '5 minutes',
-  value: '5'
-}, {
-  key: '10',
-  text: '10 minutes',
-  value: '10'
-}, {
-  key: '15',
-  text: '15 minutes',
-  value: '15'
-}, {
-  key: '30',
-  text: '30 minutes',
-  value: '30'
-}, {
-  key: '60',
-  text: '60 minutes',
-  value: '60'
-}];

@@ -7,6 +7,8 @@ exports.default = void 0;
 
 require("core-js/modules/web.dom-collections.iterator.js");
 
+require("core-js/modules/es.string.replace.js");
+
 var _react = _interopRequireWildcard(require("react"));
 
 var _StateContext = _interopRequireDefault(require("../../StateContext"));
@@ -27,20 +29,29 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 const WeekTraveler = props => {
   const {
-    displayedDate
-  } = (0, _react.useContext)(_StateContext.default); //change when displayed date change
+    displayedDate,
+    languageFile
+  } = (0, _react.useContext)(_StateContext.default);
+  const {
+    week_number
+  } = languageFile; //change when displayed date change
 
   const [state, setActual] = (0, _useImmer.useImmer)({
     actual: '',
     next: '',
     last: ''
-  });
+  }); //function to format the string output
+
+  const weekFormat = (weekNb, year) => {
+    return week_number.replace('WW', weekNb).replace('YYYY', year);
+  };
+
   (0, _react.useEffect)(() => {
-    const actual = 'semaine ' + displayedDate.week() + ' de ' + displayedDate.year();
+    const actual = weekFormat(displayedDate.week(), displayedDate.year());
     const nextWeek = (0, _moment.default)(displayedDate).add(7, 'days');
-    const next = 'semaine ' + nextWeek.week() + ' de ' + nextWeek.year();
+    const next = weekFormat(nextWeek.week(), nextWeek.year());
     const lastWeek = (0, _moment.default)(displayedDate).add(-7, 'days');
-    const last = 'semaine ' + lastWeek.week() + ' de ' + lastWeek.year();
+    const last = weekFormat(lastWeek.week(), lastWeek.year());
     setActual({
       actual,
       next,

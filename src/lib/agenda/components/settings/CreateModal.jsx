@@ -14,7 +14,7 @@ import StateContext from '../../StateContext'
 
 const CreateModal = props => {
    const appDispatch = useContext(DispatchContext)
-   const { modal, eventList, theme, languageFile } = useContext(StateContext)
+   const { modal, eventList, theme, languageFile, colors } = useContext(StateContext)
    const { Event, Creation, Actions } = languageFile
    const { create_title, modif_title, entire_day, color, icon, Errors, Confirm } = Creation
    const { createBackground } = theme
@@ -24,7 +24,7 @@ const CreateModal = props => {
    const initialState = createMode
       ? {
            entireDay: false,
-           selectedColor: '#0ed3ed',
+           selectedColor: colors[0],
            selectedIcon: '',
            description: '',
            place: '',
