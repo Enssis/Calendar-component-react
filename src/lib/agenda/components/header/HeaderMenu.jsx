@@ -6,12 +6,11 @@ import { DAY, MONTH, OPEN_MODAL, SET_MODE, WEEK, CREATE, OPEN_SETTINGS, OPEN_TAG
 //context
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
-import { MargedIcon } from '../../agenda.style'
+import { MargedIcon, StyledMenuItem } from '../../agenda.style'
 
 const HeaderMenu = () => {
-   const { settings, mode, theme, languageFile } = useContext(StateContext)
+   const { settings, mode, languageFile } = useContext(StateContext)
    const { month, week, day } = languageFile
-   const { headerBackground } = theme
    const appDispatch = useContext(DispatchContext)
 
    const handleOpenSettings = () => {
@@ -19,30 +18,30 @@ const HeaderMenu = () => {
    }
 
    return (
-      <Menu inverted={headerBackground !== 'white'} secondary>
-         <Menu.Item name={month} active={mode === MONTH} onClick={() => appDispatch({ type: SET_MODE, data: MONTH })} />
-         <Menu.Item name={week} active={mode === WEEK} onClick={() => appDispatch({ type: SET_MODE, data: WEEK })} />
-         <Menu.Item name={day} active={mode === DAY} onClick={() => appDispatch({ type: SET_MODE, data: DAY })} />
+      <Menu secondary>
+         <StyledMenuItem name={month} active={mode === MONTH} onClick={() => appDispatch({ type: SET_MODE, data: MONTH })} />
+         <StyledMenuItem name={week} active={mode === WEEK} onClick={() => appDispatch({ type: SET_MODE, data: WEEK })} />
+         <StyledMenuItem name={day} active={mode === DAY} onClick={() => appDispatch({ type: SET_MODE, data: DAY })} />
          <Menu.Menu position="right">
-            <Menu.Item name="tag" onClick={() => appDispatch({ type: OPEN_TAGS })}>
+            <StyledMenuItem name="tag" onClick={() => appDispatch({ type: OPEN_TAGS })}>
                <MargedIcon name="tags" />
-            </Menu.Item>
+            </StyledMenuItem>
 
             {
                //add icon used to open the create modal only if it's allowed in the settings
                settings.allowCreation ? (
-                  <Menu.Item name="add" onClick={() => appDispatch({ type: OPEN_MODAL, mode: CREATE, event: moment().minute(moment().minute() - (moment().minute() % 5)) })}>
+                  <StyledMenuItem name="add" onClick={() => appDispatch({ type: OPEN_MODAL, mode: CREATE, event: moment().minute(moment().minute() - (moment().minute() % 5)) })}>
                      <MargedIcon name="add" />
-                  </Menu.Item>
+                  </StyledMenuItem>
                ) : null
             }
 
             {
                //add icon used to open the Settings modal only if it's allowed in the settings
                settings.settingsModif.allowed ? (
-                  <Menu.Item name="settings" onClick={handleOpenSettings}>
+                  <StyledMenuItem name="settings" onClick={handleOpenSettings}>
                      <MargedIcon name="setting" />
-                  </Menu.Item>
+                  </StyledMenuItem>
                ) : null
             }
          </Menu.Menu>

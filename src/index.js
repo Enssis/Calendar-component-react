@@ -201,15 +201,7 @@ function Main() {
       handleTagList: handleSetTagList
    }
 
-   const theme = {
-      pageBackground: '#000',
-      headerBackground: 'yellow',
-      mainBackground: '#f56f82',
-      travelerColor: 'red',
-      dayDateColor: 'green',
-      caseBackground: 'yellow',
-      createBackground: '#a4f6c5'
-   }
+   const theme = 5
 
    return <Calendar eventList={eventList} language="fr" settings={settings} handlers={handlers} />
 }

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useImmerReducer } from 'use-immer'
-import { Element, scroller } from 'react-scroll'
+import { scroller } from 'react-scroll'
 import moment from 'moment'
 import 'semantic-ui-css/semantic.min.css'
 import { Dimmer, List, Message, Loader, Sidebar, Modal } from 'semantic-ui-react'
-import { ADD_DAYS, SET_EVENTS, MONTH, SET_EVENTLIST, SET_LANGUAGE_FILE, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS } from './constants'
+import { ThemeProvider } from 'styled-components'
+import { ADD_DAYS, SET_EVENTS, MONTH, SET_EVENTLIST, SET_LANGUAGE_FILE, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS, ZOOM_PLUS, applicationTheme } from './constants'
 
 //components
 //header
@@ -13,13 +14,13 @@ import CalendarHeader from './components/header/CalendarHeader'
 import MainBody from './components/body/MainBody'
 //modal
 import SettingsSidebar from './components/settings/SettingsSidebar'
+import CreateModal from './components/settings/CreateModal'
+import TagsSidebar from './components/settings/TagsSidebar'
 
 //context for acces from all childrens
 import DispatchContext from './DispatchContext'
 import StateContext from './StateContext'
-import TagsSidebar from './components/settings/TagsSidebar'
-import CreateModal from './components/settings/CreateModal'
-import { ZOOM_PLUS } from './constants'
+import { StyledElement } from './agenda.style'
 
 const date = moment()
 
@@ -61,16 +62,6 @@ const Agenda = props => {
       tagsList: {}
    }
 
-   const defaultTheme = {
-      pageBackground: '#fff', //what you want
-      headerBackground: 'blue', //list of color (segments color)
-      mainBackground: '#e3fcfc', //wyw
-      travelerColor: 'default', //button color + 'default' or ''
-      dayDateColor: '#fff', //wyw
-      caseBackground: 'white', //wyw
-      createBackground: '#fff' // wyw
-   }
-
    //initials states for the reducer
    const initialState = settings
       ? {
@@ -92,7 +83,7 @@ const Agenda = props => {
            activeTags: settings.tagsList,
            zoom: 0.6,
            eventList,
-           theme: theme !== undefined ? theme : defaultTheme,
+           theme: theme !== undefined ? applicationTheme[theme] : applicationTheme[5],
            languageFile: require(`./language/fr.json`)
         }
       : {
@@ -114,7 +105,7 @@ const Agenda = props => {
            activeTags: defaultSettings.tagsList,
            zoom: 1,
            eventList,
-           theme: theme !== undefined ? theme : defaultTheme,
+           theme: theme !== undefined ? applicationTheme[theme] : applicationTheme[5],
            languageFile: require(`./language/fr.json`)
         }
 
@@ -665,21 +656,23 @@ const Agenda = props => {
    return (
       <StateContext.Provider value={state}>
          <DispatchContext.Provider value={dispatch}>
-            <Sidebar.Pushable style={{ minHeight: '100vh' }}>
-               <Sidebar.Pusher dimmed={state.settingsOpen || state.tagsOpen}>
-                  <div style={{ minHeight: '100vh' }}>
-                     <CalendarHeader />
-                     <Element name="body" style={{ backgroundColor: state.theme.pageBackground }}>
-                        <MainBody />
-                     </Element>
-                  </div>
-               </Sidebar.Pusher>
-               <Modal dimmer open={state.modal.open} onClose={() => dispatch({ type: CLOSE_MODAL })}>
-                  <CreateModal event={state.modal.event} />
-               </Modal>
-               <SettingsSidebar />
-               <TagsSidebar />
-            </Sidebar.Pushable>
+            <ThemeProvider theme={state.theme}>
+               <Sidebar.Pushable style={{ minHeight: '100vh' }}>
+                  <Sidebar.Pusher dimmed={state.settingsOpen || state.tagsOpen}>
+                     <div style={{ minHeight: '100vh' }}>
+                        <CalendarHeader />
+                        <StyledElement name="body">
+                           <MainBody />
+                        </StyledElement>
+                     </div>
+                  </Sidebar.Pusher>
+                  <Modal dimmer open={state.modal.open} onClose={() => dispatch({ type: CLOSE_MODAL })}>
+                     <CreateModal event={state.modal.event} />
+                  </Modal>
+                  <SettingsSidebar />
+                  <TagsSidebar />
+               </Sidebar.Pushable>
+            </ThemeProvider>
          </DispatchContext.Provider>
       </StateContext.Provider>
    )

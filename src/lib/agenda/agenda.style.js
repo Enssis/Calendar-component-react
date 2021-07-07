@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { Segment, Table, Grid, Button, Label, List, Icon } from 'semantic-ui-react'
+import { Segment, Table, Grid, Button, Label, List, Icon, Header, Menu } from 'semantic-ui-react'
 import convert from 'color-convert'
 import TimePicker from 'rc-time-picker'
+import { Element } from 'react-scroll'
 
 //function wich get a hexadecimal color and return the color a little bit darker
 const darkerColor = (hexColor, darkPercent) => {
@@ -19,7 +20,7 @@ export const DaySegment = styled(Segment)`
    font-size: 10px !important;
    padding: 2px !important;
    &:hover {
-      background-color: ${props => darkerColor(props.backcolor, 20)} !important;
+      background-color: ${props => darkerColor(props.theme.lightPrimaryColor, 20)} !important;
    }
 `
 
@@ -38,9 +39,9 @@ export const SizedSegment = styled(Segment)`
    padding: ${props => (props.nopadding ? '0!important' : '')};
    ${props => (props.height > 0 ? `height: ${props.height}px;` : '')}
    margin: ${props => (props.nomargin ? '0!important' : '')};
-   background-color: ${props => props.backcolor} !important;
+   background-color: ${props => props.theme.defaultPrimaryColor} !important;
    &:hover {
-      background-color: ${props => darkerColor(props.backcolor, 10)} ${props => (props.nohover ? '' : '!important')};
+      background-color: ${props => darkerColor(props.theme.defaultPrimaryColor, 10)} ${props => (props.nohover ? '' : '!important')};
    }
    ${props => (props.border ? 'border: 1px solid rgba(34, 36, 38, 0.15) !important;' : '')}
 `
@@ -86,6 +87,26 @@ export const BiggerTimePicker = styled(TimePicker)`
    .rc-time-picker-input {
       height: 40px;
       font-size: 20px;
-      background-color: ${props => props.color};
+      background-color: ${props => props.theme.lightPrimaryColor};
    }
+`
+
+export const StyledElement = styled(Element)`
+   background-color: ${props => props.theme.lightPrimaryColor};
+`
+
+export const StyledSegment = styled(Segment)`
+   background-color: ${props => props.theme.defaultPrimaryColor};
+`
+
+export const StyledHeader = styled(Header)`
+   color: ${props => props.theme.textPrimaryColor};
+`
+
+export const StyledGridColumn = styled(Grid.Column)`
+   background-color: ${props => props.theme.defaultPrimaryColor};
+`
+
+export const StyledMenuItem = styled(Menu.Item)`
+   color: ${props => props.theme.textPrimaryColor} !important;
 `
