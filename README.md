@@ -7,7 +7,6 @@
 An Agenda component for your React application. Display a list of events and offer the possibility to create new or modify these events.
 
 Offer the possibility to customise options and colors of the component.
-For the moment all texts are in French but the possibility to change the langage is in devellopement
 
 ## Installation
 
@@ -15,6 +14,18 @@ Use `npm install agenda-rc` to install the package
 You need to download [input-moment.min.css](https://github.com/wayofthefuture/react-input-moment/tree/master/css) and add it as a css link in your html page
 
 ## Utilisation
+
+### Props
+
+| Props     | Description                                          | Type                  | Optional             |
+| --------- | ---------------------------------------------------- | --------------------- | -------------------- |
+| eventList | List of events which will be displayed in the agenda | Array                 | false                |
+| language  | language of the text displayed                       | String ("en" or "fr") | true (fr by default) |
+| theme     | object with colors of each element                   | Object                | true                 |
+| settings  | list of settings of the app                          | Object                | true                 |
+| handlers  | list of function to update value of different props  | Object                | true                 |
+
+### Example
 
 ```javaScript
 
@@ -47,7 +58,7 @@ const settings = {
          //is the title an image and no a text
          isImage: false,
          //text of the title or link to the image
-         value: 'Agenda',
+         value: 'Calendrier',
          //does it have logo
          hasLogo: false,
          //logo path

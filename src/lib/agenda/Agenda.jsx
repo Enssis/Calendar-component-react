@@ -24,7 +24,9 @@ import { ZOOM_PLUS } from './constants'
 const date = moment()
 
 const Agenda = props => {
-   const { settings, eventList, handlers, theme, language } = props
+   const { settings, handlers, theme, language } = props
+
+   const [eventList, setEventList] = useState(props.eventList)
 
    //used in case of options errors
    const [error, setError] = useState({ isError: false, errorMsg: [] })
@@ -137,15 +139,19 @@ const Agenda = props => {
          case ADD_EVENT:
             if (eventList.filter(el => el.key === action.value.key).length === 0) {
                handleEvent(eventList.concat(action.value))
+               setEventList(eventList.concat(action.value))
             }
             break
          case MODIF_EVENT:
             const event = action.value
-            const newEventList = [...eventList.filter(el => el.key !== event.key)]
-            handleEvent(newEventList.concat(event))
+            const newEventList = [...eventList.filter(el => el.key !== event.key)].concat(event)
+            handleEvent(newEventList)
+            setEventList(newEventList)
             break
          case DELETE_EVENT:
-            handleEvent([...eventList.filter(el => el.key !== action.value.key)])
+            const filteredList = [...eventList.filter(el => el.key !== action.value.key)]
+            handleEvent(filteredList)
+            setEventList(filteredList)
             break
          case OPEN_MODAL:
             draft.modal = { open: true, mode: action.mode, event: action.event }
@@ -220,8 +226,12 @@ const Agenda = props => {
    const [state, dispatch] = useImmerReducer(reducer, initialState)
 
    useEffect(() => {
+      setEventList(props.eventList)
+   }, [props.eventList])
+
+   useEffect(() => {
       dispatch({ type: SET_LANGUAGE_FILE })
-   }, language)
+   }, [language])
 
    //check if the options doesn't have errors
    useEffect(() => {
@@ -275,6 +285,49 @@ const Agenda = props => {
       setIsLoading(false)
    }, [state.settings])
 
+   //function to add an event to the list
+   const addEvent = newEvent => {
+      let active = false
+      //check if at least one of it's tag is active
+      if (newEvent.tags.length === 0 || settings === undefined) active = true
+      else
+         for (const tagKey of newEvent.tags) {
+            if (state.activeTags[tagKey] !== undefined) active = true
+         }
+      if (!active) return
+
+      const { event } = state
+
+      const containedEvents = findContainedEvent(newEvent, event)
+
+      const containedIn = event.filter(el => {
+         const { start, end } = el
+         //start and end considering the time division
+         const startByPart = moment(start).minutes(start.minutes() - (start.minutes() % (5 * state.nbrTimeRange)))
+         const endByPart = moment(end).minutes(end.minutes() + 5 * state.nbrTimeRange - (end.minutes() % (5 * state.nbrTimeRange)))
+
+         if (startByPart.diff(newEvent.start) <= 0 && endByPart.diff(newEvent.start) > 0 && newEvent.key !== el.key) {
+            return true
+         }
+         return false
+      })
+   }
+
+   //search all events who have their start between the start and the end of this event
+   const findContainedEvent = (event, eventList) => {
+      const { start, end } = event
+      //start and end considering the time division
+      const startByPart = moment(start).minutes(start.minutes() - (start.minutes() % (5 * state.nbrTimeRange)))
+      const endByPart = moment(end).minutes(end.minutes() + 5 * state.nbrTimeRange - (end.minutes() % (5 * state.nbrTimeRange)))
+
+      return eventList.filter(element => {
+         if (startByPart.diff(element.start) <= 0 && endByPart.diff(element.start) > 0 && element.key !== event.key) {
+            return true
+         }
+         return false
+      })
+   }
+
    //loop through the events to assign them to each day
    useEffect(() => {
       if (isLoading) {
@@ -315,17 +368,7 @@ const Agenda = props => {
             columnList[event.key] = 0
          }
 
-         //search all events who have their start between the start and the end of this event
-         //start considering the time division
-         const startByPart = moment(start).minutes(start.minutes() - (start.minutes() % (5 * state.nbrTimeRange)))
-         const endByPart = moment(end).minutes(end.minutes() + 5 * state.nbrTimeRange - (end.minutes() % (5 * state.nbrTimeRange)))
-
-         const sameTimeEvents = timeSortedEvents.filter(element => {
-            if (startByPart.diff(element.start) <= 0 && endByPart.diff(element.start) > 0 && element.key !== event.key) {
-               return true
-            }
-            return false
-         })
+         const sameTimeEvents = findContainedEvent(event, timeSortedEvents)
 
          //if there is some, need to assign a column number for each
          if (sameTimeEvents.length > 0) {

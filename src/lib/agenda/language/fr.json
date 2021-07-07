@@ -14,7 +14,7 @@
    },
    "Actions": {
       "applied": "Appliquer",
-      "validate": "Valider",
+      "confirm": "Valider",
       "cancel": "Annuler",
       "delete": "Supprimer"
    },

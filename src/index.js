@@ -21,7 +21,7 @@ function Main() {
    }
 
    const handleSetEvents = events => {
-      setEventList(events)
+      //setEventList(events)
    }
 
    const handleSetTagList = tagsList => {
@@ -211,7 +211,7 @@ function Main() {
       createBackground: '#a4f6c5'
    }
 
-   return <Calendar eventList={eventList} language="en" settings={settings} handlers={handlers} />
+   return <Calendar eventList={eventList} language="fr" settings={settings} handlers={handlers} />
 }
 
 ReactDOM.render(<Main />, document.querySelector('#root'))
