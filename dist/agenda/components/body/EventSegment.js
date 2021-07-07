@@ -89,7 +89,7 @@ const EventSegment = props => {
 
   if (event == null) {
     return /*#__PURE__*/_react.default.createElement(_agenda.SizedSegment, {
-      nohover: !settings.allowCreation,
+      nohover: !settings.allowCreation ? 1 : 0,
       nomargin: 1,
       nopadding: 1,
       height: size,

@@ -47,7 +47,8 @@ const CreateModal = props => {
     modal,
     eventList,
     theme,
-    languageFile
+    languageFile,
+    colors
   } = (0, _react.useContext)(_StateContext.default);
   const {
     Event,
@@ -72,7 +73,7 @@ const CreateModal = props => {
   const createMode = modal.mode === _constants.CREATE;
   const initialState = createMode ? {
     entireDay: false,
-    selectedColor: '',
+    selectedColor: colors[0],
     selectedIcon: '',
     description: '',
     place: '',

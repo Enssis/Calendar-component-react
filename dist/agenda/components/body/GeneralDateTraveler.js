@@ -34,7 +34,8 @@ const DateTraveler = props => {
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const {
     travelerColor
-  } = (0, _react.useContext)(_StateContext.default).theme; //change the date displayed by adding the right amount of days / month
+  } = (0, _react.useContext)(_StateContext.default).theme;
+  const colorList = ['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink', 'brown', 'grey', 'black']; //change the date displayed by adding the right amount of days / month
 
   const changeDate = nbDays => {
     return () => appDispatch({
@@ -43,34 +44,35 @@ const DateTraveler = props => {
     });
   };
 
+  const color = colorList.indexOf(travelerColor) >= 0 ? travelerColor : null;
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button.Group, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
-    color: travelerColor,
+    color: color,
     icon: true,
     onClick: changeDate(-10)
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "angle double left"
   })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
-    color: travelerColor,
+    color: color,
     icon: true,
     onClick: changeDate(-5)
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "angle left"
   })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
-    color: travelerColor,
+    color: color,
     onClick: changeDate(-1)
   }, last), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
-    color: travelerColor
+    color: color
   }, actual), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
-    color: travelerColor,
+    color: color,
     onClick: changeDate(1)
   }, next), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
-    color: travelerColor,
+    color: color,
     icon: true,
     onClick: changeDate(5)
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "angle right"
   })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
-    color: travelerColor,
+    color: color,
     icon: true,
     onClick: changeDate(10)
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {

@@ -84,7 +84,7 @@ const Agenda = props => {
               event: {}
            },
            settings: settings,
-           debug: true,
+           debug: false,
            colors: settings.eventColors ? settings.eventColors : ['#0ed3ed', '#00c21d', '#ff87c3', '#ffd438', '#ff1c14', '#ff7919', '#0055ff', '#cc00ff'],
            nbrTimeRange: settings.timeRange / 5,
            settingsOpen: false,
@@ -330,7 +330,6 @@ const Agenda = props => {
          let dateEvents = [...daysEvent[date], ...events]
          //events contained in the new event
          const containedEvents = findContainedEvent(newEvent, event[date] ? event[date] : [])
-         console.log(containedEvents)
          for (const contEvent of containedEvents) {
             //if it's column number is updated by the new event, change the event
             if (contEvent.timeInfo.column >= col && !modif) {

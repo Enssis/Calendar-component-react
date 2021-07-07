@@ -235,6 +235,7 @@ const HourCase = props => {
           if (firstElement) {
             if (!firstEventReady) setFirstEventReady(true);
             return /*#__PURE__*/_react.default.createElement(_reactScroll.Element, {
+              key: row,
               name: "firstEvent"
             }, /*#__PURE__*/_react.default.createElement(_EventSegment.default, {
               moment: quarterHourEvent.time,
@@ -242,6 +243,7 @@ const HourCase = props => {
               size: value.timeInfo.duration * 15 * nbrTimeRange * zoom
             }));
           } else return /*#__PURE__*/_react.default.createElement(_EventSegment.default, {
+            key: row,
             moment: quarterHourEvent.time,
             event: value,
             size: value.timeInfo.duration * 15 * nbrTimeRange * zoom
@@ -251,6 +253,7 @@ const HourCase = props => {
     }
 
     if (week) return /*#__PURE__*/_react.default.createElement(_agenda.SizedSegment, {
+      key: row,
       nohover: 1,
       basic: true,
       nomargin: 1,

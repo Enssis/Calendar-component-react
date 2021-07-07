@@ -37,16 +37,16 @@ const ColorPicker = props => {
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_agenda.ColorButton, {
-    backcolor: color !== '' ? color : colors[0],
+    backcolor: color,
     onClick: () => setDisplayPicker(value => !value),
     fluid: true
-  }, color !== '' ? color : colors[0]), displayPicker ? /*#__PURE__*/_react.default.createElement("div", {
+  }, color), displayPicker ? /*#__PURE__*/_react.default.createElement("div", {
     style: {
       position: 'absolute',
       zIndex: '2'
     }
   }, /*#__PURE__*/_react.default.createElement(_reactColor.TwitterPicker, {
-    color: color !== '' ? color : colors[0],
+    color: color,
     colors: colors,
     onChange: handleColorChange
   })) : '');

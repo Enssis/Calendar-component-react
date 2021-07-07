@@ -9,6 +9,8 @@ require("core-js/modules/web.dom-collections.iterator.js");
 
 require("core-js/modules/es.object.assign.js");
 
+require("core-js/modules/es.object.from-entries.js");
+
 require("core-js/modules/es.array.sort.js");
 
 var _react = _interopRequireWildcard(require("react"));
@@ -59,14 +61,16 @@ const Agenda = props => {
     theme,
     language
   } = props;
-  const [eventList, setEventList] = (0, _react.useState)(props.eventList); //used in case of options errors
+  const [eventList, setEventList] = (0, _react.useState)(props.eventList);
+  const [deletedEvent, setDeleteEvent] = (0, _react.useState)(0); //used in case of options errors
 
   const [error, setError] = (0, _react.useState)({
     isError: false,
     errorMsg: []
   }); //used to stop any action until the options are verified
 
-  const [isLoading, setIsLoading] = (0, _react.useState)(true); //Default settings in case settings are undefined
+  const [isLoading, setIsLoading] = (0, _react.useState)(true);
+  const [addNewEvent, setAddNewEvent] = (0, _react.useState)(null); //Default settings in case settings are undefined
 
   const defaultSettings = {
     settingsModif: {
@@ -184,7 +188,7 @@ const Agenda = props => {
       case _constants.ADD_EVENT:
         if (eventList.filter(el => el.key === action.value.key).length === 0) {
           handleEvent(eventList.concat(action.value));
-          setEventList(eventList.concat(action.value));
+          setAddNewEvent(action.value);
         }
 
         break;
@@ -193,13 +197,14 @@ const Agenda = props => {
         const event = action.value;
         const newEventList = [...eventList.filter(el => el.key !== event.key)].concat(event);
         handleEvent(newEventList);
-        setEventList(newEventList);
+        setAddNewEvent(event);
         break;
 
       case _constants.DELETE_EVENT:
         const filteredList = [...eventList.filter(el => el.key !== action.value.key)];
         handleEvent(filteredList);
         setEventList(filteredList);
+        setDeleteEvent(action.value);
         break;
 
       case _constants.OPEN_MODAL:
@@ -290,7 +295,324 @@ const Agenda = props => {
     }
   };
 
-  const [state, dispatch] = (0, _useImmer.useImmerReducer)(reducer, initialState);
+  const [state, dispatch] = (0, _useImmer.useImmerReducer)(reducer, initialState); //search all events who have their start between the start and the end of this event
+
+  const findContainedEvent = (event, eventList) => {
+    const {
+      start,
+      end
+    } = event; //start and end considering the time division
+
+    const startByPart = (0, _moment.default)(start).minutes(start.minutes() - start.minutes() % (5 * state.nbrTimeRange));
+    const endByPart = (0, _moment.default)(end).minutes(end.minutes() + 5 * state.nbrTimeRange - end.minutes() % (5 * state.nbrTimeRange));
+    return eventList.filter(element => {
+      if (startByPart.diff(element.start) <= 0 && endByPart.diff(element.start) > 0 && element.key !== event.key) {
+        return true;
+      }
+
+      return false;
+    });
+  }; //function to add an event to the list
+
+
+  const addEvent = newEvent => {
+    let active = false; //check if at least one of it's tag is active
+
+    if (newEvent.tags.length === 0 || settings === undefined) active = true;else for (const tagKey of newEvent.tags) {
+      if (state.activeTags[tagKey] !== undefined) active = true;
+    }
+    if (!active) return;
+    const {
+      event
+    } = state;
+    const startDate = (0, _moment.default)(newEvent.start).format('YYYY MM DD');
+    const daysEvent = {}; //events that contain the new event
+
+    const containedIn = event[startDate].filter(el => {
+      const {
+        start,
+        end
+      } = el; //start and end considering the time division
+
+      const startByPart = (0, _moment.default)(start).minutes(start.minutes() - start.minutes() % (5 * state.nbrTimeRange));
+      const endByPart = (0, _moment.default)(end).minutes(end.minutes() + 5 * state.nbrTimeRange - end.minutes() % (5 * state.nbrTimeRange));
+
+      if (startByPart.diff(newEvent.start) <= 0 && endByPart.diff(newEvent.start) > 0 && newEvent.key !== el.key) {
+        return true;
+      }
+
+      return false;
+    });
+    let col = -1;
+
+    for (const event of containedIn) {
+      let column = 0;
+      if ((column = event.timeInfo.column) > col) col = column;
+    }
+
+    col++;
+    const {
+      start,
+      end
+    } = newEvent; //loop to add the events to each day it is in
+
+    const dates = [];
+    let nbDays = 0;
+    let day = (0, _moment.default)(start);
+
+    do {
+      //wich day we are adding the event
+      day = (0, _moment.default)(start).add(nbDays, 'd');
+      nbDays++; //the key corresponding to a day are on the format "YYYY MM DD", ex : "2021 06 25" for the 25 june 2021
+
+      const dayFormat = day.format('YYYY MM DD');
+      dates.push(dayFormat);
+      if (!daysEvent[dayFormat]) daysEvent[dayFormat] = []; //copy of the event to save
+
+      const copyEvent = Object.assign({}, newEvent); //info of the event linked to the day : hour of start and end, and number of time block (ex : 5 quarter of hours or half hours (depending on the options))
+
+      const timeInfo = {
+        start,
+        end,
+        duration: 0,
+        column: col
+      }; //set the start to 00:00 if the real start is before the day
+
+      if (!start.isSame(day, 'day')) {
+        timeInfo.start = (0, _moment.default)({
+          year: day.year(),
+          month: day.month(),
+          date: day.date(),
+          hour: 0,
+          minute: 0
+        });
+      } //set the end to 23:59 if the real end is after the day
+
+
+      if (!end.isSame(day, 'day')) {
+        timeInfo.end = (0, _moment.default)({
+          year: day.year(),
+          month: day.month(),
+          date: day.date(),
+          hour: 23,
+          minute: 59
+        });
+      } //duration in part of hours
+
+
+      const dayStart = (0, _moment.default)({
+        year: timeInfo.start.year(),
+        month: timeInfo.start.month(),
+        date: timeInfo.start.date()
+      });
+      timeInfo.duration = Math.ceil(Math.abs(dayStart.diff(timeInfo.end) / (300000 * state.nbrTimeRange))) - Math.floor(Math.abs(dayStart.diff(timeInfo.start) / (300000 * state.nbrTimeRange)));
+      copyEvent['timeInfo'] = timeInfo;
+      daysEvent[dayFormat].push(copyEvent);
+    } while (!end.isSame(day, 'day')); //remove new event from the events
+
+
+    const eventListFiltered = Object.fromEntries(Object.entries(event).filter(_ref => {
+      let [key, ev] = _ref;
+      return ev.key !== newEvent.key;
+    })); //events with new columns
+
+    let newEvents = Object.assign({}, eventListFiltered);
+    let modif = false;
+
+    for (const date of dates) {
+      const events = event[date] ? event[date].filter(el => el.key !== daysEvent[date][0].key) : [];
+      if (events.length !== event[date].length) modif = true;
+      let dateEvents = [...daysEvent[date], ...events]; //events contained in the new event
+
+      const containedEvents = findContainedEvent(newEvent, event[date] ? event[date] : []);
+
+      for (const contEvent of containedEvents) {
+        //if it's column number is updated by the new event, change the event
+        if (contEvent.timeInfo.column >= col && !modif) {
+          dateEvents = dateEvents.filter(el => el.key !== contEvent.key);
+          let newContEvent = Object.assign({}, contEvent);
+          const {
+            column,
+            start,
+            end,
+            duration
+          } = contEvent.timeInfo;
+          newContEvent.timeInfo = {
+            column: column + 1,
+            start,
+            end,
+            duration
+          };
+          dateEvents = dateEvents.concat(newContEvent); //change the col for other days
+
+          let dayNbr = 1;
+          let nextDate = null; //while the next day isn'tn empty
+
+          while (event[nextDate = (0, _moment.default)(date, 'YYYY MM DD').add(dayNbr, 'd').format('YYYY MM DD')]) {
+            //check if the next date will not be already changed at the next iteration
+            if (dates.indexOf(nextDate) >= 0) break; //check if there is the event
+
+            let ev = null;
+
+            if ((ev = event[nextDate].filter(el => el.key === contEvent.key)).length > 0) {
+              const changedEvent = Object.assign({}, ev[0]);
+              newEvents[nextDate] = newEvents[nextDate].filter(el => el.key !== contEvent.key);
+              const {
+                column,
+                start,
+                end,
+                duration
+              } = changedEvent.timeInfo;
+              changedEvent.timeInfo = {
+                column: column + 1,
+                start,
+                end,
+                duration
+              };
+              newEvents[nextDate] = newEvents[nextDate].concat(changedEvent).sort((el1, el2) => {
+                const diff = el1.start.diff(el2.start);
+                if (diff < 0) return -1;else if (diff > 0) return 1;else return 0;
+              });
+              dayNbr++;
+            } else {
+              break;
+            }
+          }
+        }
+      }
+
+      newEvents[date] = dateEvents.sort((el1, el2) => {
+        const diff = el1.start.diff(el2.start);
+        if (diff < 0) return -1;else if (diff > 0) return 1;else return 0;
+      });
+    }
+
+    dispatch({
+      type: _constants.SET_EVENTS,
+      value: newEvents
+    });
+  };
+
+  (0, _react.useEffect)(() => {
+    if (addNewEvent !== null) {
+      addEvent(addNewEvent);
+      setEventList(eventList.concat(addNewEvent));
+      setAddNewEvent(null);
+    }
+  }, [addNewEvent]);
+
+  const deleteEvent = eventToDelete => {
+    let active = false; //check if at least one of it's tag is active
+
+    if (eventToDelete.tags.length === 0 || settings === undefined) active = true;else for (const tagKey of eventToDelete.tags) {
+      if (state.activeTags[tagKey] !== undefined) active = true;
+    }
+    if (!active) return;
+    const {
+      start,
+      end
+    } = eventToDelete;
+    const {
+      event
+    } = state; //loop to find on wich days the event was present
+
+    const dates = [];
+    let nbDays = 0;
+    let day = (0, _moment.default)(start);
+
+    do {
+      //wich day we are adding the event
+      day = (0, _moment.default)(start).add(nbDays, 'd');
+      nbDays++; //the key corresponding to a day are on the format "YYYY MM DD", ex : "2021 06 25" for the 25 june 2021
+
+      const dayFormat = day.format('YYYY MM DD');
+      dates.push(dayFormat);
+    } while (!end.isSame(day, 'day')); //remove new event from the events
+
+
+    const eventListFiltered = Object.fromEntries(Object.entries(event).filter(_ref2 => {
+      let [key, ev] = _ref2;
+      return ev.key !== eventToDelete.key;
+    })); //events with new columns
+
+    let newEvents = Object.assign({}, eventListFiltered);
+
+    for (const date of dates) {
+      const events = event[date] ? event[date].filter(el => el.key !== eventToDelete.key) : [];
+      let dateEvents = [...events]; //events contained in the new event
+
+      const containedEvents = findContainedEvent(eventToDelete, event[date] ? event[date] : []);
+
+      for (const contEvent of containedEvents) {
+        //if it's column number is updated by the new event, change the event
+        if (contEvent.timeInfo.column >= eventToDelete.timeInfo.column) {
+          let newContEvent = Object.assign({}, contEvent);
+          const {
+            column,
+            start,
+            end,
+            duration
+          } = contEvent.timeInfo;
+          newContEvent.timeInfo = {
+            column: column - 1,
+            start,
+            end,
+            duration
+          };
+          dateEvents = dateEvents.concat(newContEvent); //change the col for other days
+
+          let dayNbr = 1;
+          let nextDate = null; //while the next day isn't empty
+
+          while (event[nextDate = (0, _moment.default)(date, 'YYYY MM DD').add(dayNbr, 'd').format('YYYY MM DD')]) {
+            //check if the next date will not be already changed at the next iteration
+            if (dates.indexOf(nextDate) >= 0) break; //check if there is the event
+
+            let ev = null;
+
+            if ((ev = event[nextDate].filter(el => el.key === contEvent.key)).length > 0) {
+              const changedEvent = Object.assign({}, ev[0]);
+              newEvents[nextDate] = newEvents[nextDate].filter(el => el.key !== contEvent.key);
+              const {
+                column,
+                start,
+                end,
+                duration
+              } = changedEvent.timeInfo;
+              changedEvent.timeInfo = {
+                column: column - 1,
+                start,
+                end,
+                duration
+              };
+              newEvents[nextDate] = newEvents[nextDate].concat(changedEvent).sort((el1, el2) => {
+                const diff = el1.start.diff(el2.start);
+                if (diff < 0) return -1;else if (diff > 0) return 1;else return 0;
+              });
+              dayNbr++;
+            } else {
+              break;
+            }
+          }
+        }
+      }
+
+      newEvents[date] = dateEvents;
+    }
+
+    dispatch({
+      type: _constants.SET_EVENTS,
+      value: newEvents
+    });
+  };
+
+  (0, _react.useEffect)(() => {
+    if (deletedEvent) {
+      deleteEvent(deletedEvent);
+      setEventList(eventList.filter(el => el.key !== deletedEvent.key));
+      setDeleteEvent(null);
+    }
+  }, [deletedEvent]);
   (0, _react.useEffect)(() => {
     setEventList(props.eventList);
   }, [props.eventList]);
@@ -354,54 +676,7 @@ const Agenda = props => {
     }
 
     setIsLoading(false);
-  }, [state.settings]); //function to add an event to the list
-
-  const addEvent = newEvent => {
-    let active = false; //check if at least one of it's tag is active
-
-    if (newEvent.tags.length === 0 || settings === undefined) active = true;else for (const tagKey of newEvent.tags) {
-      if (state.activeTags[tagKey] !== undefined) active = true;
-    }
-    if (!active) return;
-    const {
-      event
-    } = state;
-    const containedEvents = findContainedEvent(newEvent, event);
-    const containedIn = event.filter(el => {
-      const {
-        start,
-        end
-      } = el; //start and end considering the time division
-
-      const startByPart = (0, _moment.default)(start).minutes(start.minutes() - start.minutes() % (5 * state.nbrTimeRange));
-      const endByPart = (0, _moment.default)(end).minutes(end.minutes() + 5 * state.nbrTimeRange - end.minutes() % (5 * state.nbrTimeRange));
-
-      if (startByPart.diff(newEvent.start) <= 0 && endByPart.diff(newEvent.start) > 0 && newEvent.key !== el.key) {
-        return true;
-      }
-
-      return false;
-    });
-  }; //search all events who have their start between the start and the end of this event
-
-
-  const findContainedEvent = (event, eventList) => {
-    const {
-      start,
-      end
-    } = event; //start and end considering the time division
-
-    const startByPart = (0, _moment.default)(start).minutes(start.minutes() - start.minutes() % (5 * state.nbrTimeRange));
-    const endByPart = (0, _moment.default)(end).minutes(end.minutes() + 5 * state.nbrTimeRange - end.minutes() % (5 * state.nbrTimeRange));
-    return eventList.filter(element => {
-      if (startByPart.diff(element.start) <= 0 && endByPart.diff(element.start) > 0 && element.key !== event.key) {
-        return true;
-      }
-
-      return false;
-    });
-  }; //loop through the events to assign them to each day
-
+  }, [state.settings]); //loop through the events to assign them to each day
 
   (0, _react.useEffect)(() => {
     if (isLoading) {
@@ -416,7 +691,7 @@ const Agenda = props => {
 
     const columnList = {}; //sort the events from the first in time to the last and remove these with all tags non active
 
-    const timeSortedEvents = [...eventList].filter(el => {
+    const timeSortedEvents = [...props.eventList].filter(el => {
       if (el.tags.length === 0 || settings === undefined) return true;
 
       for (const tagKey of el.tags) {
@@ -518,7 +793,7 @@ const Agenda = props => {
       type: _constants.SET_EVENTLIST,
       value: eventList
     });
-  }, [eventList, isLoading, state.settings.table, state.nbrTimeRange, state.activeTags]);
+  }, [props.eventList, isLoading, state.settings.table, state.nbrTimeRange, state.activeTags]);
   (0, _react.useEffect)(() => {
     if (settings) {
       dispatch({
