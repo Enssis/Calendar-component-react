@@ -24,7 +24,7 @@ const HourCase = props => {
 
    // open the modification modal with the current event if modification is allowed
    const handleModifClick = ev => {
-      if (settings.allowModification) appDispatch({ type: OPEN_MODAL, mode: MODIF, event: ev })
+      if (settings.allowModification || settings.allowModification === undefined) appDispatch({ type: OPEN_MODAL, mode: MODIF, event: ev })
    }
 
    //event in each time block

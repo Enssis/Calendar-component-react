@@ -23,13 +23,15 @@ const HeaderMenu = () => {
          <StyledMenuItem name={week} active={mode === WEEK} onClick={() => appDispatch({ type: SET_MODE, data: WEEK })} />
          <StyledMenuItem name={day} active={mode === DAY} onClick={() => appDispatch({ type: SET_MODE, data: DAY })} />
          <Menu.Menu position="right">
-            <StyledMenuItem name="tag" onClick={() => appDispatch({ type: OPEN_TAGS })}>
-               <MargedIcon name="tags" />
-            </StyledMenuItem>
+            {Object.entries(settings.tagsList).length > 0 ? (
+               <StyledMenuItem name="tag" onClick={() => appDispatch({ type: OPEN_TAGS })}>
+                  <MargedIcon name="tags" />
+               </StyledMenuItem>
+            ) : null}
 
             {
                //add icon used to open the create modal only if it's allowed in the settings
-               settings.allowCreation ? (
+               settings.allowCreation || settings.allowCreation === undefined ? (
                   <StyledMenuItem name="add" onClick={() => appDispatch({ type: OPEN_MODAL, mode: CREATE, event: moment().minute(moment().minute() - (moment().minute() % 5)) })}>
                      <MargedIcon name="add" />
                   </StyledMenuItem>

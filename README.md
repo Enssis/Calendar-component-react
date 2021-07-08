@@ -1,6 +1,6 @@
 # Agenda React Component
 
-![Capture d’écran du 2021-07-05 13-22-25](https://user-images.githubusercontent.com/49796491/124464132-1872b100-dd94-11eb-93dc-ab2130b23615.png)
+![Capture d’écran du 2021-07-08 15-36-59](https://user-images.githubusercontent.com/49796491/124931335-67be1900-e002-11eb-81b9-6f111f1a8fc7.png)
 
 ## Description
 
@@ -25,6 +25,54 @@ You need to download [input-moment.min.css](https://github.com/wayofthefuture/re
 | settings  | list of settings of the app                                                                                 | Object                | true                 |
 | handlers  | list of function to update value of different props (no need to update the props directly)                  | Object                | false                |
 
+#### Settings
+
+Settings object props
+
+| Name              | Description                                                              | Type    | Optional                |
+| ----------------- | ------------------------------------------------------------------------ | ------- | ----------------------- |
+| settingsModif     | Defined wich options can be changed within the component                 | Object  | false                   |
+| table             | Used to know during how much month before and after the events are given | Object  | false                   |
+| title             | Informations about the title                                             | Object  | false                   |
+| allowCreation     | Tell if we can create new events                                         | Boolean | true (default : true)   |
+| allowModification | Tell if we can modify existing event (delete included)                   | Boolean | true (default : true)   |
+| eventColors       | Default List of colors for events                                        | List    | true                    |
+| timeRange         | Minimal time division (must be : 5, 10, 15, 20, 30 or 60)                | Number  | true (default : 5)      |
+| tagsList          | List of tags                                                             | Object  | false(but can be empty) |
+| allowTags         | allow the creation of tags                                               | Object  | true (default : true)   |
+
+#### settingsModif
+
+SettingsModif object props
+
+| Name             | Description                                                         | Type    | Optional               |
+| ---------------- | ------------------------------------------------------------------- | ------- | ---------------------- |
+| allowed          | Allow the possibility to acces change the settings in the component | Boolean | false                  |
+| allowColor       | Allow to change the event color range                               | Boolean | true (default : true ) |
+| allowTimeRange   | Allow to change the time division                                   | Boolean | true (default : true ) |
+| allowThemeChange | Allow to change the theme                                           | Boolean | true (default : true ) |
+
+#### table
+
+Table object props
+
+| Name   | Description                                | Type   | Optional |
+| ------ | ------------------------------------------ | ------ | -------- |
+| before | Number of month rendered before today date | Number | false    |
+| after  | Number of month rendered after today date  | Number | false    |
+| total  | Number total of month rendered             | Number | false    |
+
+#### title
+
+Title object props
+
+| Name     | Description                                                      | Type    | Optional |
+| -------- | ---------------------------------------------------------------- | ------- | -------- |
+| isImage  | Tell if you want to use an image instead of a text for the title | Boolean | false    |
+| value    | Title or path to the image                                       | String  | false    |
+| hasLogo  | Tell if ther is a logo to render before the title                | Boolean | false    |
+| logoPath | Path to the logo                                                 | String  | false    |
+
 ### Example
 
 ```javaScript
@@ -44,7 +92,7 @@ const settings = {
          //allow change of timeRange
          allowTimeRange: true
          //allow theme color change
-         allowThemeChange : true
+         allowThemeChange: true
       },
       //settings link to the eventList
       table: {
@@ -83,7 +131,9 @@ const settings = {
             name: '', //the name displayed
             color: '' //the color, must be one element of : red, orange, yellow, olive, green, teal, blue, violet, purple, pink, brown, grey, black
          }
-      }
+      },
+      //allow the creation of tags
+      allowTags : true
    }
 
   //list of events to be displayed
@@ -108,7 +158,7 @@ const settings = {
       handleEvent: function, //for the eventList
       handleColors: function, // for the colorsList
       handleTimeRange: function, // for the timeRange
-      handleTagList: function // for the tagList
+      handleTagList: function, // for the tagList
       handleTheme: function // for the theme
    }
 

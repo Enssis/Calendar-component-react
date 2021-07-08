@@ -15,10 +15,9 @@ import { StyledModalHeader, StyledFormCheckbox, StyledModalContent, StyledFormTe
 
 const CreateModal = props => {
    const appDispatch = useContext(DispatchContext)
-   const { modal, eventList, theme, languageFile, colors } = useContext(StateContext)
+   const { modal, eventList, languageFile, colors, settings } = useContext(StateContext)
    const { Event, Creation, Actions } = languageFile
    const { create_title, modif_title, entire_day, color, icon, Errors, Confirm } = Creation
-   const { createBackground } = theme
    const { event } = props
    const createMode = modal.mode === CREATE
 
@@ -156,8 +155,8 @@ const CreateModal = props => {
 
    return (
       <>
-         <StyledModalHeader style={{ backgroundColor: createBackground }}>{createMode ? create_title : modif_title.replace('$', state.title)}</StyledModalHeader>
-         <StyledModalContent style={{ backgroundColor: createBackground }}>
+         <StyledModalHeader>{createMode ? create_title : modif_title.replace('$', state.title)}</StyledModalHeader>
+         <StyledModalContent>
             <Form>
                <StyledFormInput error={state.titleError ? state.titleErrorMessage : null} label={Event.title} placeholder={Event.title} value={state.title} onChange={handleTitleChange} />
                <StyledFormCheckbox
@@ -220,21 +219,24 @@ const CreateModal = props => {
                      }
                   />
                </Form.Group>
-               <StyledFormField
-                  label={Event.tags}
-                  control={TagsPicker}
-                  tags={state.tags}
-                  setTags={value =>
-                     setState(draft => {
-                        draft.tags = value
-                     })
-                  }
-               />
+               {settings.allowTags || settings.allowTags === undefined ? (
+                  <StyledFormField
+                     label={Event.tags}
+                     control={TagsPicker}
+                     tags={state.tags}
+                     setTags={value =>
+                        setState(draft => {
+                           draft.tags = value
+                        })
+                     }
+                  />
+               ) : null}
+
                <StyledFormInput label={Event.place} placeholder={Event.place} value={state.place} onChange={handlePlaceChange} />
                <StyledFormTextArea label={Event.description} placeholder={Event.description} value={state.description} onChange={handleDescriptionChange} />
             </Form>
          </StyledModalContent>
-         <StyledModalActions style={{ backgroundColor: createBackground }}>
+         <StyledModalActions>
             <Button positive onClick={handleValidate}>
                {Actions.confirm}
             </Button>
@@ -250,9 +252,9 @@ const CreateModal = props => {
          </StyledModalActions>
          {confirm ? (
             <Modal open size="small">
-               <StyledModalHeader style={{ backgroundColor: createBackground }}>{Confirm.sure}</StyledModalHeader>
-               <StyledModalContent style={{ backgroundColor: createBackground }}>{Confirm.irrevocable}</StyledModalContent>
-               <StyledModalActions style={{ backgroundColor: createBackground }}>
+               <StyledModalHeader>{Confirm.sure}</StyledModalHeader>
+               <StyledModalContent>{Confirm.irrevocable}</StyledModalContent>
+               <StyledModalActions>
                   <Button positive onClick={handleDelete}>
                      <Icon name="checkmark" /> {Confirm.yes}
                   </Button>
