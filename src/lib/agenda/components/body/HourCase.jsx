@@ -5,7 +5,7 @@ import moment from 'moment'
 import StateContext from '../../StateContext'
 //components
 import { Divider, Table, Dimmer, Loader, Segment, Icon, Header } from 'semantic-ui-react'
-import { ScrollableSegment, PaddingLessTableCell, SizedTableRow, SizedSegment } from '../../agenda.style'
+import { ScrollableSegment, PaddingLessTableCell, SizedTableRow, SizedSegment, DarkTableCell, StyledDivider } from '../../agenda.style'
 import EventSegment from './EventSegment'
 import EventPopup from './EventPopup'
 import DispatchContext from '../../DispatchContext'
@@ -121,14 +121,14 @@ const HourCase = props => {
                           return (
                              <SizedTableRow key={key} height={180 * zoom}>
                                 {isLoading ? (
-                                   <Dimmer active inverted>
+                                   <Dimmer active>
                                       <Loader />
                                    </Dimmer>
                                 ) : (
-                                   <Table.Cell textAlign="center" width={1} verticalAlign="top">
-                                      <Divider fitted />
+                                   <DarkTableCell textAlign="center" width={1} verticalAlign="top">
+                                      <StyledDivider fitted />
                                       {hour}
-                                   </Table.Cell>
+                                   </DarkTableCell>
                                 )}
                              </SizedTableRow>
                           )
@@ -140,7 +140,7 @@ const HourCase = props => {
                      .map((_, col) => (
                         <PaddingLessTableCell key={col} textAlign="center" width={week ? 1 : Math.ceil(15 / nbCol)}>
                            {isLoading ? (
-                              <Dimmer active inverted>
+                              <Dimmer active>
                                  <Loader />
                               </Dimmer>
                            ) : (

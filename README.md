@@ -17,13 +17,13 @@ You need to download [input-moment.min.css](https://github.com/wayofthefuture/re
 
 ### Props
 
-| Props     | Description                                                                                | Type                  | Optional             |
-| --------- | ------------------------------------------------------------------------------------------ | --------------------- | -------------------- |
-| eventList | List of events which will be displayed in the agenda                                       | Array                 | false                |
-| language  | language of the text displayed                                                             | String ("en" or "fr") | true (fr by default) |
-| theme     | object with colors of each element                                                         | Object                | true                 |
-| settings  | list of settings of the app                                                                | Object                | true                 |
-| handlers  | list of function to update value of different props (no need to update the props directly) | Object                | true                 |
+| Props     | Description                                                                                                 | Type                  | Optional             |
+| --------- | ----------------------------------------------------------------------------------------------------------- | --------------------- | -------------------- |
+| eventList | List of events which will be displayed in the agenda                                                        | Array                 | false                |
+| language  | language of the text displayed                                                                              | String ("en" or "fr") | true (fr by default) |
+| theme     | Index of the color theme (see [material palette](https://www.materialpalette.com/colors) + white and black) | number                | true                 |
+| settings  | list of settings of the app                                                                                 | Object                | true                 |
+| handlers  | list of function to update value of different props (no need to update the props directly)                  | Object                | false                |
 
 ### Example
 
@@ -43,6 +43,8 @@ const settings = {
          allowColor: true,
          //allow change of timeRange
          allowTimeRange: true
+         //allow theme color change
+         allowThemeChange : true
       },
       //settings link to the eventList
       table: {
@@ -107,18 +109,7 @@ const settings = {
       handleColors: function, // for the colorsList
       handleTimeRange: function, // for the timeRange
       handleTagList: function // for the tagList
-   }
-
-   //theme of the app (optional)
-   const theme = {
-      pageBackground: '', //color of the background of the page
-      //color of the background of the page (need to be one of : red, orange, yellow, olive, green, teal, blue, violet, purple, pink, brown, grey, black, white)
-      headerBackground: '',
-      mainBackground: '', //color of the background of the agenda
-      travelerColor: '', //color of the background of the date traveler (need to be one of : red, orange, yellow, olive, green, teal, blue, violet, purple, pink, brown, grey, black, default)
-      dayDateColor: '', //Color of the background of the date display
-      caseBackground: '', //Color of the background of the cases
-      createBackground: '' // Color of the background of the create / modif popup
+      handleTheme: function // for the theme
    }
 
    .
@@ -126,6 +117,6 @@ const settings = {
    .
 
 
-   ReactDOM.render(<Calendar eventList={eventList} language="en" theme={theme} settings={settings} handlers={handlers} />, document.querySelector('#root'))
+   ReactDOM.render(<Calendar eventList={eventList} language="en" theme={1} settings={settings} handlers={handlers} />, document.querySelector('#root'))
 
 ```

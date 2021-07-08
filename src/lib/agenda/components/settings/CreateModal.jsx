@@ -11,6 +11,7 @@ import TagsPicker from './TagsPicker'
 //context
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
+import { StyledModalHeader, StyledFormCheckbox, StyledModalContent, StyledFormTextArea, StyledModalActions, StyledFormInput, StyledFormField } from '../../agenda.style'
 
 const CreateModal = props => {
    const appDispatch = useContext(DispatchContext)
@@ -155,11 +156,11 @@ const CreateModal = props => {
 
    return (
       <>
-         <Modal.Header style={{ backgroundColor: createBackground }}>{createMode ? create_title : modif_title.replace('$', state.title)}</Modal.Header>
-         <Modal.Content style={{ backgroundColor: createBackground }}>
+         <StyledModalHeader style={{ backgroundColor: createBackground }}>{createMode ? create_title : modif_title.replace('$', state.title)}</StyledModalHeader>
+         <StyledModalContent style={{ backgroundColor: createBackground }}>
             <Form>
-               <Form.Input error={state.titleError ? state.titleErrorMessage : null} label={Event.title} placeholder={Event.title} value={state.title} onChange={handleTitleChange} />
-               <Form.Checkbox
+               <StyledFormInput error={state.titleError ? state.titleErrorMessage : null} label={Event.title} placeholder={Event.title} value={state.title} onChange={handleTitleChange} />
+               <StyledFormCheckbox
                   label={entire_day}
                   onChange={(e, { checked }) =>
                      setState(draft => {
@@ -168,7 +169,7 @@ const CreateModal = props => {
                   }
                />
                <Form.Group>
-                  <Form.Field
+                  <StyledFormField
                      control={MomentPicker}
                      label={state.entireDay ? languageFile.day : Event.start}
                      day={state.entireDay}
@@ -183,7 +184,7 @@ const CreateModal = props => {
                   {state.entireDay ? (
                      ''
                   ) : (
-                     <Form.Field
+                     <StyledFormField
                         control={MomentPicker}
                         label={Event.end}
                         date={state.end}
@@ -198,7 +199,7 @@ const CreateModal = props => {
                </Form.Group>
                {state.timeError ? <Message negative>{state.timeErrorMessage}</Message> : ''}
                <Form.Group>
-                  <Form.Field
+                  <StyledFormField
                      control={ColorPicker}
                      label={color + ' :'}
                      color={state.selectedColor}
@@ -208,7 +209,7 @@ const CreateModal = props => {
                         })
                      }
                   />
-                  <Form.Field
+                  <StyledFormField
                      label={icon + ' :'}
                      control={IconDropdown}
                      selectedIcon={state.selectedIcon}
@@ -219,7 +220,7 @@ const CreateModal = props => {
                      }
                   />
                </Form.Group>
-               <Form.Field
+               <StyledFormField
                   label={Event.tags}
                   control={TagsPicker}
                   tags={state.tags}
@@ -229,11 +230,11 @@ const CreateModal = props => {
                      })
                   }
                />
-               <Form.Input label={Event.place} placeholder={Event.place} value={state.place} onChange={handlePlaceChange} />
-               <Form.TextArea label={Event.description} value={state.description} onChange={handleDescriptionChange} />
+               <StyledFormInput label={Event.place} placeholder={Event.place} value={state.place} onChange={handlePlaceChange} />
+               <StyledFormTextArea label={Event.description} placeholder={Event.description} value={state.description} onChange={handleDescriptionChange} />
             </Form>
-         </Modal.Content>
-         <Modal.Actions style={{ backgroundColor: createBackground }}>
+         </StyledModalContent>
+         <StyledModalActions style={{ backgroundColor: createBackground }}>
             <Button positive onClick={handleValidate}>
                {Actions.confirm}
             </Button>
@@ -246,19 +247,19 @@ const CreateModal = props => {
             <Button negative onClick={() => appDispatch({ type: CLOSE_MODAL })}>
                {Actions.cancel}
             </Button>
-         </Modal.Actions>
+         </StyledModalActions>
          {confirm ? (
             <Modal open size="small">
-               <Modal.Header style={{ backgroundColor: createBackground }}>{Confirm.sure}</Modal.Header>
-               <Modal.Content style={{ backgroundColor: createBackground }}>{Confirm.irrevocable}</Modal.Content>
-               <Modal.Actions style={{ backgroundColor: createBackground }}>
+               <StyledModalHeader style={{ backgroundColor: createBackground }}>{Confirm.sure}</StyledModalHeader>
+               <StyledModalContent style={{ backgroundColor: createBackground }}>{Confirm.irrevocable}</StyledModalContent>
+               <StyledModalActions style={{ backgroundColor: createBackground }}>
                   <Button positive onClick={handleDelete}>
                      <Icon name="checkmark" /> {Confirm.yes}
                   </Button>
                   <Button negative onClick={() => setConfirm(false)}>
                      <Icon name="remove" /> {Confirm.no}
                   </Button>
-               </Modal.Actions>
+               </StyledModalActions>
             </Modal>
          ) : (
             ''

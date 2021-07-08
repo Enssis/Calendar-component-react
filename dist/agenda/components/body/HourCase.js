@@ -184,13 +184,12 @@ const HourCase = props => {
       key: key,
       height: 180 * zoom
     }, isLoading ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Dimmer, {
-      active: true,
-      inverted: true
-    }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Loader, null)) : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Table.Cell, {
+      active: true
+    }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Loader, null)) : /*#__PURE__*/_react.default.createElement(_agenda.DarkTableCell, {
       textAlign: "center",
       width: 1,
       verticalAlign: "top"
-    }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Divider, {
+    }, /*#__PURE__*/_react.default.createElement(_agenda.StyledDivider, {
       fitted: true
     }), hour));
   }) : null, Array(nbCol).fill().map((_, col) => /*#__PURE__*/_react.default.createElement(_agenda.PaddingLessTableCell, {
@@ -198,8 +197,7 @@ const HourCase = props => {
     textAlign: "center",
     width: week ? 1 : Math.ceil(15 / nbCol)
   }, isLoading ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Dimmer, {
-    active: true,
-    inverted: true
+    active: true
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Loader, null)) : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment.Group, null, partHourEvents.map((quarterHourEvent, row) => {
     const event = quarterHourEvent.event[col];
 

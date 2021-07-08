@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 
 //components
 import { Button, Icon } from 'semantic-ui-react'
+import { StyledButton } from '../../agenda.style'
 
 //context
 import DispatchContext from '../../DispatchContext'
@@ -18,27 +19,27 @@ const DateTraveler = props => {
    }
    const color = colorList.indexOf(travelerColor) >= 0 ? travelerColor : null
    return (
-      <Button.Group>
-         <Button color={color} icon onClick={changeDate(-10)}>
+      <StyledButton.Group>
+         <StyledButton color={color} icon onClick={changeDate(-10)}>
             <Icon name="angle double left" />
-         </Button>
-         <Button color={color} icon onClick={changeDate(-5)}>
+         </StyledButton>
+         <StyledButton color={color} icon onClick={changeDate(-5)}>
             <Icon name="angle left" />
-         </Button>
-         <Button color={color} onClick={changeDate(-1)}>
+         </StyledButton>
+         <StyledButton color={color} onClick={changeDate(-1)}>
             {last}
-         </Button>
-         <Button color={color}>{actual}</Button>
-         <Button color={color} onClick={changeDate(1)}>
+         </StyledButton>
+         <StyledButton color={color}>{actual}</StyledButton>
+         <StyledButton color={color} onClick={changeDate(1)}>
             {next}
-         </Button>
-         <Button color={color} icon onClick={changeDate(5)}>
+         </StyledButton>
+         <StyledButton color={color} icon onClick={changeDate(5)}>
             <Icon name="angle right" />
-         </Button>
-         <Button color={color} icon onClick={changeDate(10)}>
+         </StyledButton>
+         <StyledButton color={color} icon onClick={changeDate(10)}>
             <Icon name="angle double right" />
-         </Button>
-      </Button.Group>
+         </StyledButton>
+      </StyledButton.Group>
    )
 }
 

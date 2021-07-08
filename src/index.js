@@ -38,7 +38,9 @@ function Main() {
          //allow color change in settings(true by default)
          allowColor: true,
          //allow change of timeRange
-         allowTimeRange: true
+         allowTimeRange: true,
+         //allow theme color change
+         allowThemeChange: true
       },
       //settings link to the eventList
       table: {
@@ -201,9 +203,7 @@ function Main() {
       handleTagList: handleSetTagList
    }
 
-   const theme = 5
-
-   return <Calendar eventList={eventList} language="fr" settings={settings} handlers={handlers} />
+   return <Calendar eventList={eventList} theme={8} language="fr" settings={settings} handlers={handlers} />
 }
 
 ReactDOM.render(<Main />, document.querySelector('#root'))

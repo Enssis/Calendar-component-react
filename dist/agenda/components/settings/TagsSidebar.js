@@ -32,7 +32,8 @@ const TagsSidebar = () => {
     tagsOpen,
     settings,
     activeTags,
-    languageFile
+    languageFile,
+    theme
   } = (0, _react.useContext)(_StateContext.default);
   const {
     active_tags,
@@ -77,6 +78,9 @@ const TagsSidebar = () => {
     setTagsList(settings.tagsList);
   }, [tagsOpen]);
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Sidebar, {
+    style: {
+      backgroundColor: theme.darkPrimaryColor
+    },
     animation: "overlay",
     as: _semanticUiReact.Segment,
     inverted: true,
@@ -90,8 +94,7 @@ const TagsSidebar = () => {
     style: {
       padding: '15px'
     }
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
-    inverted: true,
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledHeader, {
     as: "h3"
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "tags"

@@ -34,12 +34,8 @@ const MomentPicker = props => {
     day
   } = props;
   const {
-    theme,
     languageFile
   } = (0, _react.useContext)(_StateContext.default);
-  const {
-    createBackground
-  } = theme;
   const {
     hour
   } = languageFile.Creation;
@@ -63,27 +59,24 @@ const MomentPicker = props => {
 
   const TimeModal = () => /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal, {
     dimmer: true,
-    open: modalOpen,
     basic: true,
+    open: modalOpen,
     onClose: () => setModalOpen(false),
     size: "small"
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledModalContent, {
+    light: 1,
     style: {
-      backgroundColor: createBackground,
       padding: 10
     }
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Container, {
     text: true
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
-    basic: true,
-    style: {
-      backgroundColor: createBackground
-    }
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledSegment, {
+    basic: true
   }, day ? /*#__PURE__*/_react.default.createElement(_rimBdsit.DatePicker, {
     moment: selectedMoment,
     onChange: handleDayChange,
     locale: "fr"
-  }) : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
+  }) : /*#__PURE__*/_react.default.createElement(_agenda.StyledSegment, {
     basic: true
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid, {
     centered: true,
@@ -93,19 +86,17 @@ const MomentPicker = props => {
     moment: selectedMoment,
     onChange: handleDayChange,
     locale: "fr"
-  })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
+  })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledHeader, {
+    accent: 1,
     as: "h2"
-  }, " ", hour, " : ")), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_agenda.BiggerTimePicker, {
-    color: createBackground,
+  }, ' ', hour, " :", ' ')), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, null, /*#__PURE__*/_react.default.createElement(_agenda.BiggerTimePicker, {
     value: selectedMoment,
     onChange: handleTimeChange,
     minuteStep: 5,
     showSecond: false,
     allowEmpty: false
-  }))))))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, {
-    style: {
-      backgroundColor: createBackground
-    }
+  }))))))), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalActions, {
+    light: 1
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleValidate
@@ -114,7 +105,7 @@ const MomentPicker = props => {
     onClick: () => setModalOpen(false)
   }, "Annuler")));
 
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledButton, {
     onClick: () => setModalOpen(true)
   }, date.format(props.day ? 'DD/MM/YYYY' : 'DD/MM/YYYY HH:mm')), /*#__PURE__*/_react.default.createElement(TimeModal, null));
 };

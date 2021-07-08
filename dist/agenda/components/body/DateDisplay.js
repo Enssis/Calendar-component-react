@@ -90,38 +90,35 @@ const DateDisplay = props => {
     textAlign: mode !== _constants.DAY ? 'center' : 'left'
   }, /*#__PURE__*/_react.default.createElement(_agenda.SizedSegment, {
     nohover: mode !== _constants.WEEK ? 1 : 0,
-    backcolor: dayDateColor,
+    dark: 1,
     onClick: () => handleDayClick(getDate(key, displayedDate))
   }, mode === _constants.DAY ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu, {
     icon: true,
     secondary: true
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     header: true
   }, displayDate(day, key)), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Menu, {
     position: "right"
-  }, showZoom ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
+  }, showZoom ? /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     header: true
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, null, "".concat(Math.floor(zoom * 100), "%"))) : null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
-    as: "a",
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, null, "".concat(Math.floor(zoom * 100), "%"))) : null, /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     icon: "add",
     onClick: () => appDispatch({
       type: _constants.OPEN_MODAL,
       mode: _constants.CREATE,
       event: getDate(key, displayedDate)
     })
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
-    as: "a",
+  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     icon: "plus circle",
     onClick: () => appDispatch({
       type: _constants.ZOOM_PLUS
     })
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
-    as: "a",
+  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     icon: "minus circle",
     onClick: () => appDispatch({
       type: _constants.ZOOM_MINUS
     })
-  }))) : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
+  }))) : /*#__PURE__*/_react.default.createElement(_agenda.StyledHeader, {
     as: "h5"
   }, displayDate(day, key))))));
 };

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { Dropdown, Icon } from 'semantic-ui-react'
+import { StyledDropdown } from '../../agenda.style'
 import StateContext from '../../StateContext'
 
 const IconDropdown = props => {
@@ -17,7 +18,7 @@ const IconDropdown = props => {
       )
    }))
    const { selectedIcon, setSelectedIcon } = props
-   return <Dropdown button className="icon" defaultValue={selectedIcon} floating labeled options={iconsOption} clearable placeholder={Icones.none} onChange={(_, data) => setSelectedIcon(data.value)} />
+   return <StyledDropdown button className="icon" defaultValue={selectedIcon} floating labeled options={iconsOption} clearable placeholder={Icones.none} onChange={(_, data) => setSelectedIcon(data.value)} />
 }
 
 export default IconDropdown

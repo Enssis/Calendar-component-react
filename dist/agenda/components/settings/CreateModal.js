@@ -33,6 +33,8 @@ var _DispatchContext = _interopRequireDefault(require("../../DispatchContext"));
 
 var _StateContext = _interopRequireDefault(require("../../StateContext"));
 
+var _agenda = require("../../agenda.style");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -217,21 +219,21 @@ const CreateModal = props => {
     }
   };
 
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Header, {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledModalHeader, {
     style: {
       backgroundColor: createBackground
     }
-  }, createMode ? create_title : modif_title.replace('$', state.title)), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
+  }, createMode ? create_title : modif_title.replace('$', state.title)), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalContent, {
     style: {
       backgroundColor: createBackground
     }
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Input, {
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledFormInput, {
     error: state.titleError ? state.titleErrorMessage : null,
     label: Event.title,
     placeholder: Event.title,
     value: state.title,
     onChange: handleTitleChange
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Checkbox, {
+  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledFormCheckbox, {
     label: entire_day,
     onChange: (e, _ref) => {
       let {
@@ -241,7 +243,7 @@ const CreateModal = props => {
         draft.entireDay = checked;
       });
     }
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Group, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
+  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Group, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledFormField, {
     control: _MomentPicker.default,
     label: state.entireDay ? languageFile.day : Event.start,
     day: state.entireDay,
@@ -250,7 +252,7 @@ const CreateModal = props => {
       draft.start = value;
       draft.timeError = false;
     })
-  }), state.entireDay ? '' : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
+  }), state.entireDay ? '' : /*#__PURE__*/_react.default.createElement(_agenda.StyledFormField, {
     control: _MomentPicker.default,
     label: Event.end,
     date: state.end,
@@ -260,37 +262,38 @@ const CreateModal = props => {
     })
   })), state.timeError ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Message, {
     negative: true
-  }, state.timeErrorMessage) : '', /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Group, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
+  }, state.timeErrorMessage) : '', /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Group, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledFormField, {
     control: _ColorPicker.default,
     label: color + ' :',
     color: state.selectedColor,
     setColor: value => setState(draft => {
       draft.selectedColor = value;
     })
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
+  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledFormField, {
     label: icon + ' :',
     control: _IconDropdown.default,
     selectedIcon: state.selectedIcon,
     setSelectedIcon: value => setState(draft => {
       draft.selectedIcon = value;
     })
-  })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
+  })), /*#__PURE__*/_react.default.createElement(_agenda.StyledFormField, {
     label: Event.tags,
     control: _TagsPicker.default,
     tags: state.tags,
     setTags: value => setState(draft => {
       draft.tags = value;
     })
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Input, {
+  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledFormInput, {
     label: Event.place,
     placeholder: Event.place,
     value: state.place,
     onChange: handlePlaceChange
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.TextArea, {
+  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledFormTextArea, {
     label: Event.description,
+    placeholder: Event.description,
     value: state.description,
     onChange: handleDescriptionChange
-  }))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, {
+  }))), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalActions, {
     style: {
       backgroundColor: createBackground
     }
@@ -308,15 +311,15 @@ const CreateModal = props => {
   }, Actions.cancel)), confirm ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal, {
     open: true,
     size: "small"
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Header, {
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledModalHeader, {
     style: {
       backgroundColor: createBackground
     }
-  }, Confirm.sure), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, {
+  }, Confirm.sure), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalContent, {
     style: {
       backgroundColor: createBackground
     }
-  }, Confirm.irrevocable), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, {
+  }, Confirm.irrevocable), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalActions, {
     style: {
       backgroundColor: createBackground
     }

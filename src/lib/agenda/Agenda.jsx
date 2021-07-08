@@ -5,7 +5,7 @@ import moment from 'moment'
 import 'semantic-ui-css/semantic.min.css'
 import { Dimmer, List, Message, Loader, Sidebar, Modal } from 'semantic-ui-react'
 import { ThemeProvider } from 'styled-components'
-import { ADD_DAYS, SET_EVENTS, MONTH, SET_EVENTLIST, SET_LANGUAGE_FILE, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS, ZOOM_PLUS, applicationTheme } from './constants'
+import { ADD_DAYS, SET_EVENTS, MONTH, SET_EVENTLIST, SET_LANGUAGE_FILE, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS, ZOOM_PLUS, applicationTheme, SET_THEME } from './constants'
 
 //components
 //header
@@ -20,7 +20,7 @@ import TagsSidebar from './components/settings/TagsSidebar'
 //context for acces from all childrens
 import DispatchContext from './DispatchContext'
 import StateContext from './StateContext'
-import { StyledElement } from './agenda.style'
+import { StyledElement, StyledModal } from './agenda.style'
 
 const date = moment()
 
@@ -111,7 +111,7 @@ const Agenda = props => {
 
    //Reducer function used to controle all the generals states
    const reducer = (draft, action) => {
-      const { handleEvent, handleColors, handleTimeRange, handleTagList } = handlers
+      const { handleEvent, handleColors, handleTimeRange, handleTagList, handleTheme } = handlers
 
       switch (action.type) {
          case SET_MODE:
@@ -158,7 +158,7 @@ const Agenda = props => {
             draft.event = action.value
             break
          case SET_COLORS:
-            handleColors(action.value)
+            if (handleColors !== undefined) handleColors(action.value)
             draft.colors = action.value
             break
          case SET_TIME_RANGE:
@@ -170,7 +170,7 @@ const Agenda = props => {
             break
          case SET_TAGS:
             draft.settings.tagsList = action.value
-            handleTagList(action.value)
+            if (handleTagList === undefined) handleTagList(action.value)
             handleEvent(
                eventList.map(el => {
                   if (el.tags.length === 0) return el
@@ -212,6 +212,9 @@ const Agenda = props => {
             if (languageList.indexOf(language) >= 0) draft.languageFile = require(`./language/${language}.json`)
             else console.log('non disponible language')
             break
+         case SET_THEME:
+            if (handleTheme !== undefined) handleTheme(action.value)
+            draft.theme = action.value
          default:
             console.log('unrecognized type')
             break

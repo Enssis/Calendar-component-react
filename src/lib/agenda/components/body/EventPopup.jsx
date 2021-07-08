@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 
 //components
 import { Header, Icon, Label, List, Popup, Segment } from 'semantic-ui-react'
+import { ColoredPopupHeader, DefaultPopup, LightSegment, StyledHeader, StyledSegment } from '../../agenda.style'
 import { DAY, SET_DISPLAYED_DATE, SET_MODE } from '../../constants'
 
 //context
@@ -44,12 +45,12 @@ const EventPopup = props => {
    }
 
    return (
-      <Popup {...trigg()} hoverable wide hideOnScroll position={left ? 'left center' : 'left center'}>
-         <Popup.Header>
+      <DefaultPopup {...trigg()} hoverable wide hideOnScroll position={left ? 'left center' : 'left center'}>
+         <ColoredPopupHeader>
             <Icon name={icon} /> {title}
-         </Popup.Header>
-         <Popup.Content>
-            <Segment>
+         </ColoredPopupHeader>
+         <DefaultPopup.Content>
+            <StyledSegment basic>
                <List>
                   <List.Item>
                      <Label color="green" image as="a" onClick={() => goToDay(start)}>
@@ -83,7 +84,7 @@ const EventPopup = props => {
                   </List.Item>
                   {tags.length > 0 ? (
                      <List.Item>
-                        <Header as="h5">{Event.tags} : </Header>
+                        <StyledHeader as="h5">{Event.tags} : </StyledHeader>
                         <List horizontal>
                            {tags.map(tagKey => {
                               const tag = tagsList[tagKey]
@@ -128,9 +129,9 @@ const EventPopup = props => {
                      )
                   }
                </List>
-            </Segment>
-         </Popup.Content>
-      </Popup>
+            </StyledSegment>
+         </DefaultPopup.Content>
+      </DefaultPopup>
    )
 }
 

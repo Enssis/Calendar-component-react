@@ -3,7 +3,7 @@ import { Grid, Label, Menu, Header } from 'semantic-ui-react'
 import { DAY, WEEK, OPEN_MODAL, CREATE, ZOOM_MINUS, ZOOM_PLUS, MONTH, SET_DISPLAYED_DATE, SET_MODE } from '../../constants'
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
-import { PaddingLessGridColumn, SizedSegment } from '../../agenda.style'
+import { PaddingLessGridColumn, SizedSegment, StyledHeader, StyledMenuItem } from '../../agenda.style'
 import moment from 'moment'
 
 const DateDisplay = props => {
@@ -50,23 +50,23 @@ const DateDisplay = props => {
       <Grid.Row columns={listDays.length}>
          {listDays.map((day, key) => (
             <PaddingLessGridColumn paddingright={1} key={key} textAlign={mode !== DAY ? 'center' : 'left'}>
-               <SizedSegment nohover={mode !== WEEK ? 1 : 0} backcolor={dayDateColor} onClick={() => handleDayClick(getDate(key, displayedDate))}>
+               <SizedSegment nohover={mode !== WEEK ? 1 : 0} dark={1} onClick={() => handleDayClick(getDate(key, displayedDate))}>
                   {mode === DAY ? (
                      <Menu icon secondary>
-                        <Menu.Item header>{displayDate(day, key)}</Menu.Item>
+                        <StyledMenuItem header>{displayDate(day, key)}</StyledMenuItem>
                         <Menu.Menu position="right">
                            {showZoom ? (
-                              <Menu.Item header>
+                              <StyledMenuItem header>
                                  <Label>{`${Math.floor(zoom * 100)}%`}</Label>
-                              </Menu.Item>
+                              </StyledMenuItem>
                            ) : null}
-                           <Menu.Item as="a" icon="add" onClick={() => appDispatch({ type: OPEN_MODAL, mode: CREATE, event: getDate(key, displayedDate) })} />
-                           <Menu.Item as="a" icon="plus circle" onClick={() => appDispatch({ type: ZOOM_PLUS })} />
-                           <Menu.Item as="a" icon="minus circle" onClick={() => appDispatch({ type: ZOOM_MINUS })} />
+                           <StyledMenuItem icon="add" onClick={() => appDispatch({ type: OPEN_MODAL, mode: CREATE, event: getDate(key, displayedDate) })}></StyledMenuItem>
+                           <StyledMenuItem icon="plus circle" onClick={() => appDispatch({ type: ZOOM_PLUS })}></StyledMenuItem>
+                           <StyledMenuItem icon="minus circle" onClick={() => appDispatch({ type: ZOOM_MINUS })}></StyledMenuItem>
                         </Menu.Menu>
                      </Menu>
                   ) : (
-                     <Header as="h5">{displayDate(day, key)}</Header>
+                     <StyledHeader as="h5">{displayDate(day, key)}</StyledHeader>
                   )}
                </SizedSegment>
             </PaddingLessGridColumn>

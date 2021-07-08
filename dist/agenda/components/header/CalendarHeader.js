@@ -11,6 +11,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _semanticUiReact = require("semantic-ui-react");
 
+var _agenda = require("../../agenda.style");
+
 var _StateContext = _interopRequireDefault(require("../../StateContext"));
 
 var _HeaderMenu = _interopRequireDefault(require("./HeaderMenu"));
@@ -23,41 +25,31 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 const CalendarHeader = () => {
   const {
-    settings,
-    theme
+    settings
   } = (0, _react.useContext)(_StateContext.default);
   const {
     title
   } = settings;
-  const {
-    headerBackground
-  } = theme;
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid, {
     celled: true,
     style: {
       marginTop: 0
     }
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Column, {
-    width: 10,
-    color: headerBackground
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
-    color: headerBackground,
-    inverted: headerBackground !== 'white',
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledGridColumn, {
+    width: 10
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledSegment, {
     basic: true,
     textAlign: "center"
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledHeader, {
     as: "h1"
   }, title.hasLogo ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Image, {
     src: title.logoPath
   }) : '', " ", title.isImage ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Image, {
     src: title.value,
     size: "small"
-  }) : /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, title.value)))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Column, {
-    width: 6,
-    color: headerBackground
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, {
-    color: headerBackground,
-    inverted: headerBackground !== 'white',
+  }) : /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, title.value)))), /*#__PURE__*/_react.default.createElement(_agenda.StyledGridColumn, {
+    width: 6
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledSegment, {
     basic: true,
     textAlign: "center"
   }, /*#__PURE__*/_react.default.createElement(_HeaderMenu.default, null))));

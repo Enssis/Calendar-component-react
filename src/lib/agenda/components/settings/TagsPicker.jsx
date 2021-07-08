@@ -4,19 +4,22 @@ import StateContext from '../../StateContext'
 import DispatchContext from '../../DispatchContext'
 import { useImmer } from 'use-immer'
 import { ADD_ACTIVE_TAG, SET_TAGS } from '../../constants'
+import { StyledDropdown, StyledFormField, StyledFormInput, StyledModalActions, StyledModalContent, StyledModalHeader } from '../../agenda.style'
 
 const TagsPicker = props => {
-   const { tagsList } = useContext(StateContext).settings
+   const { settings, languageFile } = useContext(StateContext)
+   const { tagsList } = settings
+   const { create_tag, name, color, colors_names, Actions } = languageFile
    const appDispatch = useContext(DispatchContext)
 
    const { tags, setTags } = props
 
    const colors = ['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink', 'brown', 'grey', 'black']
 
-   const colorsDropdown = colors.map(color => ({
+   const colorsDropdown = colors.map((color, key) => ({
       key: color,
       value: color,
-      text: color,
+      text: colors_names[key],
       label: { color, empty: true, circular: true }
    }))
 
@@ -73,12 +76,12 @@ const TagsPicker = props => {
    return (
       <>
          <Modal size="small" open={newTagModal} onClose={() => setNewTagModal(false)}>
-            <Modal.Header>Créer un nouveau tag</Modal.Header>
-            <Modal.Content>
+            <StyledModalHeader>{create_tag}</StyledModalHeader>
+            <StyledModalContent>
                <Form>
-                  <Form.Input
-                     label="Nom"
-                     placeholder="Nom"
+                  <StyledFormInput
+                     label={name}
+                     placeholder={name}
                      text={newTag.name}
                      onChange={(_, data) =>
                         setNewTag(draft => {
@@ -86,9 +89,9 @@ const TagsPicker = props => {
                         })
                      }
                   />
-                  <Form.Field
-                     label="Couleur"
-                     control={Dropdown}
+                  <StyledFormField
+                     label={color}
+                     control={StyledDropdown}
                      value={newTag.color}
                      selection
                      options={colorsDropdown}
@@ -99,17 +102,17 @@ const TagsPicker = props => {
                      }
                   />
                </Form>
-            </Modal.Content>
-            <Modal.Actions>
+            </StyledModalContent>
+            <StyledModalActions>
                <Button positive onClick={handleCreate}>
-                  Créer
+                  {Actions.confirm}
                </Button>
                <Button negative onClick={() => setNewTagModal(false)}>
-                  Annuler
+                  {Actions.cancel}
                </Button>
-            </Modal.Actions>
+            </StyledModalActions>
          </Modal>
-         <Dropdown selection fluid selectOnNavigation={false} noResultsMessage={null} multiple value={tags} search placeholder="Tag" renderLabel={renderLabel} options={tagDropdown} onChange={handleDropdownChange}></Dropdown>
+         <StyledDropdown selection fluid selectOnNavigation={false} noResultsMessage={null} multiple value={tags} search placeholder="Tag" renderLabel={renderLabel} options={tagDropdown} onChange={handleDropdownChange} />
       </>
    )
 }

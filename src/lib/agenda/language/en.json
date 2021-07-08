@@ -10,7 +10,8 @@
       "settings": "Settings",
       "colors": "Event color palette",
       "time": "Time gap",
-      "minutes": "minutes"
+      "minutes": "minutes",
+      "theme": "Theme"
    },
    "Actions": {
       "applied": "Applied",
@@ -59,5 +60,10 @@
          "sure": "Do you really want to delete this Event ?",
          "irrevocable": "This action is irrevocable"
       }
-   }
+   },
+   "create_tag": "Create a new tag",
+   "name": "Name",
+   "color": "Color",
+   "colors_names": ["Red", "Orange", "Yellow", "Olive", "Green", "Teal", "Blue", "Violet", "Purple", "Pink", "Brown", "Grey", "Black"],
+   "theme_list": ["Red", "Pink", "Purple", "Deep purple", "Indigo", "Blue", "Light blue", "Cyan", "Teal", "Green", "Light green", "Lime", "Yellow", "Amber", "Orange", "Deep orange", "Brown", "Grey", "Blue grey", "White", "Black"]
 }

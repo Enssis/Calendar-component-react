@@ -3,14 +3,13 @@ import { Button, Container, Grid, Header, Modal, Segment } from 'semantic-ui-rea
 import { DatePicker } from 'rim-bdsit'
 import moment from 'moment'
 import 'rc-time-picker/assets/index.css'
-import { BiggerTimePicker } from '../../agenda.style'
+import { BiggerTimePicker, StyledButton, StyledHeader, StyledModalActions, StyledModalContent, StyledSegment } from '../../agenda.style'
 import StateContext from '../../StateContext'
 
 const MomentPicker = props => {
    const { date, setSelectedDate, day } = props
 
-   const { theme, languageFile } = useContext(StateContext)
-   const { createBackground } = theme
+   const { languageFile } = useContext(StateContext)
    const { hour } = languageFile.Creation
 
    const [modalOpen, setModalOpen] = useState(false)
@@ -32,44 +31,47 @@ const MomentPicker = props => {
 
    //popup to choose the time
    const TimeModal = () => (
-      <Modal dimmer open={modalOpen} basic onClose={() => setModalOpen(false)} size="small">
-         <Modal.Content style={{ backgroundColor: createBackground, padding: 10 }}>
+      <Modal dimmer basic open={modalOpen} onClose={() => setModalOpen(false)} size="small">
+         <StyledModalContent light={1} style={{ padding: 10 }}>
             <Container text>
-               <Segment basic style={{ backgroundColor: createBackground }}>
+               <StyledSegment basic>
                   {day ? (
                      <DatePicker moment={selectedMoment} onChange={handleDayChange} locale="fr" />
                   ) : (
-                     <Segment basic>
+                     <StyledSegment basic>
                         <Grid centered container textAlign="center">
                            <Grid.Row>
                               <DatePicker moment={selectedMoment} onChange={handleDayChange} locale="fr" />
                            </Grid.Row>
                            <Grid.Row>
-                              <Header as="h2"> {hour} : </Header>
+                              <StyledHeader accent={1} as="h2">
+                                 {' '}
+                                 {hour} :{' '}
+                              </StyledHeader>
                            </Grid.Row>
                            <Grid.Row>
-                              <BiggerTimePicker color={createBackground} value={selectedMoment} onChange={handleTimeChange} minuteStep={5} showSecond={false} allowEmpty={false} />
+                              <BiggerTimePicker value={selectedMoment} onChange={handleTimeChange} minuteStep={5} showSecond={false} allowEmpty={false} />
                            </Grid.Row>
                         </Grid>
-                     </Segment>
+                     </StyledSegment>
                   )}
-               </Segment>
+               </StyledSegment>
             </Container>
-         </Modal.Content>
-         <Modal.Actions style={{ backgroundColor: createBackground }}>
+         </StyledModalContent>
+         <StyledModalActions light={1}>
             <Button positive onClick={handleValidate}>
                Valider
             </Button>
             <Button negative onClick={() => setModalOpen(false)}>
                Annuler
             </Button>
-         </Modal.Actions>
+         </StyledModalActions>
       </Modal>
    )
 
    return (
       <>
-         <Button onClick={() => setModalOpen(true)}>{date.format(props.day ? 'DD/MM/YYYY' : 'DD/MM/YYYY HH:mm')}</Button>
+         <StyledButton onClick={() => setModalOpen(true)}>{date.format(props.day ? 'DD/MM/YYYY' : 'DD/MM/YYYY HH:mm')}</StyledButton>
          <TimeModal />
       </>
    )

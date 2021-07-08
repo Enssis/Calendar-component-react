@@ -1,13 +1,13 @@
 import React, { useContext, useEffect } from 'react'
 import { Header, Sidebar, Segment, Icon, Grid, Divider, Button, Checkbox, Label } from 'semantic-ui-react'
 import { useImmer } from 'use-immer'
-import { CLOSE_TAGS, SET_ACTIVE_TAG, SET_TAGS } from '../../constants'
+import { applicationTheme, CLOSE_TAGS, SET_ACTIVE_TAG, SET_TAGS } from '../../constants'
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
-import { MargedIcon } from '../../agenda.style'
+import { MargedIcon, StyledHeader } from '../../agenda.style'
 
 const TagsSidebar = () => {
-   const { tagsOpen, settings, activeTags, languageFile } = useContext(StateContext)
+   const { tagsOpen, settings, activeTags, languageFile, theme } = useContext(StateContext)
    const { active_tags, Actions } = languageFile
    const appDispatch = useContext(DispatchContext)
 
@@ -43,12 +43,12 @@ const TagsSidebar = () => {
    }, [tagsOpen])
 
    return (
-      <Sidebar animation="overlay" as={Segment} inverted visible={tagsOpen} direction="right" vertical onHide={handleClose} width="wide">
+      <Sidebar style={{ backgroundColor: theme.darkPrimaryColor }} animation="overlay" as={Segment} inverted visible={tagsOpen} direction="right" vertical onHide={handleClose} width="wide">
          <Grid container style={{ padding: '15px' }}>
             <Grid.Row>
-               <Header inverted as="h3">
+               <StyledHeader as="h3">
                   <Icon name="tags" /> {active_tags}
-               </Header>
+               </StyledHeader>
             </Grid.Row>
             <Divider />
             {Object.entries(tagsList).map(([key, tag]) => (

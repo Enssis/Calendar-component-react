@@ -11,6 +11,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _semanticUiReact = require("semantic-ui-react");
 
+var _agenda = require("../../agenda.style");
+
 var _StateContext = _interopRequireDefault(require("../../StateContext"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -36,7 +38,7 @@ const IconDropdown = props => {
     selectedIcon,
     setSelectedIcon
   } = props;
-  return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Dropdown, {
+  return /*#__PURE__*/_react.default.createElement(_agenda.StyledDropdown, {
     button: true,
     className: "icon",
     defaultValue: selectedIcon,

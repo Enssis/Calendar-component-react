@@ -11,6 +11,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _semanticUiReact = require("semantic-ui-react");
 
+var _agenda = require("../../agenda.style");
+
 var _DispatchContext = _interopRequireDefault(require("../../DispatchContext"));
 
 var _StateContext = _interopRequireDefault(require("../../StateContext"));
@@ -45,33 +47,33 @@ const DateTraveler = props => {
   };
 
   const color = colorList.indexOf(travelerColor) >= 0 ? travelerColor : null;
-  return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button.Group, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  return /*#__PURE__*/_react.default.createElement(_agenda.StyledButton.Group, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledButton, {
     color: color,
     icon: true,
     onClick: changeDate(-10)
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "angle double left"
-  })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  })), /*#__PURE__*/_react.default.createElement(_agenda.StyledButton, {
     color: color,
     icon: true,
     onClick: changeDate(-5)
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "angle left"
-  })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  })), /*#__PURE__*/_react.default.createElement(_agenda.StyledButton, {
     color: color,
     onClick: changeDate(-1)
-  }, last), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, last), /*#__PURE__*/_react.default.createElement(_agenda.StyledButton, {
     color: color
-  }, actual), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, actual), /*#__PURE__*/_react.default.createElement(_agenda.StyledButton, {
     color: color,
     onClick: changeDate(1)
-  }, next), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, next), /*#__PURE__*/_react.default.createElement(_agenda.StyledButton, {
     color: color,
     icon: true,
     onClick: changeDate(5)
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: "angle right"
-  })), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  })), /*#__PURE__*/_react.default.createElement(_agenda.StyledButton, {
     color: color,
     icon: true,
     onClick: changeDate(10)

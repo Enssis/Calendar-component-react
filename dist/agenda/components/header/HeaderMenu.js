@@ -32,7 +32,6 @@ const HeaderMenu = () => {
   const {
     settings,
     mode,
-    theme,
     languageFile
   } = (0, _react.useContext)(_StateContext.default);
   const {
@@ -40,9 +39,6 @@ const HeaderMenu = () => {
     week,
     day
   } = languageFile;
-  const {
-    headerBackground
-  } = theme;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
 
   const handleOpenSettings = () => {
@@ -52,23 +48,22 @@ const HeaderMenu = () => {
   };
 
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu, {
-    inverted: headerBackground !== 'white',
     secondary: true
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     name: month,
     active: mode === _constants.MONTH,
     onClick: () => appDispatch({
       type: _constants.SET_MODE,
       data: _constants.MONTH
     })
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
+  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     name: week,
     active: mode === _constants.WEEK,
     onClick: () => appDispatch({
       type: _constants.SET_MODE,
       data: _constants.WEEK
     })
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
+  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     name: day,
     active: mode === _constants.DAY,
     onClick: () => appDispatch({
@@ -77,7 +72,7 @@ const HeaderMenu = () => {
     })
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Menu, {
     position: "right"
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     name: "tag",
     onClick: () => appDispatch({
       type: _constants.OPEN_TAGS
@@ -85,7 +80,7 @@ const HeaderMenu = () => {
   }, /*#__PURE__*/_react.default.createElement(_agenda.MargedIcon, {
     name: "tags"
   })), //add icon used to open the create modal only if it's allowed in the settings
-  settings.allowCreation ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
+  settings.allowCreation ? /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     name: "add",
     onClick: () => appDispatch({
       type: _constants.OPEN_MODAL,
@@ -95,7 +90,7 @@ const HeaderMenu = () => {
   }, /*#__PURE__*/_react.default.createElement(_agenda.MargedIcon, {
     name: "add"
   })) : null, //add icon used to open the Settings modal only if it's allowed in the settings
-  settings.settingsModif.allowed ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Item, {
+  settings.settingsModif.allowed ? /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     name: "settings",
     onClick: handleOpenSettings
   }, /*#__PURE__*/_react.default.createElement(_agenda.MargedIcon, {

@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { List, Segment, Button, Modal } from 'semantic-ui-react'
 import { PhotoshopPicker } from 'react-color'
 import StateContext from '../../StateContext'
+import { StyledButton } from '../../agenda.style'
 
 const ColorList = props => {
    const { colors, setColors, setModalOpen } = props
@@ -42,7 +43,7 @@ const ColorList = props => {
                )
             })}
             <List.Item>
-               <Button icon="add" style={{ backgroundColor: '#eee', padding: 10 }} onClick={() => handleModalChange(true)} />
+               <StyledButton light={1} icon="add" style={{ padding: 10 }} onClick={() => handleModalChange(true)} />
             </List.Item>
          </List>
          <Modal basic size="tiny" open={openColorModal} onClose={() => handleModalChange(false)}>

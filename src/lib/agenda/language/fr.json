@@ -10,7 +10,8 @@
       "settings": "Paramètres",
       "colors": "Palette de couleur des évennements",
       "time": "Ecart de temps",
-      "minutes": "minutes"
+      "minutes": "minutes",
+      "theme": "Theme"
    },
    "Actions": {
       "applied": "Appliquer",
@@ -27,7 +28,7 @@
       "tags": "Tags",
       "description": "Description"
    },
-   "Active_tags": "Tags actifs",
+   "active_tags": "Tags actifs",
    "Creation": {
       "create_title": "Création d'un nouvel évennement",
       "modif_title": "Modification de '$'",
@@ -59,5 +60,10 @@
          "sure": "Êtes vous sur de vouloir supprimer cet évennement ?",
          "irrevocable": "Cette action est irréversible"
       }
-   }
+   },
+   "create_tag": "Créer un nouveau tag",
+   "name": "Nom",
+   "color": "Couleur",
+   "colors_names": ["Rouge", "Orange", "Jaune", "Olive", "Vert", "Turquoise", "Bleu", "Violet", "Pourpre", "Rose", "Marron", "Gris", "Noir"],
+   "theme_list": ["Rouge", "Rose", "Pourpre", "Violet", "Indigo", "Bleu", "Bleu clair", "Cyan", "Turquoise", "Vert", "Vert clair", "Vert citron", "Jaune", "Ambre", "Orange", "Orange foncé", "Marron", "Gris", "Gris bleu", "Blanc", "Noir"]
 }

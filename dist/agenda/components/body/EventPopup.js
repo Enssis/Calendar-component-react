@@ -15,6 +15,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _semanticUiReact = require("semantic-ui-react");
 
+var _agenda = require("../../agenda.style");
+
 var _constants = require("../../constants");
 
 var _DispatchContext = _interopRequireDefault(require("../../DispatchContext"));
@@ -95,14 +97,16 @@ const EventPopup = props => {
     }
   };
 
-  return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Popup, _extends({}, trigg(), {
+  return /*#__PURE__*/_react.default.createElement(_agenda.DefaultPopup, _extends({}, trigg(), {
     hoverable: true,
     wide: true,
     hideOnScroll: true,
     position: left ? 'left center' : 'left center'
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Popup.Header, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
+  }), /*#__PURE__*/_react.default.createElement(_agenda.ColoredPopupHeader, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
     name: icon
-  }), " ", title), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Popup.Content, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Segment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.List, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
+  }), " ", title), /*#__PURE__*/_react.default.createElement(_agenda.DefaultPopup.Content, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledSegment, {
+    basic: true
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.List, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
     color: "green",
     image: true,
     as: "a",
@@ -125,7 +129,7 @@ const EventPopup = props => {
     image: true,
     onClick: () => setShowFullPlace(!showFullPlace),
     as: "a"
-  }, !showFullPlace ? Event.place : '', /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", !showFullPlace && place.length > 20 ? "".concat(place.substring(0, 20), "...") : place, " "))), tags.length > 0 ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
+  }, !showFullPlace ? Event.place : '', /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", !showFullPlace && place.length > 20 ? "".concat(place.substring(0, 20), "...") : place, " "))), tags.length > 0 ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledHeader, {
     as: "h5"
   }, Event.tags, " : "), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List, {
     horizontal: true

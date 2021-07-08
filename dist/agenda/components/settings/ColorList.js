@@ -15,6 +15,8 @@ var _reactColor = require("react-color");
 
 var _StateContext = _interopRequireDefault(require("../../StateContext"));
 
+var _agenda = require("../../agenda.style");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -72,10 +74,10 @@ const ColorList = props => {
       onMouseLeave: () => setShowKey(-1),
       onClick: () => handleRemove(color)
     }));
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledButton, {
+    light: 1,
     icon: "add",
     style: {
-      backgroundColor: '#eee',
       padding: 10
     },
     onClick: () => handleModalChange(true)

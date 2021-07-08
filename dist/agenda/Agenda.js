@@ -25,6 +25,8 @@ require("semantic-ui-css/semantic.min.css");
 
 var _semanticUiReact = require("semantic-ui-react");
 
+var _styledComponents = require("styled-components");
+
 var _constants = require("./constants");
 
 var _CalendarHeader = _interopRequireDefault(require("./components/header/CalendarHeader"));
@@ -33,13 +35,15 @@ var _MainBody = _interopRequireDefault(require("./components/body/MainBody"));
 
 var _SettingsSidebar = _interopRequireDefault(require("./components/settings/SettingsSidebar"));
 
+var _CreateModal = _interopRequireDefault(require("./components/settings/CreateModal"));
+
+var _TagsSidebar = _interopRequireDefault(require("./components/settings/TagsSidebar"));
+
 var _DispatchContext = _interopRequireDefault(require("./DispatchContext"));
 
 var _StateContext = _interopRequireDefault(require("./StateContext"));
 
-var _TagsSidebar = _interopRequireDefault(require("./components/settings/TagsSidebar"));
-
-var _CreateModal = _interopRequireDefault(require("./components/settings/CreateModal"));
+var _agenda = require("./agenda.style");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -93,22 +97,6 @@ const Agenda = props => {
     allowModification: true,
     timeRange: 15,
     tagsList: {}
-  };
-  const defaultTheme = {
-    pageBackground: '#fff',
-    //what you want
-    headerBackground: 'blue',
-    //list of color (segments color)
-    mainBackground: '#e3fcfc',
-    //wyw
-    travelerColor: 'default',
-    //button color + 'default' or ''
-    dayDateColor: '#fff',
-    //wyw
-    caseBackground: 'white',
-    //wyw
-    createBackground: '#fff' // wyw
-
   }; //initials states for the reducer
 
   const initialState = settings ? {
@@ -130,7 +118,7 @@ const Agenda = props => {
     activeTags: settings.tagsList,
     zoom: 0.6,
     eventList,
-    theme: theme !== undefined ? theme : defaultTheme,
+    theme: theme !== undefined ? _constants.applicationTheme[theme] : _constants.applicationTheme[5],
     languageFile: require("./language/fr.json")
   } : {
     mode: _constants.MONTH,
@@ -151,7 +139,7 @@ const Agenda = props => {
     activeTags: defaultSettings.tagsList,
     zoom: 1,
     eventList,
-    theme: theme !== undefined ? theme : defaultTheme,
+    theme: theme !== undefined ? _constants.applicationTheme[theme] : _constants.applicationTheme[5],
     languageFile: require("./language/fr.json")
   }; //Reducer function used to controle all the generals states
 
@@ -160,7 +148,8 @@ const Agenda = props => {
       handleEvent,
       handleColors,
       handleTimeRange,
-      handleTagList
+      handleTagList,
+      handleTheme
     } = handlers;
 
     switch (action.type) {
@@ -224,7 +213,7 @@ const Agenda = props => {
         break;
 
       case _constants.SET_COLORS:
-        handleColors(action.value);
+        if (handleColors !== undefined) handleColors(action.value);
         draft.colors = action.value;
         break;
 
@@ -239,7 +228,7 @@ const Agenda = props => {
 
       case _constants.SET_TAGS:
         draft.settings.tagsList = action.value;
-        handleTagList(action.value);
+        if (handleTagList === undefined) handleTagList(action.value);
         handleEvent(eventList.map(el => {
           if (el.tags.length === 0) return el;
           const newEvent = Object.assign({}, el);
@@ -288,6 +277,10 @@ const Agenda = props => {
         const languageList = ['fr', 'en'];
         if (languageList.indexOf(language) >= 0) draft.languageFile = require("./language/".concat(language, ".json"));else console.log('non disponible language');
         break;
+
+      case _constants.SET_THEME:
+        if (handleTheme !== undefined) handleTheme(action.value);
+        draft.theme = action.value;
 
       default:
         console.log('unrecognized type');
@@ -825,6 +818,8 @@ const Agenda = props => {
     value: state
   }, /*#__PURE__*/_react.default.createElement(_DispatchContext.default.Provider, {
     value: dispatch
+  }, /*#__PURE__*/_react.default.createElement(_styledComponents.ThemeProvider, {
+    theme: state.theme
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Sidebar.Pushable, {
     style: {
       minHeight: '100vh'
@@ -835,11 +830,8 @@ const Agenda = props => {
     style: {
       minHeight: '100vh'
     }
-  }, /*#__PURE__*/_react.default.createElement(_CalendarHeader.default, null), /*#__PURE__*/_react.default.createElement(_reactScroll.Element, {
-    name: "body",
-    style: {
-      backgroundColor: state.theme.pageBackground
-    }
+  }, /*#__PURE__*/_react.default.createElement(_CalendarHeader.default, null), /*#__PURE__*/_react.default.createElement(_agenda.StyledElement, {
+    name: "body"
   }, /*#__PURE__*/_react.default.createElement(_MainBody.default, null)))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal, {
     dimmer: true,
     open: state.modal.open,
@@ -848,7 +840,7 @@ const Agenda = props => {
     })
   }, /*#__PURE__*/_react.default.createElement(_CreateModal.default, {
     event: state.modal.event
-  })), /*#__PURE__*/_react.default.createElement(_SettingsSidebar.default, null), /*#__PURE__*/_react.default.createElement(_TagsSidebar.default, null))));
+  })), /*#__PURE__*/_react.default.createElement(_SettingsSidebar.default, null), /*#__PURE__*/_react.default.createElement(_TagsSidebar.default, null)))));
 };
 
 var _default = Agenda;

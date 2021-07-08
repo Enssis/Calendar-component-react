@@ -28,6 +28,7 @@ export const ZOOM_PLUS = 'ZOOM_PLUS'
 export const ZOOM_MINUS = 'ZOOM_MINUS'
 export const SET_EVENTLIST = 'SET_EVENTLIST'
 export const SET_LANGUAGE_FILE = 'SET_LANGUAGE_FILE'
+export const SET_THEME = 'SET_THEME'
 
 // définition des thèmes de l'application
 export const applicationTheme = [
@@ -281,7 +282,7 @@ export const applicationTheme = [
    {
       id: 19,
       name: 'Blanc',
-      value: 'thTeal',
+      value: 'thWhite',
       accentColor: '#e7e4e4',
       textPrimaryColor: '#212121',
       defaultPrimaryColor: '#FFFFFF',
@@ -294,7 +295,7 @@ export const applicationTheme = [
    {
       id: 20,
       name: 'Noir',
-      value: 'thTeal',
+      value: 'thBlack',
       accentColor: '#868686',
       textPrimaryColor: '#FFFFFF',
       defaultPrimaryColor: '#252424',

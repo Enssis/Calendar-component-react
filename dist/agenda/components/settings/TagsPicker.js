@@ -21,6 +21,8 @@ var _useImmer = require("use-immer");
 
 var _constants = require("../../constants");
 
+var _agenda = require("../../agenda.style");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -29,18 +31,29 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 const TagsPicker = props => {
   const {
+    settings,
+    languageFile
+  } = (0, _react.useContext)(_StateContext.default);
+  const {
     tagsList
-  } = (0, _react.useContext)(_StateContext.default).settings;
+  } = settings;
+  const {
+    create_tag,
+    name,
+    color,
+    colors_names,
+    Actions
+  } = languageFile;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const {
     tags,
     setTags
   } = props;
   const colors = ['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink', 'brown', 'grey', 'black'];
-  const colorsDropdown = colors.map(color => ({
+  const colorsDropdown = colors.map((color, key) => ({
     key: color,
     value: color,
-    text: color,
+    text: colors_names[key],
     label: {
       color,
       empty: true,
@@ -127,29 +140,29 @@ const TagsPicker = props => {
     size: "small",
     open: newTagModal,
     onClose: () => setNewTagModal(false)
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Header, null, "Cr\xE9er un nouveau tag"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Content, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Input, {
-    label: "Nom",
-    placeholder: "Nom",
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledModalHeader, null, create_tag), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalContent, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledFormInput, {
+    label: name,
+    placeholder: name,
     text: newTag.name,
     onChange: (_, data) => setNewTag(draft => {
       draft.name = data.value;
     })
-  }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form.Field, {
-    label: "Couleur",
-    control: _semanticUiReact.Dropdown,
+  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledFormField, {
+    label: color,
+    control: _agenda.StyledDropdown,
     value: newTag.color,
     selection: true,
     options: colorsDropdown,
     onChange: (_, data) => setNewTag(draft => {
       draft.color = data.value;
     })
-  }))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal.Actions, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }))), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalActions, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleCreate
-  }, "Cr\xE9er"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, Actions.confirm), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     negative: true,
     onClick: () => setNewTagModal(false)
-  }, "Annuler"))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Dropdown, {
+  }, Actions.cancel))), /*#__PURE__*/_react.default.createElement(_agenda.StyledDropdown, {
     selection: true,
     fluid: true,
     selectOnNavigation: false,

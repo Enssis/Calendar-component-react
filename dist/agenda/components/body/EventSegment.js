@@ -95,7 +95,7 @@ const EventSegment = props => {
       height: size,
       vertical: true,
       onClick: handleCreateClick,
-      backcolor: caseBackground
+      light: 1
     });
   }
 
