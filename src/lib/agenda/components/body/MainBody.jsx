@@ -52,7 +52,7 @@ const MainBody = () => {
    }, [settings, mode, displayedDate])
 
    return (
-      <Grid container centered>
+      <Grid centered>
          <Grid.Column textAlign="center">
             {eventCharged !== 'totally' ? (
                <Message warning>

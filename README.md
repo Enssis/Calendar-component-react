@@ -1,6 +1,6 @@
 # Agenda React Component
 
-![Capture d’écran du 2021-07-08 15-36-59](https://user-images.githubusercontent.com/49796491/124931335-67be1900-e002-11eb-81b9-6f111f1a8fc7.png)
+![Capture d’écran du 2021-07-09 09-39-02](https://user-images.githubusercontent.com/49796491/125041916-93d8a900-e099-11eb-99a3-42fb1b5d678c.png)
 
 ## Description
 
@@ -20,10 +20,10 @@ You need to download [input-moment.min.css](https://github.com/wayofthefuture/re
 | Props     | Description                                                                                                 | Type                  | Optional             |
 | --------- | ----------------------------------------------------------------------------------------------------------- | --------------------- | -------------------- |
 | eventList | List of events which will be displayed in the agenda                                                        | Array                 | false                |
-| language  | language of the text displayed                                                                              | String ("en" or "fr") | true (fr by default) |
+| language  | Language of the text displayed                                                                              | String ("en" or "fr") | true (fr by default) |
 | theme     | Index of the color theme (see [material palette](https://www.materialpalette.com/colors) + white and black) | number                | true                 |
-| settings  | list of settings of the app                                                                                 | Object                | true                 |
-| handlers  | list of function to update value of different props (no need to update the props directly)                  | Object                | false                |
+| settings  | List of settings of the app                                                                                 | Object                | true                 |
+| handlers  | List of function to update value of different props (no need to update the props of the component)          | Object                | false                |
 
 #### Settings
 
@@ -72,6 +72,18 @@ Title object props
 | value    | Title or path to the image                                       | String  | false    |
 | hasLogo  | Tell if ther is a logo to render before the title                | Boolean | false    |
 | logoPath | Path to the logo                                                 | String  | false    |
+
+#### Handlers
+
+List of function to update value of different props (no need to update the props of the component)
+
+| Name            | Description                                       | Type     | Optional |
+| --------------- | ------------------------------------------------- | -------- | -------- |
+| handleEvent     | Function to return the events modified or created | function | false    |
+| handleColors    | Function to return the color range                | function | true     |
+| handleTimeRange | Function to return the time division              | function | true     |
+| handleTagList   | Function to return the tags                       | function | true     |
+| handleTheme     | Function to return the theme                      | function | true     |
 
 ### Example
 

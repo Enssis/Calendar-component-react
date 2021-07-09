@@ -62,7 +62,7 @@ const DayCase = props => {
          <DaySegment size={'mini'} attached="top" onClick={() => goToDay(date)}>
             {date.date()}
          </DaySegment>
-         <SizedSegment height="100" nopadding={1} attached="bottom" border light={1} nohover={1}>
+         <SizedSegment height="120" nopadding={1} attached="bottom" border light={1} nohover={1}>
             <List>
                {rows.map((events, row) => {
                   if (events === '') return <div key={row} style={{ padding: 9 }}></div>

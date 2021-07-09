@@ -70,7 +70,7 @@ const EventSegment = props => {
   const [open, setOpen] = (0, _react.useState)(false); //in case event is null, open the create modal with the current moment if creation is allowed
 
   const handleCreateClick = () => {
-    if (settings.allowCreation) appDispatch({
+    if (settings.allowCreation || settings.allowCreation === undefined) appDispatch({
       type: _constants.OPEN_MODAL,
       mode: _constants.CREATE,
       event: moment
@@ -79,7 +79,7 @@ const EventSegment = props => {
 
 
   const handleModifClick = () => {
-    if (settings.allowModification) appDispatch({
+    if (settings.allowModification || settings.allowModification === undefined) appDispatch({
       type: _constants.OPEN_MODAL,
       mode: _constants.MODIF,
       event

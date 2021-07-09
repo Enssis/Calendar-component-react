@@ -164,7 +164,9 @@ const CalendarGrid = () => {
 
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid, {
     centered: true,
-    container: true
+    style: {
+      marginLeft: '2px'
+    }
   }, /*#__PURE__*/_react.default.createElement(_DateDisplay.default, {
     listDays: listDays
   }), /*#__PURE__*/_react.default.createElement(Body, null));

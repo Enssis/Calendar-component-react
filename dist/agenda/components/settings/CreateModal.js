@@ -48,9 +48,9 @@ const CreateModal = props => {
   const {
     modal,
     eventList,
-    theme,
     languageFile,
-    colors
+    colors,
+    settings
   } = (0, _react.useContext)(_StateContext.default);
   const {
     Event,
@@ -66,9 +66,6 @@ const CreateModal = props => {
     Errors,
     Confirm
   } = Creation;
-  const {
-    createBackground
-  } = theme;
   const {
     event
   } = props;
@@ -219,15 +216,7 @@ const CreateModal = props => {
     }
   };
 
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledModalHeader, {
-    style: {
-      backgroundColor: createBackground
-    }
-  }, createMode ? create_title : modif_title.replace('$', state.title)), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalContent, {
-    style: {
-      backgroundColor: createBackground
-    }
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledFormInput, {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledModalHeader, null, createMode ? create_title : modif_title.replace('$', state.title)), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalContent, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Form, null, /*#__PURE__*/_react.default.createElement(_agenda.StyledFormInput, {
     error: state.titleError ? state.titleErrorMessage : null,
     label: Event.title,
     placeholder: Event.title,
@@ -276,14 +265,14 @@ const CreateModal = props => {
     setSelectedIcon: value => setState(draft => {
       draft.selectedIcon = value;
     })
-  })), /*#__PURE__*/_react.default.createElement(_agenda.StyledFormField, {
+  })), settings.allowTags || settings.allowTags === undefined ? /*#__PURE__*/_react.default.createElement(_agenda.StyledFormField, {
     label: Event.tags,
     control: _TagsPicker.default,
     tags: state.tags,
     setTags: value => setState(draft => {
       draft.tags = value;
     })
-  }), /*#__PURE__*/_react.default.createElement(_agenda.StyledFormInput, {
+  }) : null, /*#__PURE__*/_react.default.createElement(_agenda.StyledFormInput, {
     label: Event.place,
     placeholder: Event.place,
     value: state.place,
@@ -293,11 +282,7 @@ const CreateModal = props => {
     placeholder: Event.description,
     value: state.description,
     onChange: handleDescriptionChange
-  }))), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalActions, {
-    style: {
-      backgroundColor: createBackground
-    }
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }))), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalActions, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleValidate
   }, Actions.confirm), createMode ? null : /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
@@ -311,19 +296,7 @@ const CreateModal = props => {
   }, Actions.cancel)), confirm ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Modal, {
     open: true,
     size: "small"
-  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledModalHeader, {
-    style: {
-      backgroundColor: createBackground
-    }
-  }, Confirm.sure), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalContent, {
-    style: {
-      backgroundColor: createBackground
-    }
-  }, Confirm.irrevocable), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalActions, {
-    style: {
-      backgroundColor: createBackground
-    }
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledModalHeader, null, Confirm.sure), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalContent, null, Confirm.irrevocable), /*#__PURE__*/_react.default.createElement(_agenda.StyledModalActions, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Button, {
     positive: true,
     onClick: handleDelete
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {

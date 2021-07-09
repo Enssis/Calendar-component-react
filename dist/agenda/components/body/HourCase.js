@@ -61,7 +61,7 @@ const HourCase = props => {
   } = props; // open the modification modal with the current event if modification is allowed
 
   const handleModifClick = ev => {
-    if (settings.allowModification) appDispatch({
+    if (settings.allowModification || settings.allowModification === undefined) appDispatch({
       type: _constants.OPEN_MODAL,
       mode: _constants.MODIF,
       event: ev
@@ -251,14 +251,14 @@ const HourCase = props => {
     }
 
     if (week) return /*#__PURE__*/_react.default.createElement(_agenda.SizedSegment, {
+      light: 1,
       key: row,
       nohover: 1,
       basic: true,
       nomargin: 1,
       nopadding: 1,
       height: 3 * nbrTimeRange,
-      vertical: true,
-      backcolor: caseBackground
+      vertical: true
     });
     return /*#__PURE__*/_react.default.createElement(_EventSegment.default, {
       key: row,

@@ -112,7 +112,7 @@ const Agenda = props => {
     settings: settings,
     debug: false,
     colors: settings.eventColors ? settings.eventColors : ['#0ed3ed', '#00c21d', '#ff87c3', '#ffd438', '#ff1c14', '#ff7919', '#0055ff', '#cc00ff'],
-    nbrTimeRange: settings.timeRange / 5,
+    nbrTimeRange: settings.timeRange ? settings.timeRange / 5 : 1,
     settingsOpen: false,
     tagsOpen: false,
     activeTags: settings.tagsList,
@@ -218,7 +218,7 @@ const Agenda = props => {
         break;
 
       case _constants.SET_TIME_RANGE:
-        handleTimeRange(action.value);
+        if (handleTimeRange !== undefined) handleTimeRange(action.value);
         draft.nbrTimeRange = action.value / 5;
         break;
 

@@ -81,7 +81,6 @@ const MainBody = () => {
     setEventCharged(charged);
   }, [settings, mode, displayedDate]);
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid, {
-    container: true,
     centered: true
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Column, {
     textAlign: "center"

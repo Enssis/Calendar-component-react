@@ -43,7 +43,7 @@ const WeekTraveler = props => {
   }); //function to format the string output
 
   const weekFormat = (weekNb, year) => {
-    return week_number.replace('WW', weekNb).replace('YYYY', year);
+    return week_number.replace('$WW', weekNb).replace('$YYYY', year);
   };
 
   (0, _react.useEffect)(() => {

@@ -162,7 +162,7 @@ const Agenda = props => {
             draft.colors = action.value
             break
          case SET_TIME_RANGE:
-            handleTimeRange(action.value)
+            if (handleTimeRange !== undefined) handleTimeRange(action.value)
             draft.nbrTimeRange = action.value / 5
             break
          case SET_SETTINGS:

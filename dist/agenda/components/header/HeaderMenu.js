@@ -72,15 +72,15 @@ const HeaderMenu = () => {
     })
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Menu, {
     position: "right"
-  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
+  }, Object.entries(settings.tagsList).length > 0 ? /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     name: "tag",
     onClick: () => appDispatch({
       type: _constants.OPEN_TAGS
     })
   }, /*#__PURE__*/_react.default.createElement(_agenda.MargedIcon, {
     name: "tags"
-  })), //add icon used to open the create modal only if it's allowed in the settings
-  settings.allowCreation ? /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
+  })) : null, //add icon used to open the create modal only if it's allowed in the settings
+  settings.allowCreation || settings.allowCreation === undefined ? /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     name: "add",
     onClick: () => appDispatch({
       type: _constants.OPEN_MODAL,

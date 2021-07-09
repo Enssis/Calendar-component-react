@@ -132,7 +132,7 @@ const CalendarGrid = () => {
    }
 
    return (
-      <Grid centered container>
+      <Grid centered style={{ marginLeft: '2px' }}>
          <DateDisplay listDays={listDays} />
          <Body />
       </Grid>

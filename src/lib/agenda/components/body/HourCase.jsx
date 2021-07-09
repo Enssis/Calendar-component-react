@@ -183,7 +183,7 @@ const HourCase = props => {
                                        } else return ''
                                     }
 
-                                    if (week) return <SizedSegment key={row} nohover={1} basic nomargin={1} nopadding={1} height={3 * nbrTimeRange} vertical backcolor={caseBackground}></SizedSegment>
+                                    if (week) return <SizedSegment light={1} key={row} nohover={1} basic nomargin={1} nopadding={1} height={3 * nbrTimeRange} vertical></SizedSegment>
                                     return <EventSegment key={row} event={null} moment={quarterHourEvent.time} size={15 * nbrTimeRange * zoom} />
                                  })}
                               </Segment.Group>

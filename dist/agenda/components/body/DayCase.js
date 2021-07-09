@@ -96,7 +96,7 @@ const DayCase = props => {
     attached: "top",
     onClick: () => goToDay(date)
   }, date.date()), /*#__PURE__*/_react.default.createElement(_agenda.SizedSegment, {
-    height: "100",
+    height: "120",
     nopadding: 1,
     attached: "bottom",
     border: true,
