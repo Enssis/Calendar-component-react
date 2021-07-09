@@ -35,12 +35,8 @@ const DateDisplay = props => {
     zoom,
     mode,
     displayedDate,
-    theme,
     languageFile
   } = (0, _react.useContext)(_StateContext.default);
-  const {
-    dayDateColor
-  } = theme;
   const {
     Month_names
   } = languageFile;

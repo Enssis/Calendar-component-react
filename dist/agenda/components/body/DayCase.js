@@ -44,8 +44,7 @@ const DayCase = props => {
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const {
     event,
-    nbrTimeRange,
-    theme
+    nbrTimeRange
   } = (0, _react.useContext)(_StateContext.default);
   const [rows, setRows] = (0, _react.useState)([]); //set the events of the day
 
@@ -99,7 +98,7 @@ const DayCase = props => {
     height: "120",
     nopadding: 1,
     attached: "bottom",
-    border: true,
+    border: 1,
     light: 1,
     nohover: 1
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.List, null, rows.map((events, row) => {

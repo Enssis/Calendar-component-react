@@ -7,11 +7,10 @@ import { DAY, MONTH, WEEK } from '../../constants'
 //components
 import DayCase from './DayCase'
 import HourCase from './HourCase'
+import DateDisplay from './DateDisplay'
 
 //Context
-import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
-import DateDisplay from './DateDisplay'
 
 /*
    Component creating the grid of day depending on the mode

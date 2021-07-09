@@ -112,7 +112,6 @@ const SettingsSidebar = () => {
       value: key,
       text: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
         empty: true,
-        inline: true,
         circular: true,
         style: {
           backgroundColor: _constants.applicationTheme[key].accentColor

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Grid, Label, Menu, Header } from 'semantic-ui-react'
+import { Grid, Label, Menu } from 'semantic-ui-react'
 import { DAY, WEEK, OPEN_MODAL, CREATE, ZOOM_MINUS, ZOOM_PLUS, MONTH, SET_DISPLAYED_DATE, SET_MODE } from '../../constants'
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
@@ -8,8 +8,7 @@ import moment from 'moment'
 
 const DateDisplay = props => {
    const { listDays } = props
-   const { zoom, mode, displayedDate, theme, languageFile } = useContext(StateContext)
-   const { dayDateColor } = theme
+   const { zoom, mode, displayedDate, languageFile } = useContext(StateContext)
    const { Month_names } = languageFile
    const appDispatch = useContext(DispatchContext)
 

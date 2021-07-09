@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Button, Dropdown, Icon, Sidebar, Grid, Segment, Divider, List, Label } from 'semantic-ui-react'
-import { StyledDropdown, StyledHeader, StyledSidebar } from '../../agenda.style'
+import React, { useContext, useState } from 'react'
+import { Button, Icon, Sidebar, Grid, Segment, Divider, Label } from 'semantic-ui-react'
+import { StyledDropdown, StyledHeader } from '../../agenda.style'
 import { applicationTheme, CLOSE_SETTINGS, SET_COLORS, SET_THEME, SET_TIME_RANGE } from '../../constants'
 import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
@@ -56,7 +56,7 @@ const SettingsSidebar = () => {
          value: key,
          text: (
             <>
-               <Label empty inline circular style={{ backgroundColor: applicationTheme[key].accentColor }} />
+               <Label empty circular style={{ backgroundColor: applicationTheme[key].accentColor }} />
                <span>{theme}</span>
             </>
          )

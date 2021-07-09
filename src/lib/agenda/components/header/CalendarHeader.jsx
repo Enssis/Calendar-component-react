@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Grid, Header, Image, Segment } from 'semantic-ui-react'
+import { Grid, Image } from 'semantic-ui-react'
 import { StyledGridColumn, StyledHeader, StyledSegment } from '../../agenda.style'
 import StateContext from '../../StateContext'
 import HeaderMenu from './HeaderMenu'

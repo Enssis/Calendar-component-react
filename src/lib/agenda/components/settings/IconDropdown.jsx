@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Dropdown, Icon } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react'
 import { StyledDropdown } from '../../agenda.style'
 import StateContext from '../../StateContext'
 

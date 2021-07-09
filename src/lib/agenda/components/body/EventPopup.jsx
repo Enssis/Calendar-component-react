@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react'
 
 //components
-import { Header, Icon, Label, List, Popup, Segment } from 'semantic-ui-react'
-import { ColoredPopupHeader, DefaultPopup, LightSegment, StyledHeader, StyledSegment } from '../../agenda.style'
+import { Icon, Label, List } from 'semantic-ui-react'
+import { ColoredPopupHeader, DefaultPopup, StyledHeader, StyledSegment } from '../../agenda.style'
 import { DAY, SET_DISPLAYED_DATE, SET_MODE } from '../../constants'
 
 //context

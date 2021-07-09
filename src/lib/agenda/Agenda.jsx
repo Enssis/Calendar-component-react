@@ -3,14 +3,15 @@ import { useImmerReducer } from 'use-immer'
 import { scroller } from 'react-scroll'
 import moment from 'moment'
 import 'semantic-ui-css/semantic.min.css'
-import { Dimmer, List, Message, Loader, Sidebar, Modal } from 'semantic-ui-react'
-import { ThemeProvider } from 'styled-components'
 import { ADD_DAYS, SET_EVENTS, MONTH, SET_EVENTLIST, SET_LANGUAGE_FILE, SET_SETTINGS, SET_TAGS, OPEN_SETTINGS, CLOSE_SETTINGS, SET_DISPLAYED_DATE, SET_MODE, UPDATE_DATE, ADD_MONTHS, OPEN_MODAL, ADD_EVENT, CLOSE_MODAL, MODIF_EVENT, DELETE_EVENT, SET_TIME_RANGE, SET_COLORS, OPEN_TAGS, CLOSE_TAGS, SET_ACTIVE_TAG, ADD_ACTIVE_TAG, ZOOM_MINUS, ZOOM_PLUS, applicationTheme, SET_THEME } from './constants'
 
 //components
 //header
 import CalendarHeader from './components/header/CalendarHeader'
 //body
+import { ThemeProvider } from 'styled-components'
+import { Dimmer, List, Message, Loader, Sidebar, Modal } from 'semantic-ui-react'
+import { StyledElement } from './agenda.style'
 import MainBody from './components/body/MainBody'
 //modal
 import SettingsSidebar from './components/settings/SettingsSidebar'
@@ -20,7 +21,6 @@ import TagsSidebar from './components/settings/TagsSidebar'
 //context for acces from all childrens
 import DispatchContext from './DispatchContext'
 import StateContext from './StateContext'
-import { StyledElement, StyledModal } from './agenda.style'
 
 const date = moment()
 
@@ -215,6 +215,7 @@ const Agenda = props => {
          case SET_THEME:
             if (handleTheme !== undefined) handleTheme(action.value)
             draft.theme = action.value
+            break
          default:
             console.log('unrecognized type')
             break
@@ -256,16 +257,18 @@ const Agenda = props => {
       const daysEvent = {}
 
       //events that contain the new event
-      const containedIn = event[startDate].filter(el => {
-         const { start, end } = el
-         //start and end considering the time division
-         const startByPart = moment(start).minutes(start.minutes() - (start.minutes() % (5 * state.nbrTimeRange)))
-         const endByPart = moment(end).minutes(end.minutes() + 5 * state.nbrTimeRange - (end.minutes() % (5 * state.nbrTimeRange)))
-         if (startByPart.diff(newEvent.start) <= 0 && endByPart.diff(newEvent.start) > 0 && newEvent.key !== el.key) {
-            return true
-         }
-         return false
-      })
+      const containedIn = event[startDate]
+         ? event[startDate].filter(el => {
+              const { start, end } = el
+              //start and end considering the time division
+              const startByPart = moment(start).minutes(start.minutes() - (start.minutes() % (5 * state.nbrTimeRange)))
+              const endByPart = moment(end).minutes(end.minutes() + 5 * state.nbrTimeRange - (end.minutes() % (5 * state.nbrTimeRange)))
+              if (startByPart.diff(newEvent.start) <= 0 && endByPart.diff(newEvent.start) > 0 && newEvent.key !== el.key) {
+                 return true
+              }
+              return false
+           })
+         : []
 
       let col = -1
       for (const event of containedIn) {
@@ -320,7 +323,7 @@ const Agenda = props => {
       let modif = false
       for (const date of dates) {
          const events = event[date] ? event[date].filter(el => el.key !== daysEvent[date][0].key) : []
-         if (events.length !== event[date].length) modif = true
+         if (event[date] ? events.length !== event[date].length : false) modif = true
          let dateEvents = [...daysEvent[date], ...events]
          //events contained in the new event
          const containedEvents = findContainedEvent(newEvent, event[date] ? event[date] : [])

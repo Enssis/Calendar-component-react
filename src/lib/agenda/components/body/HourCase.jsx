@@ -16,8 +16,7 @@ import { useImmer } from 'use-immer'
    Component rendering all the events of the day by time block defined
 */
 const HourCase = props => {
-   const { event, nbrTimeRange, settings, activeTags, zoom, theme } = useContext(StateContext)
-   const { caseBackground } = theme
+   const { event, nbrTimeRange, settings, activeTags, zoom } = useContext(StateContext)
    const appDispatch = useContext(DispatchContext)
    const hours = Array.from(Array(24).keys())
    const { date, week } = props

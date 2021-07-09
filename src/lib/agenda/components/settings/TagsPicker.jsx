@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Button, Dropdown, Form, Modal } from 'semantic-ui-react'
+import { Button, Form, Modal } from 'semantic-ui-react'
 import StateContext from '../../StateContext'
 import DispatchContext from '../../DispatchContext'
 import { useImmer } from 'use-immer'

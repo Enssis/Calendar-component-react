@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 
 //components
-import { Button, Icon } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react'
 import { StyledButton } from '../../agenda.style'
 
 //context

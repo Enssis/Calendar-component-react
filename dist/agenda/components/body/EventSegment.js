@@ -60,12 +60,8 @@ const EventSegment = props => {
   } = props;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const {
-    settings,
-    theme
+    settings
   } = (0, _react.useContext)(_StateContext.default);
-  const {
-    caseBackground
-  } = theme;
   const contextRef = (0, _react.useRef)(null);
   const [open, setOpen] = (0, _react.useState)(false); //in case event is null, open the create modal with the current moment if creation is allowed
 

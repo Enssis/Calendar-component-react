@@ -23,13 +23,15 @@ var _moment = _interopRequireDefault(require("moment"));
 
 require("semantic-ui-css/semantic.min.css");
 
-var _semanticUiReact = require("semantic-ui-react");
-
-var _styledComponents = require("styled-components");
-
 var _constants = require("./constants");
 
 var _CalendarHeader = _interopRequireDefault(require("./components/header/CalendarHeader"));
+
+var _styledComponents = require("styled-components");
+
+var _semanticUiReact = require("semantic-ui-react");
+
+var _agenda = require("./agenda.style");
 
 var _MainBody = _interopRequireDefault(require("./components/body/MainBody"));
 
@@ -42,8 +44,6 @@ var _TagsSidebar = _interopRequireDefault(require("./components/settings/TagsSid
 var _DispatchContext = _interopRequireDefault(require("./DispatchContext"));
 
 var _StateContext = _interopRequireDefault(require("./StateContext"));
-
-var _agenda = require("./agenda.style");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -281,6 +281,7 @@ const Agenda = props => {
       case _constants.SET_THEME:
         if (handleTheme !== undefined) handleTheme(action.value);
         draft.theme = action.value;
+        break;
 
       default:
         console.log('unrecognized type');
@@ -321,7 +322,7 @@ const Agenda = props => {
     const startDate = (0, _moment.default)(newEvent.start).format('YYYY MM DD');
     const daysEvent = {}; //events that contain the new event
 
-    const containedIn = event[startDate].filter(el => {
+    const containedIn = event[startDate] ? event[startDate].filter(el => {
       const {
         start,
         end
@@ -335,7 +336,7 @@ const Agenda = props => {
       }
 
       return false;
-    });
+    }) : [];
     let col = -1;
 
     for (const event of containedIn) {
@@ -414,7 +415,7 @@ const Agenda = props => {
 
     for (const date of dates) {
       const events = event[date] ? event[date].filter(el => el.key !== daysEvent[date][0].key) : [];
-      if (events.length !== event[date].length) modif = true;
+      if (event[date] ? events.length !== event[date].length : false) modif = true;
       let dateEvents = [...daysEvent[date], ...events]; //events contained in the new event
 
       const containedEvents = findContainedEvent(newEvent, event[date] ? event[date] : []);

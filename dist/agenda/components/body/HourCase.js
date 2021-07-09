@@ -47,12 +47,8 @@ const HourCase = props => {
     nbrTimeRange,
     settings,
     activeTags,
-    zoom,
-    theme
+    zoom
   } = (0, _react.useContext)(_StateContext.default);
-  const {
-    caseBackground
-  } = theme;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const hours = Array.from(Array(24).keys());
   const {

@@ -21,11 +21,9 @@ var _DayCase = _interopRequireDefault(require("./DayCase"));
 
 var _HourCase = _interopRequireDefault(require("./HourCase"));
 
-var _DispatchContext = _interopRequireDefault(require("../../DispatchContext"));
+var _DateDisplay = _interopRequireDefault(require("./DateDisplay"));
 
 var _StateContext = _interopRequireDefault(require("../../StateContext"));
-
-var _DateDisplay = _interopRequireDefault(require("./DateDisplay"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

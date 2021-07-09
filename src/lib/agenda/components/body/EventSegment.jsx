@@ -37,8 +37,7 @@ function createContextFromEvent(e) {
 const EventSegment = props => {
    const { event, size, moment } = props
    const appDispatch = useContext(DispatchContext)
-   const { settings, theme } = useContext(StateContext)
-   const { caseBackground } = theme
+   const { settings } = useContext(StateContext)
    const contextRef = useRef(null)
    const [open, setOpen] = useState(false)
 

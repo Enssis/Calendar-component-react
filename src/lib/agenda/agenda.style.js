@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Segment, Table, Grid, Button, Label, List, Icon, Header, Menu, Popup, Divider, Modal, Form, Dropdown, Sidebar } from 'semantic-ui-react'
+import { Segment, Table, Grid, Button, Label, List, Icon, Header, Menu, Popup, Divider, Modal, Form, Dropdown } from 'semantic-ui-react'
 import convert from 'color-convert'
 import TimePicker from 'rc-time-picker'
 import { Element } from 'react-scroll'
@@ -167,6 +167,7 @@ export const StyledModalActions = styled(Modal.Actions)`
 export const StyledFormInput = styled(Form.Input)`
    input {
       background-color: ${props => props.theme.darkPrimaryColor} !important;
+      color: ${props => props.theme.textPrimaryColor} !important;
    }
    label,
    input::placeholder {
@@ -186,6 +187,7 @@ export const StyledFormCheckbox = styled(Form.Checkbox)`
 export const StyledFormTextArea = styled(Form.TextArea)`
    textArea {
       background-color: ${props => props.theme.darkPrimaryColor} !important;
+      color: ${props => props.theme.textPrimaryColor} !important;
    }
    label,
    textArea::placeholder {
