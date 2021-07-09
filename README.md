@@ -17,29 +17,29 @@ You need to download [input-moment.min.css](https://github.com/wayofthefuture/re
 
 ### Props
 
-| Props     | Description                                                                                                 | Type                  | Optional             |
-| --------- | ----------------------------------------------------------------------------------------------------------- | --------------------- | -------------------- |
-| eventList | List of events which will be displayed in the agenda                                                        | Array                 | false                |
-| language  | Language of the text displayed                                                                              | String ("en" or "fr") | true (fr by default) |
-| theme     | Index of the color theme (see [material palette](https://www.materialpalette.com/colors) + white and black) | number                | true                 |
-| settings  | List of settings of the app                                                                                 | Object                | true                 |
-| handlers  | List of function to update value of different props (no need to update the props of the component)          | Object                | false                |
+| Props       | Description                                                                                                 | Type                  | Optional                |
+| ----------- | ----------------------------------------------------------------------------------------------------------- | --------------------- | ----------------------- |
+| eventList   | List of events which will be displayed in the agenda                                                        | Array                 | false                   |
+| language    | Language of the text displayed                                                                              | String ("en" or "fr") | true (fr by default)    |
+| theme       | Index of the color theme (see [material palette](https://www.materialpalette.com/colors) + white and black) | number                | true                    |
+| settings    | List of settings of the app                                                                                 | Object                | true                    |
+| handlers    | List of function to update value of different props (no need to update the props of the component)          | Object                | false                   |
+| tagsList    | List of tags                                                                                                | Object                | false(but can be empty) |
+| eventColors | Default List of colors for events                                                                           | List                  | true                    |
+| timeRange   | Minimal time division (must be : 5, 10, 15, 20, 30 or 60)                                                   | Number                | true (default : 5)      |
 
 #### Settings
 
 Settings object props
 
-| Name              | Description                                                              | Type    | Optional                |
-| ----------------- | ------------------------------------------------------------------------ | ------- | ----------------------- |
-| settingsModif     | Defined wich options can be changed within the component                 | Object  | false                   |
-| table             | Used to know during how much month before and after the events are given | Object  | false                   |
-| title             | Informations about the title                                             | Object  | false                   |
-| allowCreation     | Tell if we can create new events                                         | Boolean | true (default : true)   |
-| allowModification | Tell if we can modify existing event (delete included)                   | Boolean | true (default : true)   |
-| eventColors       | Default List of colors for events                                        | List    | true                    |
-| timeRange         | Minimal time division (must be : 5, 10, 15, 20, 30 or 60)                | Number  | true (default : 5)      |
-| tagsList          | List of tags                                                             | Object  | false(but can be empty) |
-| allowTags         | allow the creation of tags                                               | Object  | true (default : true)   |
+| Name              | Description                                                              | Type    | Optional              |
+| ----------------- | ------------------------------------------------------------------------ | ------- | --------------------- |
+| settingsModif     | Defined wich options can be changed within the component                 | Object  | false                 |
+| table             | Used to know during how much month before and after the events are given | Object  | false                 |
+| title             | Informations about the title                                             | Object  | false                 |
+| allowCreation     | Tell if we can create new events                                         | Boolean | true (default : true) |
+| allowModification | Tell if we can modify existing event (delete included)                   | Boolean | true (default : true) |
+| allowTags         | allow the creation of tags                                               | Object  | true (default : true) |
 
 #### settingsModif
 
@@ -102,7 +102,7 @@ const settings = {
          //allow color change in settings(true by default)
          allowColor: true,
          //allow change of timeRange
-         allowTimeRange: true
+         allowTimeRange: true,
          //allow theme color change
          allowThemeChange: true
       },
@@ -131,19 +131,6 @@ const settings = {
       allowCreation: true,
       //allow modification of events
       allowModification: true,
-      //array of default color (in hexaDecimal) for events(optional)
-      eventColors: ['#000', '#f00', '#0f0', '#00f'],
-      //minimal time range (multiple of 5 and one hour can be easily divided in equals part of this time range) must be : 5, 10, 15, 20, 30 or 60
-      timeRange: 15,
-      //list of tags
-      tagsList: {
-      //can be empty, tags can be created when events are created / modified
-      //else is on the format
-         key: { //the key of the tag (must be unique)
-            name: '', //the name displayed
-            color: '' //the color, must be one element of : red, orange, yellow, olive, green, teal, blue, violet, purple, pink, brown, grey, black
-         }
-      },
       //allow the creation of tags
       allowTags : true
    }
@@ -174,11 +161,27 @@ const settings = {
       handleTheme: function // for the theme
    }
 
+   //List of tags
+   const tagsList = {
+   //can be empty, tags can be created when events are created / modified
+   //else is on the format
+      key: { //the key of the tag (must be unique)
+         name: '', //the name displayed
+         color: '' //the color, must be one element of : red, orange, yellow, olive, green, teal, blue, violet, purple, pink, brown, grey, black
+      }
+   }
+
+   //array of default color (in hexaDecimal) for events(optional)
+   const eventColors = ['#000', '#f00', '#0f0', '#00f']
+
+   //minimal time range (multiple of 5 and one hour can be easily divided in equals part of this time range) must be : 5, 10, 15, 20, 30 or 60
+   const timeRange = 15
+
    .
    .
    .
 
 
-   ReactDOM.render(<Calendar eventList={eventList} language="en" theme={1} settings={settings} handlers={handlers} />, document.querySelector('#root'))
+   ReactDOM.render(<Calendar eventList={eventList} language="en" theme={1} settings={settings} handlers={handlers} tagsList={tagsList} eventColors={eventColors} timeRange={timeRange} />, document.querySelector('#root'))
 
 ```

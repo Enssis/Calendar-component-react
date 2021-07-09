@@ -92,7 +92,8 @@ const HourCase = props => {
   }, [date, event, activeTags]); //fill all part of the day with the good event
 
   (0, _react.useEffect)(() => {
-    //well sized divided day
+    console.log(nbrTimeRange); //well sized divided day
+
     let tempDivisDay = Array.from(Array(288 / nbrTimeRange).keys()).map(key => ({
       time: (0, _moment.default)({
         year: date.year(),
@@ -150,7 +151,7 @@ const HourCase = props => {
     setNbCol(nbColMax);
     setPartHourEvents(tempDivisDay);
     setIsLoading(false);
-  }, [events, nbrTimeRange]); //function to set the scroll
+  }, [events]); //function to set the scroll
 
   const scrollToFirstElement = () => {
     _reactScroll.scroller.scrollTo('firstEvent', {
@@ -175,20 +176,27 @@ const HourCase = props => {
     definition: !week
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Table.Body, null, /*#__PURE__*/_react.default.createElement(_agenda.SizedTableRow, {
     height: 800
-  }, !week && zoom > 0.4 ? hours.map((hour, key) => {
-    return /*#__PURE__*/_react.default.createElement(_agenda.SizedTableRow, {
-      key: key,
-      height: 180 * zoom
-    }, isLoading ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Dimmer, {
-      active: true
-    }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Loader, null)) : /*#__PURE__*/_react.default.createElement(_agenda.DarkTableCell, {
-      textAlign: "center",
-      width: 1,
-      verticalAlign: "top"
-    }, /*#__PURE__*/_react.default.createElement(_agenda.StyledDivider, {
-      fitted: true
-    }), hour));
-  }) : null, Array(nbCol).fill().map((_, col) => /*#__PURE__*/_react.default.createElement(_agenda.PaddingLessTableCell, {
+  }, !week && zoom > 0.4 ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Table.Cell, {
+    key: "cell",
+    style: {
+      padding: 0
+    }
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Table, {
+    style: {
+      border: '0px solid #000 '
+    }
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Table.Body, null, hours.map((hour, key) => /*#__PURE__*/_react.default.createElement(_agenda.SizedTableRow, {
+    key: key,
+    height: 180 * zoom
+  }, isLoading ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Table.Cell, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Dimmer, {
+    active: true
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Loader, null))) : /*#__PURE__*/_react.default.createElement(_agenda.DarkTableCell, {
+    textAlign: "center",
+    width: 1,
+    verticalAlign: "top"
+  }, /*#__PURE__*/_react.default.createElement(_agenda.StyledDivider, {
+    fitted: true
+  }), hour)))))) : null, Array(nbCol).fill().map((_, col) => /*#__PURE__*/_react.default.createElement(_agenda.PaddingLessTableCell, {
     key: col,
     textAlign: "center",
     width: week ? 1 : Math.ceil(15 / nbCol)
@@ -203,21 +211,25 @@ const HourCase = props => {
         value,
         firstElement
       } = event;
+      const {
+        duration
+      } = value.timeInfo;
 
       if (isStart) {
         if (week) {
           return /*#__PURE__*/_react.default.createElement(_EventPopup.default, {
+            key: row,
             trigger: /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_agenda.SizedSegment, {
               nomargin: 1,
               nopadding: 1,
-              height: value.timeInfo.duration * 3 * nbrTimeRange,
+              height: duration * 3 * nbrTimeRange,
               vertical: true,
               backcolor: value.color,
               onClick: () => handleModifClick(value)
-            }, nbCol <= 2 && nbrTimeRange > 2 && value.timeInfo.duration * nbrTimeRange > 50 ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
+            }, nbCol <= 2 && nbrTimeRange > 2 && duration * nbrTimeRange > 50 ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
               as: "h5",
               style: {
-                paddingTop: value.timeInfo.duration * 4 - 8
+                paddingTop: duration * 4 - 8
               }
             }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
               name: value.icon,

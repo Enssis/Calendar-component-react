@@ -7,8 +7,7 @@ import { ADD_ACTIVE_TAG, SET_TAGS } from '../../constants'
 import { StyledDropdown, StyledFormField, StyledFormInput, StyledModalActions, StyledModalContent, StyledModalHeader } from '../../agenda.style'
 
 const TagsPicker = props => {
-   const { settings, languageFile } = useContext(StateContext)
-   const { tagsList } = settings
+   const { settings, languageFile, tagsList } = useContext(StateContext)
    const { create_tag, name, color, colors_names, Actions } = languageFile
    const appDispatch = useContext(DispatchContext)
 

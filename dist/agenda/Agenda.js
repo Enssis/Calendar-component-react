@@ -13,6 +13,8 @@ require("core-js/modules/es.object.from-entries.js");
 
 require("core-js/modules/es.array.sort.js");
 
+require("core-js/modules/es.symbol.description.js");
+
 var _react = _interopRequireWildcard(require("react"));
 
 var _useImmer = require("use-immer");
@@ -51,11 +53,12 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-//components
-//header
-//body
-//modal
-//context for acces from all childrens
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 const date = (0, _moment.default)();
 
 const Agenda = props => {
@@ -63,7 +66,10 @@ const Agenda = props => {
     settings,
     handlers,
     theme,
-    language
+    language,
+    eventColors,
+    timeRange,
+    tagsList
   } = props;
   const [eventList, setEventList] = (0, _react.useState)(props.eventList);
   const [deletedEvent, setDeleteEvent] = (0, _react.useState)(0); //used in case of options errors
@@ -74,7 +80,8 @@ const Agenda = props => {
   }); //used to stop any action until the options are verified
 
   const [isLoading, setIsLoading] = (0, _react.useState)(true);
-  const [addNewEvent, setAddNewEvent] = (0, _react.useState)(null); //Default settings in case settings are undefined
+  const [addNewEvent, setAddNewEvent] = (0, _react.useState)(null);
+  const [update, setUpdate] = (0, _react.useState)(0); //Default settings in case settings are undefined
 
   const defaultSettings = {
     settingsModif: {
@@ -95,11 +102,10 @@ const Agenda = props => {
     },
     allowCreation: true,
     allowModification: true,
-    timeRange: 15,
-    tagsList: {}
+    timeRange: 15
   }; //initials states for the reducer
 
-  const initialState = settings ? {
+  const initialState = {
     mode: _constants.MONTH,
     date: date,
     displayedDate: date,
@@ -109,41 +115,21 @@ const Agenda = props => {
       mode: '',
       event: {}
     },
-    settings: settings,
+    settings: settings ? settings : defaultSettings,
     debug: false,
-    colors: settings.eventColors ? settings.eventColors : ['#0ed3ed', '#00c21d', '#ff87c3', '#ffd438', '#ff1c14', '#ff7919', '#0055ff', '#cc00ff'],
-    nbrTimeRange: settings.timeRange ? settings.timeRange / 5 : 1,
+    colors: eventColors ? eventColors : ['#0ed3ed', '#00c21d', '#ff87c3', '#ffd438', '#ff1c14', '#ff7919', '#0055ff', '#cc00ff'],
+    nbrTimeRange: timeRange ? timeRange / 5 : 1,
     settingsOpen: false,
     tagsOpen: false,
-    activeTags: settings.tagsList,
+    tagsList: tagsList ? tagsList : {},
+    activeTags: tagsList ? tagsList : {},
     zoom: 0.6,
-    eventList,
-    theme: theme !== undefined ? _constants.applicationTheme[theme] : _constants.applicationTheme[5],
-    languageFile: require("./language/fr.json")
-  } : {
-    mode: _constants.MONTH,
-    date: date,
-    displayedDate: date,
-    event: {},
-    modal: {
-      open: false,
-      mode: '',
-      event: {}
-    },
-    settings: defaultSettings,
-    debug: false,
-    colors: defaultSettings.eventColors ? settings.eventColors : ['#0ed3ed', '#00c21d', '#ff87c3', '#ffd438', '#ff1c14', '#ff7919', '#0055ff', '#cc00ff'],
-    nbrTimeRange: defaultSettings.timeRange / 5,
-    settingsOpen: false,
-    tagsOpen: false,
-    activeTags: defaultSettings.tagsList,
-    zoom: 1,
     eventList,
     theme: theme !== undefined ? _constants.applicationTheme[theme] : _constants.applicationTheme[5],
     languageFile: require("./language/fr.json")
   }; //Reducer function used to controle all the generals states
 
-  const reducer = (draft, action) => {
+  const reducer = (state, action) => {
     const {
       handleEvent,
       handleColors,
@@ -154,25 +140,32 @@ const Agenda = props => {
 
     switch (action.type) {
       case _constants.SET_MODE:
-        draft.mode = action.data;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          mode: action.data
+        });
 
       case _constants.UPDATE_DATE:
         const date = (0, _moment.default)();
-        draft.date = date;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          date
+        });
 
       case _constants.SET_DISPLAYED_DATE:
-        draft.displayedDate = action.date;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          displayedDate: action.date
+        });
 
       case _constants.ADD_DAYS:
-        draft.displayedDate = (0, _moment.default)(draft.displayedDate).add(action.nbDays, 'days');
-        break;
+        let newMom = (0, _moment.default)(state.displayedDate).add(action.nbDays, 'days');
+        return _objectSpread(_objectSpread({}, state), {}, {
+          displayedDate: newMom
+        });
 
       case _constants.ADD_MONTHS:
-        draft.displayedDate = (0, _moment.default)(draft.displayedDate).add(action.nbDays, 'month');
-        break;
+        let newMom2 = (0, _moment.default)(state.displayedDate).add(action.nbDays, 'month');
+        return _objectSpread(_objectSpread({}, state), {}, {
+          displayedDate: newMom2
+        });
 
       case _constants.ADD_EVENT:
         if (eventList.filter(el => el.key === action.value.key).length === 0) {
@@ -180,116 +173,152 @@ const Agenda = props => {
           setAddNewEvent(action.value);
         }
 
-        break;
+        return _objectSpread({}, state);
 
       case _constants.MODIF_EVENT:
         const event = action.value;
         const newEventList = [...eventList.filter(el => el.key !== event.key)].concat(event);
         handleEvent(newEventList);
         setAddNewEvent(event);
-        break;
+        return _objectSpread({}, state);
 
       case _constants.DELETE_EVENT:
         const filteredList = [...eventList.filter(el => el.key !== action.value.key)];
         handleEvent(filteredList);
         setEventList(filteredList);
         setDeleteEvent(action.value);
-        break;
+        return _objectSpread({}, state);
 
       case _constants.OPEN_MODAL:
-        draft.modal = {
-          open: true,
-          mode: action.mode,
-          event: action.event
-        };
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          modal: {
+            open: true,
+            mode: action.mode,
+            event: action.event
+          }
+        });
 
       case _constants.CLOSE_MODAL:
-        draft.modal.open = false;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          modal: {
+            open: false,
+            mode: '',
+            event: null
+          }
+        });
 
       case _constants.SET_EVENTS:
-        draft.event = action.value;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          event: action.value
+        });
 
       case _constants.SET_COLORS:
         if (handleColors !== undefined) handleColors(action.value);
-        draft.colors = action.value;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          colors: action.value
+        });
 
       case _constants.SET_TIME_RANGE:
         if (handleTimeRange !== undefined) handleTimeRange(action.value);
-        draft.nbrTimeRange = action.value / 5;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          nbrTimeRange: action.value / 5
+        });
 
       case _constants.SET_SETTINGS:
-        draft.settings = action.value;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          settings: action.value
+        });
 
       case _constants.SET_TAGS:
-        draft.settings.tagsList = action.value;
-        if (handleTagList === undefined) handleTagList(action.value);
+        if (handleTagList !== undefined) handleTagList(action.value);
         handleEvent(eventList.map(el => {
           if (el.tags.length === 0) return el;
           const newEvent = Object.assign({}, el);
           newEvent.tags = newEvent.tags.filter(tag => action.value[tag] !== undefined);
           return newEvent;
         }));
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          tagsList: action.value
+        });
 
       case _constants.OPEN_SETTINGS:
-        draft.settingsOpen = true;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          settingsOpen: true
+        });
 
       case _constants.CLOSE_SETTINGS:
-        draft.settingsOpen = false;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          settingsOpen: false
+        });
 
       case _constants.OPEN_TAGS:
-        draft.tagsOpen = true;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          tagsOpen: true
+        });
 
       case _constants.CLOSE_TAGS:
-        draft.tagsOpen = false;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          tagsOpen: false
+        });
 
       case _constants.ADD_ACTIVE_TAG:
-        draft.activeTags[action.key] = action.value;
-        break;
+        let active_tags = _objectSpread(_objectSpread({}, state.activeTags), {}, {
+          [action.key]: action.value
+        });
+
+        return _objectSpread(_objectSpread({}, state), {}, {
+          active_tags
+        });
 
       case _constants.SET_ACTIVE_TAG:
-        draft.activeTags = action.value;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          activeTags: action.value
+        });
 
       case _constants.ZOOM_MINUS:
-        if (draft.zoom > 0.4) draft.zoom -= 0.2;
-        break;
+        let {
+          zoom
+        } = state;
+        if (zoom > 0.4) zoom -= 0.2;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          zoom
+        });
 
       case _constants.ZOOM_PLUS:
-        if (draft.zoom < 2) draft.zoom += 0.2;
-        break;
+        let {
+          zoom: zoomplus
+        } = state;
+        if (zoomplus < 2) zoomplus += 0.2;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          zoom: zoomplus
+        });
 
       case _constants.SET_EVENTLIST:
-        draft.eventList = eventList;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          eventList
+        });
 
       case _constants.SET_LANGUAGE_FILE:
         const languageList = ['fr', 'en'];
-        if (languageList.indexOf(language) >= 0) draft.languageFile = require("./language/".concat(language, ".json"));else console.log('non disponible language');
-        break;
+        let languageFile = '';
+        if (languageList.indexOf(language) >= 0) languageFile = require("./language/".concat(language, ".json"));else console.log('non disponible language');
+        return _objectSpread(_objectSpread({}, state), {}, {
+          languageFile
+        });
 
       case _constants.SET_THEME:
         if (handleTheme !== undefined) handleTheme(action.value);
-        draft.theme = action.value;
-        break;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          theme: action.value
+        });
 
       default:
         console.log('unrecognized type');
-        break;
+        return _objectSpread({}, state);
     }
   };
 
-  const [state, dispatch] = (0, _useImmer.useImmerReducer)(reducer, initialState); //search all events who have their start between the start and the end of this event
+  const [state, dispatch] = (0, _react.useReducer)(reducer, initialState); //search all events who have their start between the start and the end of this event
 
   const findContainedEvent = (event, eventList) => {
     const {
@@ -463,10 +492,7 @@ const Agenda = props => {
                 end,
                 duration
               };
-              newEvents[nextDate] = newEvents[nextDate].concat(changedEvent).sort((el1, el2) => {
-                const diff = el1.start.diff(el2.start);
-                if (diff < 0) return -1;else if (diff > 0) return 1;else return 0;
-              });
+              newEvents[nextDate] = newEvents[nextDate].concat(changedEvent);
               dayNbr++;
             } else {
               break;
@@ -553,7 +579,7 @@ const Agenda = props => {
             end,
             duration
           };
-          dateEvents = dateEvents.concat(newContEvent); //change the col for other days
+          dateEvents = dateEvents.filter(ev => ev.key !== newContEvent.key).concat(newContEvent); //change the col for other days
 
           let dayNbr = 1;
           let nextDate = null; //while the next day isn't empty
@@ -579,10 +605,7 @@ const Agenda = props => {
                 end,
                 duration
               };
-              newEvents[nextDate] = newEvents[nextDate].concat(changedEvent).sort((el1, el2) => {
-                const diff = el1.start.diff(el2.start);
-                if (diff < 0) return -1;else if (diff > 0) return 1;else return 0;
-              });
+              newEvents[nextDate] = newEvents[nextDate].concat(changedEvent);
               dayNbr++;
             } else {
               break;
@@ -591,7 +614,10 @@ const Agenda = props => {
         }
       }
 
-      newEvents[date] = dateEvents;
+      newEvents[date] = dateEvents.sort((el1, el2) => {
+        const diff = el1.start.diff(el2.start);
+        if (diff < 0) return -1;else if (diff > 0) return 1;else return 0;
+      });
     }
 
     dispatch({
@@ -609,6 +635,7 @@ const Agenda = props => {
   }, [deletedEvent]);
   (0, _react.useEffect)(() => {
     setEventList(props.eventList);
+    setUpdate(state => state + 1);
   }, [props.eventList]);
   (0, _react.useEffect)(() => {
     dispatch({
@@ -617,11 +644,14 @@ const Agenda = props => {
   }, [language]); //check if the options doesn't have errors
 
   (0, _react.useEffect)(() => {
-    if (settings !== undefined) {
+    if (settings !== undefined || timeRange !== undefined) {
       const {
-        table,
-        timeRange
-      } = settings;
+        table
+      } = settings ? settings : {
+        before: 1,
+        after: 11,
+        total: 12
+      };
       let optionError = false;
       let optionErrMess = []; //table settings
 
@@ -643,23 +673,25 @@ const Agenda = props => {
       } //check if the time part is usable
 
 
-      if (timeRange % 5 !== 0) {
-        optionError = true;
-        optionErrMess.push("Time range isn't a multiple of 5");
-      } else {
-        const nbTimeRange = timeRange / 5;
+      if (timeRange !== undefined) {
+        if (timeRange % 5 !== 0) {
+          optionError = true;
+          optionErrMess.push("Time range isn't a multiple of 5");
+        } else {
+          const nbTimeRange = timeRange / 5;
 
-        if (nbTimeRange < 1) {
-          optionError = true;
-          optionErrMess.push('Time range is too small');
-        } else if (nbTimeRange > 12) {
-          optionError = true;
-          optionErrMess.push('Time range is too big');
-        }
+          if (nbTimeRange < 1) {
+            optionError = true;
+            optionErrMess.push('Time range is too small');
+          } else if (nbTimeRange > 12) {
+            optionError = true;
+            optionErrMess.push('Time range is too big');
+          }
 
-        if (300 % nbTimeRange !== 0) {
-          optionError = true;
-          optionErrMess.push("A day isn't divisible in equal part with the time range given");
+          if (300 % nbTimeRange !== 0) {
+            optionError = true;
+            optionErrMess.push("A day isn't divisible in equal part with the time range given");
+          }
         }
       }
 
@@ -670,7 +702,7 @@ const Agenda = props => {
     }
 
     setIsLoading(false);
-  }, [state.settings]); //loop through the events to assign them to each day
+  }, [settings]); //loop through the events to assign them to each day
 
   (0, _react.useEffect)(() => {
     if (isLoading) {
@@ -685,11 +717,11 @@ const Agenda = props => {
 
     const columnList = {}; //sort the events from the first in time to the last and remove these with all tags non active
 
-    const timeSortedEvents = [...props.eventList].filter(el => {
+    const timeSortedEvents = [...eventList].filter(el => {
       if (el.tags.length === 0 || settings === undefined) return true;
 
       for (const tagKey of el.tags) {
-        if (state.activeTags[tagKey] !== undefined) return true;
+        if (state.activeTags[tagKey] !== undefined && state.tagsList[tagKey] !== undefined) return true;
       }
 
       return false;
@@ -774,6 +806,9 @@ const Agenda = props => {
           date: timeInfo.start.date()
         });
         timeInfo.duration = Math.ceil(Math.abs(dayStart.diff(timeInfo.end) / (300000 * state.nbrTimeRange))) - Math.floor(Math.abs(dayStart.diff(timeInfo.start) / (300000 * state.nbrTimeRange)));
+        console.log({
+          duration: timeInfo.duration
+        });
         newEvent['timeInfo'] = timeInfo;
         events[dayFormat].push(newEvent);
       } while (!end.isSame(day, 'day'));
@@ -787,7 +822,35 @@ const Agenda = props => {
       type: _constants.SET_EVENTLIST,
       value: eventList
     });
-  }, [props.eventList, isLoading, state.settings.table, state.nbrTimeRange, state.activeTags]);
+  }, [props.eventList, isLoading, state.settings.table, state.nbrTimeRange, state.activeTags, update]);
+  (0, _react.useEffect)(() => {
+    setEventList(eventList.map(ev => {
+      const newTags = ev.tags.filter(tagKey => state.tagsList[tagKey] !== undefined);
+      const {
+        title,
+        color,
+        start,
+        end,
+        icon,
+        key,
+        place,
+        description
+      } = ev;
+      const newEven = {
+        title,
+        color,
+        start,
+        end,
+        icon,
+        key,
+        place,
+        description,
+        tags: newTags
+      };
+      return newEven;
+    }));
+    setUpdate(state => state + 1);
+  }, [state.tagsList]);
   (0, _react.useEffect)(() => {
     if (settings) {
       dispatch({
@@ -815,19 +878,17 @@ const Agenda = props => {
   }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Message.Header, null, "There is an error with settings"), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List, {
     items: error.errorMsg
   }));
-  return /*#__PURE__*/_react.default.createElement(_StateContext.default.Provider, {
+  return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Sidebar.Pushable, {
+    style: {
+      minHeight: '100vh'
+    }
+  }, /*#__PURE__*/_react.default.createElement(_StateContext.default.Provider, {
     value: state
   }, /*#__PURE__*/_react.default.createElement(_DispatchContext.default.Provider, {
     value: dispatch
   }, /*#__PURE__*/_react.default.createElement(_styledComponents.ThemeProvider, {
     theme: state.theme
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Sidebar.Pushable, {
-    style: {
-      minHeight: '100vh'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Sidebar.Pusher, {
-    dimmed: state.settingsOpen || state.tagsOpen
-  }, /*#__PURE__*/_react.default.createElement("div", {
+  }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Sidebar.Pusher, null, /*#__PURE__*/_react.default.createElement("div", {
     style: {
       minHeight: '100vh'
     }

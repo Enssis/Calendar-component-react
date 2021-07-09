@@ -32,11 +32,9 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 const TagsPicker = props => {
   const {
     settings,
-    languageFile
-  } = (0, _react.useContext)(_StateContext.default);
-  const {
+    languageFile,
     tagsList
-  } = settings;
+  } = (0, _react.useContext)(_StateContext.default);
   const {
     create_tag,
     name,

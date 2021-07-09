@@ -51,17 +51,7 @@ const CalendarGrid = () => {
   } = languageFile;
   const [listDays, setListDays] = (0, _react.useState)([0]);
   const [monthDateList, setmonthDateList] = (0, _react.useState)([]);
-  const [dayDateList, setDayDateList] = (0, _react.useState)([]); //make a list with all the days of the week or only one day if it's in mode day
-
-  (0, _react.useEffect)(() => {
-    if (mode !== _constants.DAY) {
-      const newList = Days_names.concat(Days_names[0]);
-      newList.shift();
-      setListDays(newList);
-    } else {
-      setListDays([Days_names[displayedDate.day()]]);
-    }
-  }, [mode, displayedDate]); //return the day choosed by it's number on the week
+  const [dayDateList, setDayDateList] = (0, _react.useState)([]); //return the day choosed by it's number on the week
 
   const getDate = (dayNbr, comparedDate) => {
     if (mode === _constants.DAY) {
@@ -71,10 +61,10 @@ const CalendarGrid = () => {
       date.add(-((6 + comparedDate.day()) % 7 - dayNbr), 'day');
       return date;
     }
-  }; //make a list with all days displayed of a month
-
+  };
 
   (0, _react.useEffect)(() => {
+    //make a list with all days displayed of a month
     const res = [];
     const firstOfMonth = (0, _moment.default)({
       month: displayedDate.month(),
@@ -91,73 +81,53 @@ const CalendarGrid = () => {
       week++;
     } while (res[res.length - 1].month() === firstOfMonth.month() && week < 6);
 
-    setmonthDateList(res);
-  }, [displayedDate, mode]); //make a list with all days displayed off a week
+    setmonthDateList(res); //make a list with all the days of the week or only one day if it's in mode day
 
-  (0, _react.useEffect)(() => {
-    const res = [];
+    if (mode !== _constants.DAY) {
+      const newList = Days_names.concat(Days_names[0]);
+      newList.shift();
+      setListDays(newList);
+    } else {
+      setListDays([Days_names[displayedDate.day()]]);
+    } //make a list with all days displayed off a week
+
+
+    const resDisplayed = [];
 
     for (let dayNbr = 0; dayNbr < 7; dayNbr++) {
-      res.push(getDate(dayNbr, displayedDate));
+      resDisplayed.push(getDate(dayNbr, displayedDate));
     }
 
-    setDayDateList(res);
-  }, [displayedDate, mode]); //component which create the good number of cols and rows of cases
+    setDayDateList(resDisplayed);
+  }, [displayedDate, mode]); //Component which represent which type of case need to be rendered
 
-  const Body = () => {
-    if (mode !== _constants.MONTH) {
-      return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, {
-        columns: listDays.length
-      }, /*#__PURE__*/_react.default.createElement(BodyRow, {
-        row: 0,
-        dateArr: mode === _constants.WEEK ? dayDateList : [displayedDate]
-      }));
-    } else {
-      return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, Array(monthDateList.length / 7).fill().map((_, key) => /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, {
-        key: key,
-        columns: listDays.length
-      }, /*#__PURE__*/_react.default.createElement(BodyRow, {
-        row: key,
-        dateArr: monthDateList
-      }))));
+  const casetype = date => {
+    switch (mode) {
+      case _constants.MONTH:
+        return /*#__PURE__*/_react.default.createElement(_DayCase.default, {
+          date: date
+        });
+
+      case _constants.DAY:
+        return /*#__PURE__*/_react.default.createElement(_HourCase.default, {
+          week: false,
+          date: date
+        });
+
+      case _constants.WEEK:
+        return /*#__PURE__*/_react.default.createElement(_HourCase.default, {
+          week: true,
+          date: date
+        });
+
+      default:
+        console.log('Error on the mode');
+        break;
     }
-  }; //Component which represent which type of case need to be rendered
-
+  };
 
   const BodyRow = props => {
-    const casetype = date => {
-      switch (mode) {
-        case _constants.MONTH:
-          return /*#__PURE__*/_react.default.createElement(_DayCase.default, {
-            date: date
-          });
-
-        case _constants.DAY:
-          return /*#__PURE__*/_react.default.createElement(_HourCase.default, {
-            week: false,
-            date: date
-          });
-
-        case _constants.WEEK:
-          return /*#__PURE__*/_react.default.createElement(_HourCase.default, {
-            week: true,
-            date: date
-          });
-
-        default:
-          console.log('Error on the mode');
-          break;
-      }
-    };
-
-    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, //loop to create each column corresponding to the day displayed
-    Array(listDays.length).fill().map((_, key) => {
-      const date = mode === _constants.DAY ? props.dateArr[0] : props.dateArr[props.row * 7 + key];
-      return /*#__PURE__*/_react.default.createElement(_agenda.PaddingLessGridColumn, {
-        paddingright: 1,
-        key: key
-      }, casetype(date));
-    }));
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null);
   };
 
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid, {
@@ -167,7 +137,27 @@ const CalendarGrid = () => {
     }
   }, /*#__PURE__*/_react.default.createElement(_DateDisplay.default, {
     listDays: listDays
-  }), /*#__PURE__*/_react.default.createElement(Body, null));
+  }), mode !== _constants.MONTH ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, {
+    columns: listDays.length
+  }, //loop to create each column corresponding to the day displayed
+  Array(listDays.length).fill().map((_, key) => {
+    const dateList = mode === _constants.WEEK ? dayDateList : [displayedDate];
+    const date = mode === _constants.DAY ? dateList[0] : dateList[key];
+    return /*#__PURE__*/_react.default.createElement(_agenda.PaddingLessGridColumn, {
+      paddingright: 1,
+      key: key
+    }, casetype(date));
+  })) : /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, Array(monthDateList.length / 7).fill().map((_, key) => /*#__PURE__*/_react.default.createElement(_semanticUiReact.Grid.Row, {
+    key: key,
+    columns: listDays.length
+  }, //loop to create each column corresponding to the day displayed
+  Array(listDays.length).fill().map((_, keyB) => {
+    const date = mode === _constants.DAY ? monthDateList[0] : monthDateList[key * 7 + keyB];
+    return /*#__PURE__*/_react.default.createElement(_agenda.PaddingLessGridColumn, {
+      paddingright: 1,
+      key: keyB
+    }, casetype(date));
+  })))));
 };
 
 var _default = CalendarGrid;

@@ -32,7 +32,8 @@ const HeaderMenu = () => {
   const {
     settings,
     mode,
-    languageFile
+    languageFile,
+    tagsList
   } = (0, _react.useContext)(_StateContext.default);
   const {
     month,
@@ -72,7 +73,7 @@ const HeaderMenu = () => {
     })
   }), /*#__PURE__*/_react.default.createElement(_semanticUiReact.Menu.Menu, {
     position: "right"
-  }, Object.entries(settings.tagsList).length > 0 ? /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
+  }, Object.entries(tagsList).length > 0 ? /*#__PURE__*/_react.default.createElement(_agenda.StyledMenuItem, {
     name: "tag",
     onClick: () => appDispatch({
       type: _constants.OPEN_TAGS

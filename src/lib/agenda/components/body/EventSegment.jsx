@@ -6,7 +6,7 @@ import DispatchContext from '../../DispatchContext'
 import StateContext from '../../StateContext'
 
 //components
-import { SizedSegment } from '../../agenda.style'
+import { SizedSegment, StyledHeader } from '../../agenda.style'
 import { Header, Icon } from 'semantic-ui-react'
 import EventPopup from './EventPopup'
 
@@ -53,7 +53,7 @@ const EventSegment = props => {
 
    //empty case
    if (event == null) {
-      return <SizedSegment nohover={!settings.allowCreation ? 1 : 0} nomargin={1} nopadding={1} height={size} vertical onClick={handleCreateClick} light={1}></SizedSegment>
+      return <SizedSegment nohover={!settings.allowCreation ? 1 : 0} nomargin={1} nopadding={1} height={size} vertical onClick={handleCreateClick} light={1} />
    }
 
    return (
@@ -64,6 +64,7 @@ const EventSegment = props => {
                   <SizedSegment
                      border={1}
                      nomargin={1}
+                     nopadding={1}
                      height={size}
                      vertical
                      onClick={handleModifClick}
@@ -74,16 +75,12 @@ const EventSegment = props => {
                         setOpen(true)
                      }}
                   >
-                     <Header as="h3">
-                        {event.icon !== '' ? (
-                           <>
-                              <Icon name={event.icon} size="tiny" />
-                           </>
-                        ) : (
-                           ''
-                        )}
-                        {event.title}
-                     </Header>
+                     {size > 60 ? (
+                        <Header as="h3" style={{ marginTop: 10 }}>
+                           {event.icon !== '' ? <Icon name={event.icon} /> : null}
+                           {event.title}
+                        </Header>
+                     ) : null}
                   </SizedSegment>
                </div>
             }

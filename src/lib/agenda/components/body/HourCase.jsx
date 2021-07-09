@@ -4,8 +4,8 @@ import moment from 'moment'
 //context
 import StateContext from '../../StateContext'
 //components
-import { Divider, Table, Dimmer, Loader, Segment, Icon, Header } from 'semantic-ui-react'
-import { ScrollableSegment, PaddingLessTableCell, SizedTableRow, SizedSegment, DarkTableCell, StyledDivider } from '../../agenda.style'
+import { Table, Dimmer, Loader, Segment, Icon, Header } from 'semantic-ui-react'
+import { ScrollableSegment, PaddingLessTableCell, SizedTableRow, SizedSegment, DarkTableCell, StyledDivider, StyledHeader } from '../../agenda.style'
 import EventSegment from './EventSegment'
 import EventPopup from './EventPopup'
 import DispatchContext from '../../DispatchContext'
@@ -53,6 +53,7 @@ const HourCase = props => {
 
    //fill all part of the day with the good event
    useEffect(() => {
+      console.log(nbrTimeRange)
       //well sized divided day
       let tempDivisDay = Array.from(Array(288 / nbrTimeRange).keys()).map(key => ({
          time: moment({ year: date.year(), month: date.month(), date: date.date(), hour: Math.floor((nbrTimeRange * key) / 12), minute: nbrTimeRange * 5 * (key % (12 / nbrTimeRange)) }),
@@ -92,7 +93,7 @@ const HourCase = props => {
       setNbCol(nbColMax)
       setPartHourEvents(tempDivisDay)
       setIsLoading(false)
-   }, [events, nbrTimeRange])
+   }, [events])
 
    //function to set the scroll
    const scrollToFirstElement = () => {
@@ -115,24 +116,30 @@ const HourCase = props => {
          <Table definition={!week}>
             <Table.Body>
                <SizedTableRow height={800}>
-                  {!week && zoom > 0.4
-                     ? hours.map((hour, key) => {
-                          return (
-                             <SizedTableRow key={key} height={180 * zoom}>
-                                {isLoading ? (
-                                   <Dimmer active>
-                                      <Loader />
-                                   </Dimmer>
-                                ) : (
-                                   <DarkTableCell textAlign="center" width={1} verticalAlign="top">
-                                      <StyledDivider fitted />
-                                      {hour}
-                                   </DarkTableCell>
-                                )}
-                             </SizedTableRow>
-                          )
-                       })
-                     : null}
+                  {!week && zoom > 0.4 ? (
+                     <Table.Cell key="cell" style={{ padding: 0 }}>
+                        <Table style={{ border: '0px solid #000 ' }}>
+                           <Table.Body>
+                              {hours.map((hour, key) => (
+                                 <SizedTableRow key={key} height={180 * zoom}>
+                                    {isLoading ? (
+                                       <Table.Cell>
+                                          <Dimmer active>
+                                             <Loader />
+                                          </Dimmer>
+                                       </Table.Cell>
+                                    ) : (
+                                       <DarkTableCell textAlign="center" width={1} verticalAlign="top">
+                                          <StyledDivider fitted />
+                                          {hour}
+                                       </DarkTableCell>
+                                    )}
+                                 </SizedTableRow>
+                              ))}
+                           </Table.Body>
+                        </Table>
+                     </Table.Cell>
+                  ) : null}
 
                   {Array(nbCol)
                      .fill()
@@ -148,15 +155,17 @@ const HourCase = props => {
                                     const event = quarterHourEvent.event[col]
                                     if (event) {
                                        const { isStart, value, firstElement } = event
+                                       const { duration } = value.timeInfo
                                        if (isStart) {
                                           if (week) {
                                              return (
                                                 <EventPopup
+                                                   key={row}
                                                    trigger={
                                                       <div>
-                                                         <SizedSegment nomargin={1} nopadding={1} height={value.timeInfo.duration * 3 * nbrTimeRange} vertical backcolor={value.color} onClick={() => handleModifClick(value)}>
-                                                            {nbCol <= 2 && nbrTimeRange > 2 && value.timeInfo.duration * nbrTimeRange > 50 ? (
-                                                               <Header as="h5" style={{ paddingTop: value.timeInfo.duration * 4 - 8 }}>
+                                                         <SizedSegment nomargin={1} nopadding={1} height={duration * 3 * nbrTimeRange} vertical backcolor={value.color} onClick={() => handleModifClick(value)}>
+                                                            {nbCol <= 2 && nbrTimeRange > 2 && duration * nbrTimeRange > 50 ? (
+                                                               <Header as="h5" style={{ paddingTop: duration * 4 - 8 }}>
                                                                   <Icon name={value.icon} size="tiny" />
                                                                   {' ' + value.title}
                                                                </Header>

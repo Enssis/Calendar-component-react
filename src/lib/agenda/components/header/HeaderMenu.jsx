@@ -9,7 +9,7 @@ import StateContext from '../../StateContext'
 import { MargedIcon, StyledMenuItem } from '../../agenda.style'
 
 const HeaderMenu = () => {
-   const { settings, mode, languageFile } = useContext(StateContext)
+   const { settings, mode, languageFile, tagsList } = useContext(StateContext)
    const { month, week, day } = languageFile
    const appDispatch = useContext(DispatchContext)
 
@@ -23,7 +23,7 @@ const HeaderMenu = () => {
          <StyledMenuItem name={week} active={mode === WEEK} onClick={() => appDispatch({ type: SET_MODE, data: WEEK })} />
          <StyledMenuItem name={day} active={mode === DAY} onClick={() => appDispatch({ type: SET_MODE, data: DAY })} />
          <Menu.Menu position="right">
-            {Object.entries(settings.tagsList).length > 0 ? (
+            {Object.entries(tagsList).length > 0 ? (
                <StyledMenuItem name="tag" onClick={() => appDispatch({ type: OPEN_TAGS })}>
                   <MargedIcon name="tags" />
                </StyledMenuItem>

@@ -17,12 +17,11 @@ const EventPopup = props => {
    const { start, end, title, description, place, icon, tags } = event
 
    const appDispatch = useContext(DispatchContext)
-   const { mode, displayedDate, debug, settings, languageFile } = useContext(StateContext)
-   const { tagsList } = settings
+   const { mode, displayedDate, debug, languageFile, tagsList, nbrTimeRange } = useContext(StateContext)
    const { Event } = languageFile
 
    //stock the duration of the event
-   const duration = Math.ceil(Math.abs(start.diff(end) / 900000))
+   const duration = Math.ceil(Math.abs(start.diff(end) / 300000))
 
    const [showFullDesc, setShowFullDesc] = useState(false)
    const [showFullPlace, setShowFullPlace] = useState(false)
@@ -67,7 +66,7 @@ const EventPopup = props => {
                   <List.Item>
                      <Label color="yellow" image>
                         {Event.duration}
-                        <Label.Detail> {`${Math.floor(duration / 96) > 0 ? `${Math.floor(duration / 96)} jours ` : ''}${Math.floor(duration / 4) % 24 > 0 ? `${Math.floor(duration / 4) % 24} heures ` : ''}${duration % 4 > 0 ? `${(duration % 4) * 15} minutes` : ''} `} </Label.Detail>
+                        <Label.Detail> {`${Math.floor(duration / 288) > 0 ? `${Math.floor(duration / 288)} jours ` : ''}${Math.floor(duration / 12) % 24 > 0 ? `${Math.floor(duration / 12) % 24} heures ` : ''}${duration % 12 > 0 ? `${(duration % 12) * 5} minutes` : ''} `} </Label.Detail>
                      </Label>
                   </List.Item>
                   <List.Item>

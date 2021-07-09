@@ -75,14 +75,15 @@ const DayCase = props => {
                               const nbStep = 288 / nbrTimeRange
                               //calculate the distance between the start of the element and the last element / the start of the case
                               const margleft = key > 0 ? Math.floor((Math.abs(events[key - 1].timeInfo.end.diff(start) / (300000 * nbrTimeRange)) * 100) / nbStep) : Math.floor((Math.abs(moment({ year: start.year(), month: start.month(), date: start.date() }).diff(start) / (300000 * nbrTimeRange)) * 100) / nbStep)
-                              const width = Math.floor((duration * 100) / nbStep)
+                              const width = Math.max(Math.floor((duration * 100) / nbStep), 1)
+                              console.log({ width, title: event.title })
                               return (
                                  <EventPopup
                                     key={key}
                                     left
                                     trigger={
                                        <div style={{ display: 'inline list-item' }}>
-                                          <CustomLabel onClick={() => appDispatch({ type: OPEN_MODAL, mode: MODIF, event })} margleft={margleft} width={width} backcolor={event.color}></CustomLabel>
+                                          <CustomLabel onClick={() => appDispatch({ type: OPEN_MODAL, mode: MODIF, event })} margleft={margleft} width={width} backcolor={event.color} />
                                        </div>
                                     }
                                     event={event}

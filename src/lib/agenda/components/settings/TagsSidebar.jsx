@@ -7,13 +7,14 @@ import StateContext from '../../StateContext'
 import { MargedIcon, StyledHeader } from '../../agenda.style'
 
 const TagsSidebar = () => {
-   const { tagsOpen, settings, activeTags, languageFile, theme } = useContext(StateContext)
+   const appState = useContext(StateContext)
+   const { tagsOpen, activeTags, languageFile, theme } = appState
    const { active_tags, Actions } = languageFile
    const appDispatch = useContext(DispatchContext)
 
    const [checkedTags, setCheckedTags] = useImmer(activeTags)
 
-   const [tagsList, setTagsList] = useImmer(settings.tagsList)
+   const [tagsList, setTagsList] = useImmer(appState.tagsList)
 
    const handleClose = () => {
       appDispatch({ type: CLOSE_TAGS })
@@ -39,7 +40,7 @@ const TagsSidebar = () => {
 
    useEffect(() => {
       setCheckedTags(activeTags)
-      setTagsList(settings.tagsList)
+      setTagsList(appState.tagsList)
    }, [tagsOpen])
 
    return (

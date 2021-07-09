@@ -56,17 +56,15 @@ const EventPopup = props => {
     mode,
     displayedDate,
     debug,
-    settings,
-    languageFile
+    languageFile,
+    tagsList,
+    nbrTimeRange
   } = (0, _react.useContext)(_StateContext.default);
-  const {
-    tagsList
-  } = settings;
   const {
     Event
   } = languageFile; //stock the duration of the event
 
-  const duration = Math.ceil(Math.abs(start.diff(end) / 900000));
+  const duration = Math.ceil(Math.abs(start.diff(end) / 300000));
   const [showFullDesc, setShowFullDesc] = (0, _react.useState)(false);
   const [showFullPlace, setShowFullPlace] = (0, _react.useState)(false); //set the displayed day to be the clicked date and switch to day mode
 
@@ -119,7 +117,7 @@ const EventPopup = props => {
   }, Event.end, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", end.format('DD/MM/YYYY kk:mm'), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
     color: "yellow",
     image: true
-  }, Event.duration, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", "".concat(Math.floor(duration / 96) > 0 ? "".concat(Math.floor(duration / 96), " jours ") : '').concat(Math.floor(duration / 4) % 24 > 0 ? "".concat(Math.floor(duration / 4) % 24, " heures ") : '').concat(duration % 4 > 0 ? "".concat(duration % 4 * 15, " minutes") : '', " "), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
+  }, Event.duration, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label.Detail, null, " ", "".concat(Math.floor(duration / 288) > 0 ? "".concat(Math.floor(duration / 288), " jours ") : '').concat(Math.floor(duration / 12) % 24 > 0 ? "".concat(Math.floor(duration / 12) % 24, " heures ") : '').concat(duration % 12 > 0 ? "".concat(duration % 12 * 5, " minutes") : '', " "), " "))), /*#__PURE__*/_react.default.createElement(_semanticUiReact.List.Item, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Label, {
     color: "teal",
     image: true,
     onClick: () => setShowFullDesc(!showFullDesc),

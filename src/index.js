@@ -66,25 +66,21 @@ function Main() {
       //allow creation of event
       allowCreation: true,
       //allow modification of events
-      allowModification: true,
-      //array of default color for events(optional)
-      //eventColors: ['#000', '#f00', '#0f0', '#00f'],
-      //minimal time range (multiple of 5)
-      timeRange: 15,
-      //list of tags
-      tagsList: {
-         dq43q7d: {
-            name: 'travail',
-            color: 'red'
-         },
-         khfyYNCKSB: {
-            name: 'famille',
-            color: 'blue'
-         },
-         jnRvoumgadinn: {
-            name: 'amis',
-            color: 'yellow'
-         }
+      allowModification: true
+   }
+
+   const tagsList = {
+      dq43q7d: {
+         name: 'travail',
+         color: 'red'
+      },
+      khfyYNCKSB: {
+         name: 'famille',
+         color: 'blue'
+      },
+      jnRvoumgadinn: {
+         name: 'amis',
+         color: 'yellow'
       }
    }
 
@@ -108,7 +104,7 @@ function Main() {
                title: 'Second Test Event',
                color: '#0ed3ed',
                start: moment({ hour: 5, minute: 15 }),
-               end: moment({ hour: 5, minute: 15 }).add(6, 'h'),
+               end: moment({ hour: 5, minute: 5 }).add(6, 'h'),
                icon: 'address book',
                key: '45435',
                tags: ['dq43q7d'],
@@ -130,7 +126,7 @@ function Main() {
                title: 'Third Test Event',
                color: '#0ed3ed',
                start: moment({ hour: 5, minute: 30 }),
-               end: moment({ hour: 5, minute: 15 }).add(6, 'h'),
+               end: moment({ hour: 5, minute: 35 }).add(6, 'h'),
                icon: 'address book',
                key: '4521',
                tags: ['jnRvoumgadinn'],
@@ -174,7 +170,7 @@ function Main() {
                title: 'multiple day event',
                color: '#0ed3ed',
                start: moment({ hour: 18, minute: 45 }).add(2, 'd'),
-               end: moment({ hour: 18, minute: 0 }).add(4, 'd').add(5, 'h'),
+               end: moment({ hour: 18, minute: 55 }).add(4, 'd').add(5, 'h'),
                icon: 'coffee',
                key: '45238',
                tags: [],
@@ -203,7 +199,7 @@ function Main() {
       handleTagList: handleSetTagList
    }
 
-   return <Calendar eventList={eventList} theme={8} language="fr" settings={settings} handlers={handlers} />
+   return <Calendar eventList={eventList} theme={8} language="fr" settings={settings} handlers={handlers} tagsList={tagsList} />
 }
 
 ReactDOM.render(<Main />, document.querySelector('#root'))

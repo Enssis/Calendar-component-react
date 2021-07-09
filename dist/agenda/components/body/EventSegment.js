@@ -99,6 +99,7 @@ const EventSegment = props => {
     trigger: /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_agenda.SizedSegment, {
       border: 1,
       nomargin: 1,
+      nopadding: 1,
       height: size,
       vertical: true,
       onClick: handleModifClick,
@@ -108,12 +109,14 @@ const EventSegment = props => {
         contextRef.current = createContextFromEvent(e);
         setOpen(true);
       }
-    }, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
-      as: "h3"
-    }, event.icon !== '' ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
-      name: event.icon,
-      size: "tiny"
-    })) : '', event.title))),
+    }, size > 60 ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Header, {
+      as: "h3",
+      style: {
+        marginTop: 10
+      }
+    }, event.icon !== '' ? /*#__PURE__*/_react.default.createElement(_semanticUiReact.Icon, {
+      name: event.icon
+    }) : null, event.title) : null)),
     event: event,
     open: open,
     onClose: () => setOpen(false)

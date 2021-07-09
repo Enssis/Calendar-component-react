@@ -28,20 +28,20 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 const TagsSidebar = () => {
+  const appState = (0, _react.useContext)(_StateContext.default);
   const {
     tagsOpen,
-    settings,
     activeTags,
     languageFile,
     theme
-  } = (0, _react.useContext)(_StateContext.default);
+  } = appState;
   const {
     active_tags,
     Actions
   } = languageFile;
   const appDispatch = (0, _react.useContext)(_DispatchContext.default);
   const [checkedTags, setCheckedTags] = (0, _useImmer.useImmer)(activeTags);
-  const [tagsList, setTagsList] = (0, _useImmer.useImmer)(settings.tagsList);
+  const [tagsList, setTagsList] = (0, _useImmer.useImmer)(appState.tagsList);
 
   const handleClose = () => {
     appDispatch({
@@ -75,7 +75,7 @@ const TagsSidebar = () => {
 
   (0, _react.useEffect)(() => {
     setCheckedTags(activeTags);
-    setTagsList(settings.tagsList);
+    setTagsList(appState.tagsList);
   }, [tagsOpen]);
   return /*#__PURE__*/_react.default.createElement(_semanticUiReact.Sidebar, {
     style: {

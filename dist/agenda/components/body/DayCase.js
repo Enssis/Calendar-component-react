@@ -123,7 +123,11 @@ const DayCase = props => {
         month: start.month(),
         date: start.date()
       }).diff(start) / (300000 * nbrTimeRange)) * 100 / nbStep);
-      const width = Math.floor(duration * 100 / nbStep);
+      const width = Math.max(Math.floor(duration * 100 / nbStep), 1);
+      console.log({
+        width,
+        title: event.title
+      });
       return /*#__PURE__*/_react.default.createElement(_EventPopup.default, {
         key: key,
         left: true,
