@@ -182,6 +182,6 @@ const settings = {
    .
 
 
-   ReactDOM.render(<Calendar eventList={eventList} language="en" theme={1} settings={settings} handlers={handlers} tagsList={tagsList} eventColors={eventColors} timeRange={timeRange} />, document.querySelector('#root'))
+   ReactDOM.render(<Agenda eventList={eventList} language="en" theme={1} settings={settings} handlers={handlers} tagsList={tagsList} eventColors={eventColors} timeRange={timeRange} />, document.querySelector('#root'))
 
 ```
